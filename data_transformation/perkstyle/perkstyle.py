@@ -1,0 +1,138 @@
+#
+# Retrieves rowCount rows from the participant data in source database,
+# transforms the rows and inserts the transformed rows into a table
+# style_prediction_data in the destination database.
+#
+# Input: first cli argument is number of retrieved rows
+# Call from /data_transformation/:  python perkstyle/perkstyle.py [rowCount]
+#
+# style_prediction_data
+# champion_id |   tag1   |   tag2   |  role  | perk_primary_style | perk_sub_style
+#
+import psycopg2
+from config import config
+import database
+from data import championById, wikiById
+import sys
+def getOrDefault(key, dict, default):
+    if key in dict:
+        return dict[key]
+    else:
+        return default
+rowCount = sys.argv[1]
+print("Retrieving " + rowCount + " rows from matches!")
+
+# Connect to source and destination database
+try:
+    src = config["database"]["src"]
+    dest = config["database"]["dest"]
+    dataSrc = database.connect(
+        src["url"], src["username"], src["password"], src["database"])
+    dataDest = database.connect(
+        dest["url"], dest["username"], dest["password"], dest["database"])
+except Exception as e:
+    print(e)
+    print("Failed to connect to source or dest database!")
+    exit(1)
+print("Successfully connected to both databases!")
+
+print("Executing select to get " + rowCount + " rows!")
+srcCursor = dataSrc.cursor()
+srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\", \"lane\", \"role\" FROM "
+                    + "match_participant_stats mps JOIN match_participant mp ON "
+                    + "mps.\"match_platformId\" = mp.\"match_platformId\" AND "
+                    + "mps.\"match_gameId\" = mp.\"match_gameId\" AND "
+                    + "mp.\"participantId\" = mps.\"match_participant_participantId\" "
+                    + "JOIN match_participant_timeline mpt ON "
+                    + "mps.\"match_platformId\" = mpt.\"match_platformId\" AND "
+                    + "mps.\"match_gameId\" = mpt.\"match_gameId\" AND "
+                    + "mpt.\"match_participant_participantId\" = mps.\"match_participant_participantId\" "
+                    + "LIMIT " + rowCount)
+
+
+destCursor = dataDest.cursor()
+# new cols: root, slow, stun, charm, knockup (from wiki.json)
+# => maybe sum?
+# ap, ad, health, armor, mres + scaling (from champ.json)
+print("Creating table in destination database if not exists!")
+destCursor.execute("""CREATE TABLE IF NOT EXISTS style_prediction_data (champion_id integer NOT NULL, 
+                    tag1 varchar(10) NOT NULL, tag2 varchar(10) NULL, \"role\" varchar(10) NOT NULL, 
+                    root integer not null, slow integer NOT NULL, stun integer NOT NULL, charm integer 
+                    NOT NULL, knockup integer not null, base_ad decimal(7,2) not null, 
+                    base_health decimal(7,2) not null, base_armor decimal(7,2) not null, base_mres decimal(7,2) not null, 
+                    base_as decimal(7, 2) not null, ad_scaling  decimal(7,2) not null, health_scaling decimal(7,2) 
+                    not null, armor_scaling  decimal(7,2) not null, mres_scaling  decimal(7,2) not null,
+                    as_scaling decimal(8, 3) not null, perk_primary_style integer NOT NULL, 
+                    perk_sub_style integer NOT NULL);""")
+dataDest.commit()
+print("Created table style_prediction_data")
+
+baseInsert = """INSERT INTO style_prediction_data (champion_id, tag1, tag2, \"role\", root, slow, stun, charm, knockup, 
+                base_ad, base_health, base_armor, base_mres, base_as, ad_scaling, health_scaling, 
+                armor_scaling, mres_scaling, as_scaling, perk_primary_style, perk_sub_style) VALUES """
+rows = ["a"]  # just to get the loop started
+i = 0
+insert = ""
+while len(rows) > 0:
+    print("Fetching rows " + str(i) + " to " + str(i + 50))
+    rows = srcCursor.fetchmany(50)
+    rows = database.createRecord(srcCursor, rows)
+    for row in rows:
+        champion = championById[str(row.championId)]
+        wiki = wikiById[str(row.championId)]
+        tags = championById[str(row.championId)]["tags"]
+        tag1 = "'" + tags[0] + "'"
+        tag2 = "NULL"
+        if len(tags) > 1:
+            tag2 = "'" + tags[1] + "'"
+        # role transform
+        role = row.lane
+        if role == "BOTTOM":
+            if row.lane == "DUO_CARRY":
+                role = "MARKSMEN"
+            elif row.lane == "DUO_SUPPORT":
+                role = "SUPPORT"
+
+        # cc
+        slow = getOrDefault("slow", wiki["keywords"], 0)
+        root = getOrDefault("root", wiki["keywords"], 0)
+        stun = getOrDefault("stun", wiki["keywords"], 0)
+        charm = getOrDefault("charm", wiki["keywords"], 0)
+        knockup = getOrDefault("knockup", wiki["keywords"], 0)
+        # champ stats
+        stats = champion["stats"]
+        hp = stats["hp"]
+        hpScaling = stats["hpperlevel"]
+        armor = stats["armor"]
+        armorScaling = stats["armorperlevel"]
+        ad = stats["attackdamage"]
+        adScaling = stats["attackdamageperlevel"]
+        mres = stats["spellblock"]
+        mresScaling = stats["spellblockperlevel"]
+        asOffset = stats["attackspeedoffset"]
+        asScaling = stats["attackspeedperlevel"]
+
+        # champion_id, tag1, tag2, \"role\", root, slow, stun, charm, knockup, 
+        #        base_ad, base_health, base_armor, base_mres, base_as, ad_scaling, health_scaling, 
+        #        armor_scaling, mres_scaling, as_scaling, perk_primary_style, perk_sub_style
+        insert += "(" + str(row.championId) + ", " + str(tag1) + ", " + str(tag2) + ", '" + str(role) + "', " \
+            + str(root) + ", " + str(slow) + ", " + str(stun) + ", " + str(charm) + ", "\
+            + str(knockup) + ", " + str(ad) + ", " + str(hp) + ", " + str(armor) + ", " + str(mres) + ", " + str(asOffset) + ", " + str(adScaling) + ", "\
+            + str(hpScaling) + ", " + str(armorScaling) + ", " + str(mresScaling) + ", " + str(asScaling) + ", " \
+            + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ")"
+        if i > 0 and i % 50 == 0 and insert != "":
+            print("Inserting rows into destination database!")
+            destCursor.execute(baseInsert + insert + ";")
+            dataDest.commit()
+            insert = ""
+        else:  # (values), (values), ...
+            insert += ","
+        i += 1
+
+if insert != "":
+    print("Inserting remaining rows")
+    destCursor.execute(baseInsert + insert[:-1])  # remove last ,
+    dataDest.commit()
+print("Done!")
+destCursor.close()
+srcCursor.close()

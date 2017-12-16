@@ -1,0 +1,19 @@
+{
+  "pipeline":{
+
+    "Cache": {},
+
+    "SQLStore":{
+      "connection_string":"postgres://localhost/runesreforged",
+      "package":"cassiopeia-sqlstore.SQLStore",
+      "debug": false,
+      "expirations":{
+        "LeagueListDto": 0
+      }
+    },
+
+    "DDragon": {},
+
+    "RiotAPI": {}
+  }
+}

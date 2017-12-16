@@ -1,0 +1,16 @@
+{
+	database: {
+		src: {
+			url: "",
+			username: "",
+			password: "",
+			database: ""
+		},
+		dest: {
+			url: "",
+			username: "",
+			password: "",
+			database: ""
+		}
+	}
+}
