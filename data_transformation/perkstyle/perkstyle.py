@@ -51,10 +51,8 @@ srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\"
 
 
 destCursor = dataDest.cursor()
-# new cols: root, slow, stun, charm, knockup (from wiki.json)
-# => maybe sum?
-# ap, ad, health, armor, mres + scaling (from champ.json)
 print("Creating table in destination database if not exists!")
+# TODO could also use " integer not null".join(integerColumns) here
 destCursor.execute("""CREATE TABLE IF NOT EXISTS style_prediction_data (champion_id integer NOT NULL, 
                     tag1 varchar(10) NOT NULL, tag2 varchar(10) NULL, \"role\" varchar(10) NOT NULL, 
                     root integer not null, slow integer NOT NULL, stun integer NOT NULL, charm integer 
@@ -67,6 +65,10 @@ destCursor.execute("""CREATE TABLE IF NOT EXISTS style_prediction_data (champion
                     decimal(7,2) not null, e_cd_early  decimal(7,2) not null, r_cd_early  decimal(7,2) not null,
                     q_cd_late decimal(7,2) not null, w_cd_late  decimal(7,2) not null, e_cd_late  
                     decimal(7,2) not null, r_cd_late  decimal(7,2) not null,
+                    ap_ability_scaling_early decimal(7,2), ad_ability_scaling_early decimal(7,2), max_hp_scaling_early decimal(7,2),
+                    bonus_armor_scaling_early decimal(7,2), bonus_magic_resist_scaling_early decimal(7,2),
+                    ap_ability_scaling_late decimal(7,2), ad_ability_scaling_late decimal(7,2), max_hp_scaling_late decimal(7,2),
+                    bonus_armor_scaling_late decimal(7,2), bonus_magic_resist_scaling_late decimal(7,2),
                     perk_primary_style integer NOT NULL, 
                     perk_sub_style integer NOT NULL);""")
 dataDest.commit()
@@ -75,7 +77,11 @@ print("Created table style_prediction_data")
 baseInsert = """INSERT INTO style_prediction_data (champion_id, tag1, tag2, \"role\", root, slow, stun, charm, knockup, 
                 heal, shield, base_ad, base_health, base_armor, base_mres, base_as, ad_scaling, health_scaling, 
                 armor_scaling, mres_scaling, as_scaling, q_cd_early, w_cd_early, e_cd_early, r_cd_early,
-                q_cd_late, w_cd_late, e_cd_late, r_cd_late, perk_primary_style, perk_sub_style) VALUES """
+                q_cd_late, w_cd_late, e_cd_late, r_cd_late, ap_ability_scaling_early, ad_ability_scaling_early, 
+                max_hp_scaling_early, bonus_armor_scaling_early, bonus_magic_resist_scaling_early, 
+                ap_ability_scaling_late, ad_ability_scaling_late, 
+                max_hp_scaling_late, bonus_armor_scaling_late, bonus_magic_resist_scaling_late,
+                perk_primary_style, perk_sub_style) VALUES """
 rows = ["a"]  # just to get the loop started
 i = 0
 insert = ""
@@ -132,6 +138,21 @@ while len(rows) > 0:
         eCdLate = getOrDefault("3", cdLate, 0)
         rCdLate = getOrDefault("4", cdLate, 0)
 
+        # Ability scalings
+        early = wiki["early"]
+        late = wiki["late"]
+        ap_ability_scaling_early = getOrDefault("AP", early, 0)
+        ad_ability_scaling_early = getOrDefault("AD", early, 0) 
+        max_hp_scaling_early = getOrDefault("maximum health", early, 0)
+        bonus_armor_scaling_early = getOrDefault("bonus armor", early, 0)
+        bonus_magic_resist_scaling_early = getOrDefault("bonus magic resistance", early, 0)
+        
+        ap_ability_scaling_late = getOrDefault("AP", late, 0)
+        ad_ability_scaling_late = getOrDefault("AD", late, 0) 
+        max_hp_scaling_late = getOrDefault("maximum health", late, 0)
+        bonus_armor_scaling_late = getOrDefault("bonus armor", late, 0)
+        bonus_magic_resist_scaling_late = getOrDefault("bonus magic resistance", late, 0)
+
         # TODO: better with ", ".join(colList)        
         insert += "(" + str(row.championId) + ", " + str(tag1) + ", " + str(tag2) + ", '" + str(role) + "', " \
             + str(root) + ", " + str(slow) + ", " + str(stun) + ", " + str(charm) + ", "\
@@ -140,6 +161,12 @@ while len(rows) > 0:
             + str(hpScaling) + ", " + str(armorScaling) + ", " + str(mresScaling) + ", " + str(asScaling) + ", " \
             + str(qCdEarly) + " , " + str(wCdEarly) + ", " + str(eCdEarly) + " ," + str(rCdEarly) + ", " \
             + str(qCdLate) + " , " + str(wCdLate) + ", " + str(eCdLate) + ", " + str(rCdLate) + ", "\
+            + str(ap_ability_scaling_early) + ", " + str(ad_ability_scaling_early) + ", "  \
+            + str(max_hp_scaling_early) + ", " + str(bonus_armor_scaling_early) + ", " \
+            + str(bonus_armor_scaling_early) + ", "\
+            + str(bonus_magic_resist_scaling_early) + ", " + str(ad_ability_scaling_late) + ", "  \
+            + str(max_hp_scaling_late) + ", " + str(bonus_armor_scaling_late) + ", " \
+            + str(bonus_magic_resist_scaling_late) + ", "\
             + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ")"
         if i > 0 and i % 50 == 0 and insert != "":
             print("Inserting rows into destination database!")
