@@ -58,18 +58,24 @@ print("Creating table in destination database if not exists!")
 destCursor.execute("""CREATE TABLE IF NOT EXISTS style_prediction_data (champion_id integer NOT NULL, 
                     tag1 varchar(10) NOT NULL, tag2 varchar(10) NULL, \"role\" varchar(10) NOT NULL, 
                     root integer not null, slow integer NOT NULL, stun integer NOT NULL, charm integer 
-                    NOT NULL, knockup integer not null, base_ad decimal(7,2) not null, 
-                    base_health decimal(7,2) not null, base_armor decimal(7,2) not null, base_mres decimal(7,2) not null, 
+                    NOT NULL, knockup integer not null, heal integer not null, shield integer not null, 
+                    base_ad decimal(7,2) not null, base_health decimal(7,2) not null, 
+                    base_armor decimal(7,2) not null, base_mres decimal(7,2) not null, 
                     base_as decimal(7, 2) not null, ad_scaling  decimal(7,2) not null, health_scaling decimal(7,2) 
                     not null, armor_scaling  decimal(7,2) not null, mres_scaling  decimal(7,2) not null,
-                    as_scaling decimal(8, 3) not null, perk_primary_style integer NOT NULL, 
+                    as_scaling decimal(8, 3) not null, q_cd_early decimal(7,2) not null, w_cd_early  
+                    decimal(7,2) not null, e_cd_early  decimal(7,2) not null, r_cd_early  decimal(7,2) not null,
+                    q_cd_late decimal(7,2) not null, w_cd_late  decimal(7,2) not null, e_cd_late  
+                    decimal(7,2) not null, r_cd_late  decimal(7,2) not null,
+                    perk_primary_style integer NOT NULL, 
                     perk_sub_style integer NOT NULL);""")
 dataDest.commit()
 print("Created table style_prediction_data")
 
 baseInsert = """INSERT INTO style_prediction_data (champion_id, tag1, tag2, \"role\", root, slow, stun, charm, knockup, 
-                base_ad, base_health, base_armor, base_mres, base_as, ad_scaling, health_scaling, 
-                armor_scaling, mres_scaling, as_scaling, perk_primary_style, perk_sub_style) VALUES """
+                heal, shield, base_ad, base_health, base_armor, base_mres, base_as, ad_scaling, health_scaling, 
+                armor_scaling, mres_scaling, as_scaling, q_cd_early, w_cd_early, e_cd_early, r_cd_early,
+                q_cd_late, w_cd_late, e_cd_late, r_cd_late, perk_primary_style, perk_sub_style) VALUES """
 rows = ["a"]  # just to get the loop started
 i = 0
 insert = ""
@@ -92,13 +98,15 @@ while len(rows) > 0:
                 role = "MARKSMEN"
             elif row.lane == "DUO_SUPPORT":
                 role = "SUPPORT"
-
+        # TODO: write directly to list? see TODO below
         # cc
         slow = getOrDefault("slow", wiki["keywords"], 0)
         root = getOrDefault("root", wiki["keywords"], 0)
         stun = getOrDefault("stun", wiki["keywords"], 0)
         charm = getOrDefault("charm", wiki["keywords"], 0)
         knockup = getOrDefault("knockup", wiki["keywords"], 0)
+        heal = getOrDefault("heal", wiki["keywords"], 0)
+        shield = getOrDefault("shield", wiki["keywords"], 0)
         # champ stats
         stats = champion["stats"]
         hp = stats["hp"]
@@ -111,14 +119,27 @@ while len(rows) > 0:
         mresScaling = stats["spellblockperlevel"]
         asOffset = stats["attackspeedoffset"]
         asScaling = stats["attackspeedperlevel"]
+        # Cooldowns
+        cdEarly = wiki["early"]["cooldown"]
+        qCdEarly = getOrDefault("1", cdEarly, 0)
+        wCdEarly = getOrDefault("2", cdEarly, 0)
+        eCdEarly = getOrDefault("3", cdEarly, 0)
+        rCdEarly = getOrDefault("4", cdEarly, 0)
 
-        # champion_id, tag1, tag2, \"role\", root, slow, stun, charm, knockup, 
-        #        base_ad, base_health, base_armor, base_mres, base_as, ad_scaling, health_scaling, 
-        #        armor_scaling, mres_scaling, as_scaling, perk_primary_style, perk_sub_style
+        cdLate = wiki["late"]["cooldown"]
+        qCdLate = getOrDefault("1", cdLate, 0)
+        wCdLate = getOrDefault("2", cdLate, 0)
+        eCdLate = getOrDefault("3", cdLate, 0)
+        rCdLate = getOrDefault("4", cdLate, 0)
+
+        # TODO: better with ", ".join(colList)        
         insert += "(" + str(row.championId) + ", " + str(tag1) + ", " + str(tag2) + ", '" + str(role) + "', " \
             + str(root) + ", " + str(slow) + ", " + str(stun) + ", " + str(charm) + ", "\
-            + str(knockup) + ", " + str(ad) + ", " + str(hp) + ", " + str(armor) + ", " + str(mres) + ", " + str(asOffset) + ", " + str(adScaling) + ", "\
+            + str(knockup) + ", " + str(heal) + ", " + str(shield) +  ", " + str(ad) + ", " + str(hp) + ", " + str(armor) + ", " \
+            + str(mres) + ", " + str(asOffset) + ", " + str(adScaling) + ", "\
             + str(hpScaling) + ", " + str(armorScaling) + ", " + str(mresScaling) + ", " + str(asScaling) + ", " \
+            + str(qCdEarly) + " , " + str(wCdEarly) + ", " + str(eCdEarly) + " ," + str(rCdEarly) + ", " \
+            + str(qCdLate) + " , " + str(wCdLate) + ", " + str(eCdLate) + ", " + str(rCdLate) + ", "\
             + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ")"
         if i > 0 and i % 50 == 0 and insert != "":
             print("Inserting rows into destination database!")

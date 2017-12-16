@@ -3,22 +3,17 @@
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 250
+            "neuronCount": 300
         },
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 150
+            "neuronCount": 200
         },
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 250
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 150
+            "neuronCount": 100
         },
         {
             "type": "Dense",
@@ -40,7 +35,7 @@
     "predictColumn": "perk_primary_style",
     "nominalColumns": ["tag1", "tag2", "role", "perk_primary_style"],
     "trainDataPercentage": 0.9,
-    "epochs": 30,
+    "epochs": 100,
     "batchSize": 512,
-    "modelName": "b"
+    "modelName": "statsPrimaryPerkstyle1"
 }

@@ -22,8 +22,10 @@ class Data:
         colCount = 0
         for dfCol in dfCols.values:
             for column in columns:
-                if dfCol.startswith(column):
+                # either same OR we found the start of a nominal value
+                if dfCol == column or dfCol.startswith(column + "_"): 
                     colCount += 1
+        print("-----------------")
         return colCount
 
     def makeDataFrame(self, rows):
