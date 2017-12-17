@@ -38,5 +38,5 @@
     "trainDataPercentage": 0.9,
     "epochs": 100,
     "batchSize": 512,
-    "modelName": "cdPrimaryPerkstyle"
+    "modelName": "primary_perkstyle/cdPrimaryPerkstyle"
 }

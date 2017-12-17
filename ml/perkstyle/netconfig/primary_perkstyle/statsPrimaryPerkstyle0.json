@@ -42,5 +42,5 @@
     "trainDataPercentage": 0.9,
     "epochs": 30,
     "batchSize": 512,
-    "modelName": "statsPrimaryPerkstyle0"
+    "modelName": "primary_perkstyle/statsPrimaryPerkstyle0"
 }

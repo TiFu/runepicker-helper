@@ -25,5 +25,5 @@
     "nominalColumns": ["tag1", "tag2", "role", "perk_primary_style"],
     "epochs": 30,
     "batchSize": 256,
-    "modelName": "simplePrimaryPerkstyle"
+    "modelName": "primary_perkstyle/simplePrimaryPerkstyle"
 }
