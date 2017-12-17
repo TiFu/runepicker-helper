@@ -47,7 +47,7 @@ srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\"
                     + "mps.\"match_platformId\" = mpt.\"match_platformId\" AND "
                     + "mps.\"match_gameId\" = mpt.\"match_gameId\" AND "
                     + "mpt.\"match_participant_participantId\" = mps.\"match_participant_participantId\" "
-                    + "LIMIT " + rowCount)
+                    + "WHERE mps.\"perkPrimaryStyle\" IS NOT NULL and mps.\"perkSubStyle\" IS NOT NULL LIMIT " + rowCount)
 
 
 destCursor = dataDest.cursor()
