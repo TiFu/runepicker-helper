@@ -30,20 +30,21 @@ processedData = preprocessData(rows, netConfig["columns"], netConfig["predictCol
 data = processedData.transformed_rows
 print(data.columns)
 
+# TODO: integrate netConfig and this code into preprocessing.Data
 # train data length & col counts
 trainValidData = int(netConfig["trainDataPercentage"] * len(rows))
-inputColCount = processedData.getColumnCount(netConfig["columns"], 0);
-netConfig["layers"][0]["inputDim"] = inputColCount
-outputColCount = processedData.getColumnCount([netConfig["predictColumn"]], inputColCount)
+inCols = processedData.getColumns(netConfig["columns"]);
+outCols = processedData.getColumns([netConfig["predictColumn"]])
+netConfig["layers"][0]["inputDim"] = len(inCols)
 
 # train/val & test data
-trainX = data.iloc[0:trainValidData,0:inputColCount]
-trainY = data.iloc[0:trainValidData,inputColCount:inputColCount + outputColCount];
-testX = data.iloc[trainValidData:len(rows),0:inputColCount]
-testY = data.iloc[trainValidData:len(rows),inputColCount:inputColCount + outputColCount];
+trainX = data.iloc[0:trainValidData,:][inCols]
+trainY = data.iloc[0:trainValidData,:][outCols];
+testX = data.iloc[trainValidData:len(rows),:][inCols]
+testY = data.iloc[trainValidData:len(rows),:][outCols];
 
-print("Input columns (" + str(inputColCount) + "): " + str(trainX.columns))
-print("Target columns ( " + str(outputColCount) + "): " + str(trainY.columns))
+print("Input columns (" + str(len(inCols)) + "): " + str(trainX.columns))
+print("Target columns ( " + str(len(outCols)) + "): " + str(trainY.columns))
 
 
 from neuralnet import build, train, save

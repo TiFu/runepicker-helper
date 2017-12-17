@@ -1,6 +1,6 @@
 import keras
 from keras.layers import Dense
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 import json
 import os
 import pickle
@@ -67,7 +67,8 @@ def save(model, history, netConfig, trainReport, testReport):
 
 def load(netConfig):
     # todo implement
-    pass
+    return load_model("./perkstyle/models/" + netConfig["modelName"] + "/model")
+
 """
     {
         name: # in [Dense, ]
