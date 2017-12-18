@@ -38,7 +38,8 @@ print("Successfully connected to both databases!")
 
 print("Executing select to get " + rowCount + " rows!")
 srcCursor = dataSrc.cursor()
-srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\", \"lane\", \"role\" FROM "
+srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\", \"lane\", \"role\", \"perk0\", "
+                    + "\"perk1\", \"perk2\", \"perk3\", \"perk4\", \"perk5\" FROM "
                     + "match_participant_stats mps JOIN match_participant mp ON "
                     + "mps.\"match_platformId\" = mp.\"match_platformId\" AND "
                     + "mps.\"match_gameId\" = mp.\"match_gameId\" AND "
@@ -68,9 +69,10 @@ destCursor.execute("""CREATE TABLE IF NOT EXISTS style_prediction_data (champion
                     ap_ability_scaling_early decimal(7,2), ad_ability_scaling_early decimal(7,2), max_hp_scaling_early decimal(7,2),
                     bonus_armor_scaling_early decimal(7,2), bonus_magic_resist_scaling_early decimal(7,2),
                     ap_ability_scaling_late decimal(7,2), ad_ability_scaling_late decimal(7,2), max_hp_scaling_late decimal(7,2),
-                    bonus_armor_scaling_late decimal(7,2), bonus_magic_resist_scaling_late decimal(7,2),
+                    bonus_armor_scaling_late decimal(7,2), bonus_magic_resist_scaling_late decimal(7,2), \"resource\" varchar(20) NOT NULL,
                     perk_primary_style integer NOT NULL, 
-                    perk_sub_style integer NOT NULL);""")
+                    perk_sub_style integer NOT NULL, perk0 integer NOT NULL, perk1 integer NOT NULL, perk2  integer NOT NULL,
+                    perk3 integer NOT NULL, perk4 integer NOT NULL, perk5 integer NOT NULL);""")
 dataDest.commit()
 print("Created table style_prediction_data")
 
@@ -81,7 +83,7 @@ baseInsert = """INSERT INTO style_prediction_data (champion_id, tag1, tag2, \"ro
                 max_hp_scaling_early, bonus_armor_scaling_early, bonus_magic_resist_scaling_early, 
                 ap_ability_scaling_late, ad_ability_scaling_late, 
                 max_hp_scaling_late, bonus_armor_scaling_late, bonus_magic_resist_scaling_late,
-                perk_primary_style, perk_sub_style) VALUES """
+                resource, perk0, perk1, perk2, perk3, perk4, perk5, perk_primary_style, perk_sub_style) VALUES """
 rows = ["a"]  # just to get the loop started
 i = 0
 insert = ""
@@ -104,6 +106,8 @@ while len(rows) > 0:
                 role = "MARKSMEN"
             elif row.lane == "DUO_SUPPORT":
                 role = "SUPPORT"
+
+        resources = "'" + getOrDefault("partype", champion, "None") + "'";
         # TODO: write directly to list? see TODO below
         # cc
         slow = getOrDefault("slow", wiki["keywords"], 0)
@@ -152,7 +156,6 @@ while len(rows) > 0:
         max_hp_scaling_late = getOrDefault("maximum health", late, 0)
         bonus_armor_scaling_late = getOrDefault("bonus armor", late, 0)
         bonus_magic_resist_scaling_late = getOrDefault("bonus magic resistance", late, 0)
-
         # TODO: better with ", ".join(colList)        
         insert += "(" + str(row.championId) + ", " + str(tag1) + ", " + str(tag2) + ", '" + str(role) + "', " \
             + str(root) + ", " + str(slow) + ", " + str(stun) + ", " + str(charm) + ", "\
@@ -166,7 +169,9 @@ while len(rows) > 0:
             + str(bonus_armor_scaling_early) + ", "\
             + str(bonus_magic_resist_scaling_early) + ", " + str(ad_ability_scaling_late) + ", "  \
             + str(max_hp_scaling_late) + ", " + str(bonus_armor_scaling_late) + ", " \
-            + str(bonus_magic_resist_scaling_late) + ", "\
+            + str(bonus_magic_resist_scaling_late) + ", " + resources + ", "\
+            + str(row.perk0) + ", "+ str(row.perk1) + ", "+ str(row.perk2) + ", "+ str(row.perk3) + ", " \
+            + str(row.perk4) + ", "+ str(row.perk5) + ", "\
             + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ")"
         if i > 0 and i % 50 == 0 and insert != "":
             print("Inserting rows into destination database!")
