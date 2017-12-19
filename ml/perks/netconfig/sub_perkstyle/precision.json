@@ -26,7 +26,7 @@
             {
                 "type": "Dense",
                 "activation": "softmax",
-                "neuronCount": 3,
+                "neuronCount": 8,
                 "name": "perk0"
             }
         ],
@@ -34,24 +34,8 @@
             {
                 "type": "Dense",
                 "activation": "softmax",
-                "neuronCount": 3,
+                "neuronCount": 8,
                 "name": "perk1"
-            }    
-        ],
-        [
-            {
-                "type": "Dense",
-                "activation": "softmax",
-                "neuronCount": 3,
-                "name": "perk2"
-            }    
-        ],
-        [
-            {
-                "type": "Dense",
-                "activation": "softmax",
-                "neuronCount": 3,
-                "name": "perk3"
             }    
         ]
     ],
