@@ -40,19 +40,19 @@ def fetchDataFiltered(connection, columns, predictColumn, conditions):
     cursor.close()
     return rows
 
-def fetchData(connection, columns, predictColumn):
+def fetchData(connection, columns, predictColumns, perkstyle_attribute, perkstyle):
     cursor = connection.cursor()
-    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns)) + ", \"" + predictColumn + """\" FROM style_prediction_data""");
+    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns)) + ", " + ", ".join(map(lambda x: "\"" + x + "\"", predictColumns)) + " FROM style_prediction_data WHERE " + perkstyle_attribute + " = " + str(perkstyle));
     rows = cursor.fetchall()
     cursor.close()
     return rows
 
 # TODO: use https://github.com/pandas-dev/pandas/issues/8918
 #       see comment of jreback on Oct 5, 2015 (and determine automatically)
-def preprocessData(rows, columns, predictColumn, nominalColumns):
+def preprocessData(rows, columns, predictColumns, nominalColumns):
     totalColumns = []
     totalColumns.extend(columns)
-    totalColumns.append(predictColumn)
+    totalColumns.extend(predictColumns)
     dataFrame = pd.DataFrame(rows, columns=totalColumns)
     smarties = Smarties()
     dummies = smarties.fit_transform(data=dataFrame, columns=nominalColumns)
