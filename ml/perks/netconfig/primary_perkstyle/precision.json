@@ -73,10 +73,10 @@
         "perk3"
     ],
     "nominalColumns": ["tag1", "tag2", "role", "perk0", "perk1", "perk2", "perk3"],
-    "perkstyle": 8300,
+    "perkstyle": 8000,
     "perkstyle_attribute": "perk_primary_style",
     "trainDataPercentage": 0.9,
     "epochs": 10,
     "batchSize": 512,
-    "modelName": "primary_perkstyle/abilityScaling"
+    "modelName": "primary_perkstyle/domination"
 }
