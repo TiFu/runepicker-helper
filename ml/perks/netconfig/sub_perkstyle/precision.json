@@ -60,5 +60,5 @@
     "trainDataPercentage": 0.9,
     "epochs": 10,
     "batchSize": 512,
-    "modelName": "sub_perkstyle/domination"
+    "modelName": "sub_perkstyle/precision"
 }
