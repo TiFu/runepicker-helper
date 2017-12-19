@@ -76,5 +76,5 @@
     "trainDataPercentage": 0.9,
     "epochs": 10,
     "batchSize": 512,
-    "modelName": "primary_perkstyle/sorcery"
+    "modelName": "sub_perkstyle/sorcery"
 }
