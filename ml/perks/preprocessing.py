@@ -34,26 +34,54 @@ def fetchDataFiltered(connection, columns, predictColumn, conditions):
     cursor = connection.cursor()
     conditions = map(lambda x: x[0] + " = " + "'" +  str(x[1]) + "'", conditions)
     cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns))\
-                    + ", \"" + predictColumn + "\" FROM style_prediction_data WHERE " \
+                    + ", \"" + predictColumn + "\", \"win\" FROM style_prediction_data WHERE " \
                     + " and ".join(conditions));
     rows = cursor.fetchall()
     cursor.close()
     return rows
 
-def fetchData(connection, columns, predictColumns, perkstyle_attribute, perkstyle):
+def fetchData(connection, columns, predictColumn, perkstyle_attribute, perkstyle):
     cursor = connection.cursor()
-    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns)) + ", " + ", ".join(map(lambda x: "\"" + x + "\"", predictColumns)) + " FROM style_prediction_data WHERE " + perkstyle_attribute + " = " + str(perkstyle));
+    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns)) + ", \"" + predictColumn + "\", \"win\" FROM style_prediction_data WHERE " + perkstyle_attribute + " = " + str(perkstyle));
     rows = cursor.fetchall()
     cursor.close()
     return rows
 
 # TODO: use https://github.com/pandas-dev/pandas/issues/8918
 #       see comment of jreback on Oct 5, 2015 (and determine automatically)
-def preprocessData(rows, columns, predictColumns, nominalColumns):
+def preprocessData(rows, columns, predictColumn, nominalColumns):
     totalColumns = []
     totalColumns.extend(columns)
-    totalColumns.extend(predictColumns)
+    totalColumns.append(predictColumn)
+    totalColumns.append("win")
     dataFrame = pd.DataFrame(rows, columns=totalColumns)
+    dataFrame["win"] = pd.to_numeric(dataFrame["win"])
     smarties = Smarties()
     dummies = smarties.fit_transform(data=dataFrame, columns=nominalColumns)
-    return Data(smarties, dataFrame, dummies, totalColumns)
+    # TODO: set 1 or -1 depending on win 
+    data = Data(smarties, dataFrame, dummies, totalColumns)
+    cols = data.getColumns([predictColumn])
+# enable if you want to use custom error func
+#    for col in cols:
+        # set 'not picked' perks to -1
+#        data.transformed_rows[col] = np.where(data.transformed_rows[col] == 0, -1, data.transformed_rows[col])
+        # set to 1 if won and picked
+        # TODO: exclude -1 from this setting 
+#        data.transformed_rows[col] = np.where(data.transformed_rows[col] > -1, data.transformed_rows["win"], -1)
+    return data
+
+from sklearn import preprocessing
+def preprocessDataForRandomForest(rows, columns, predictColumn, nominalColumns):
+    totalColumns = []
+    totalColumns.extend(columns)
+    totalColumns.append(predictColumn)
+    totalColumns.append("win")
+    dataFrame = pd.DataFrame(rows, columns=totalColumns)
+    dataFrame["win"] = pd.to_numeric(dataFrame["win"])
+    for col in nominalColumns:
+        le = preprocessing.LabelEncoder()
+        dataFrame[col].fillna(value="null", inplace=True) 
+        dataFrame[col] = le.fit_transform(dataFrame[col])
+    
+    data = Data(None, dataFrame, dataFrame, totalColumns)
+    return data
