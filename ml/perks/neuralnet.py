@@ -81,7 +81,7 @@ def save(model, history, netConfig, trainReports, testReports):
 
 def load(netConfig):
     # todo implement
-    return load_model("./perkstyle/models/" + netConfig["modelName"] + "/model")
+    return load_model("./perks/models/" + netConfig["modelName"] + "/model")
 
 """
     {
