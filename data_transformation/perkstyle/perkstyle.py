@@ -39,7 +39,7 @@ print("Successfully connected to both databases!")
 print("Executing select to get " + rowCount + " rows!")
 srcCursor = dataSrc.cursor()
 srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\", \"lane\", \"role\", \"perk0\", "
-                    + "\"perk1\", \"perk2\", \"perk3\", \"perk4\", \"perk5\" FROM "
+                    + "\"perk1\", \"perk2\", \"perk3\", \"perk4\", \"perk5\", mt.\"win\" FROM "
                     + "match_participant_stats mps JOIN match_participant mp ON "
                     + "mps.\"match_platformId\" = mp.\"match_platformId\" AND "
                     + "mps.\"match_gameId\" = mp.\"match_gameId\" AND "
@@ -48,7 +48,9 @@ srcCursor.execute("SELECT \"championId\", \"perkPrimaryStyle\", \"perkSubStyle\"
                     + "mps.\"match_platformId\" = mpt.\"match_platformId\" AND "
                     + "mps.\"match_gameId\" = mpt.\"match_gameId\" AND "
                     + "mpt.\"match_participant_participantId\" = mps.\"match_participant_participantId\" "
-                    + "WHERE mps.\"perkPrimaryStyle\" IS NOT NULL and mps.\"perkSubStyle\" IS NOT NULL LIMIT " + rowCount)
+                    + "JOIN match m ON m.\"platformId\" = mp.\"match_platformId\" AND m.\"gameId\" = mp.\"match_gameId\" "
+                    + "JOIN match_team mt ON mt.\"match_platformId\" = m.\"platformId\" AND mt.\"match_gameId\" = m.\"gameId\" "
+                    + "WHERE mt.\"teamId\" = mp.\"teamId\" AND mps.\"perkPrimaryStyle\" IS NOT NULL and mps.\"perkSubStyle\" IS NOT NULL LIMIT " + rowCount)
 
 
 destCursor = dataDest.cursor()
@@ -72,7 +74,7 @@ destCursor.execute("""CREATE TABLE IF NOT EXISTS style_prediction_data (champion
                     bonus_armor_scaling_late decimal(7,2), bonus_magic_resist_scaling_late decimal(7,2), \"resource\" varchar(20) NOT NULL,
                     perk_primary_style integer NOT NULL, 
                     perk_sub_style integer NOT NULL, perk0 integer NOT NULL, perk1 integer NOT NULL, perk2  integer NOT NULL,
-                    perk3 integer NOT NULL, perk4 integer NOT NULL, perk5 integer NOT NULL);""")
+                    perk3 integer NOT NULL, perk4 integer NOT NULL, perk5 integer NOT NULL, win BIT NOT NULL);""")
 dataDest.commit()
 print("Created table style_prediction_data")
 
@@ -83,7 +85,7 @@ baseInsert = """INSERT INTO style_prediction_data (champion_id, tag1, tag2, \"ro
                 max_hp_scaling_early, bonus_armor_scaling_early, bonus_magic_resist_scaling_early, 
                 ap_ability_scaling_late, ad_ability_scaling_late, 
                 max_hp_scaling_late, bonus_armor_scaling_late, bonus_magic_resist_scaling_late,
-                resource, perk0, perk1, perk2, perk3, perk4, perk5, perk_primary_style, perk_sub_style) VALUES """
+                resource, perk0, perk1, perk2, perk3, perk4, perk5, perk_primary_style, perk_sub_style, win) VALUES """
 rows = ["a"]  # just to get the loop started
 i = 0
 insert = ""
@@ -92,6 +94,8 @@ while len(rows) > 0:
     rows = srcCursor.fetchmany(50)
     rows = database.createRecord(srcCursor, rows)
     for row in rows:
+        if row.win != "Win" and row.win != "Fail":
+            print("Skipped entry with win " + str(row.win))
         champion = championById[str(row.championId)]
         wiki = wikiById[str(row.championId)]
         tags = championById[str(row.championId)]["tags"]
@@ -172,7 +176,7 @@ while len(rows) > 0:
             + str(bonus_magic_resist_scaling_late) + ", " + resources + ", "\
             + str(row.perk0) + ", "+ str(row.perk1) + ", "+ str(row.perk2) + ", "+ str(row.perk3) + ", " \
             + str(row.perk4) + ", "+ str(row.perk5) + ", "\
-            + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ")"
+            + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ", '" + str(1 if row.win == "Win" else 0) + "')"
         if i > 0 and i % 50 == 0 and insert != "":
             print("Inserting rows into destination database!")
             destCursor.execute(baseInsert + insert + ";")
