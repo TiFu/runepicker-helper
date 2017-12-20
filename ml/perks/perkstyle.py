@@ -22,12 +22,11 @@ db = dbConfig["database"]
 
 connection = database.connect(url, user, password,db)
 netConfig = json.load(open("./perks/netconfig/" + sys.argv[1]))
-# TODO: set custom error func here
 
 from preprocessing import fetchData, preprocessData
 
-rows = fetchData(connection, netConfig["columns"], netConfig["predictColumns"], netConfig["perkstyle_attribute"], netConfig["perkstyle"])
-processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumns"], netConfig["nominalColumns"])
+rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig["perkstyle_attribute"], netConfig["perkstyle"])
+processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"])
 data = processedData.transformed_rows
 print(data.columns)
 
@@ -35,22 +34,18 @@ print(data.columns)
 # train data length & col counts
 trainValidData = int(netConfig["trainDataPercentage"] * len(rows))
 inCols = processedData.getColumns(netConfig["columns"]);
+outCols = processedData.getColumns([netConfig["predictColumn"]])
+netConfig["layers"][0]["inputDim"] = len(inCols)
+
 # train/val & test data
 trainX = data.iloc[0:trainValidData,:][inCols]
-testX = data.iloc[trainValidData:len(rows),:][inCols]
+trainY = data.iloc[0:trainValidData,:][outCols];
 
-trainY = []
-testY = []
-for col in netConfig["predictColumns"]:
-    outCols = processedData.getColumns([col])
-    trainY.append(data.iloc[0:trainValidData,:][outCols])
-    testY.append(data.iloc[trainValidData:len(rows),:][outCols])
-print(netConfig)
-netConfig["sharedLayers"][0]["inputDim"] = len(inCols)
+testX = data.iloc[trainValidData:len(rows),:][inCols]
+testY = data.iloc[trainValidData:len(rows),:][outCols];
 
 print("Input columns (" + str(len(inCols)) + "): " + str(trainX.columns))
-for out in trainY:
-    print("Target columns ( " + str(len(outCols)) + "): " + str(out.columns))
+print("Target columns ( " + str(len(outCols)) + "): " + str(trainY.columns))
 
 
 from neuralnet import build, train, save
@@ -58,26 +53,17 @@ model = build(netConfig)
 history = train(model, trainX, trainY, netConfig)
 
 from sklearn.metrics import classification_report
+predictY = model.predict_classes(testX.values)
+predictTrainY = model.predict_classes(trainX.values)
 
-print("")
-predictTrainY = model.predict(trainX.values)
-predictY = model.predict(testX.values)
-trainReports = []
-testReports = []
-for i in range(len(predictTrainY)):
-    print("Training Data: ")
-    cols = trainY[i].columns
-    predictTrainY[i] = predictTrainY[i].argmax(axis=-1)
-    trainReport = classification_report(np.argmax(trainY[i].values, axis=1), predictTrainY[i])
-    trainReports.append((cols, trainReport))
-    print(trainReport)
-    print("Test data:")
-    cols = testY[i].columns
-    predictY[i] = predictY[i].argmax(axis=-1)
-    testReport = classification_report(np.argmax(testY[i].values, axis=1), predictY[i])
-    testReports.append((cols, testReport))
-    print(testY[i].columns)
-    print(testReport)
-    print("------------")
+
+labelTrainY = np.argmax(trainY.values, axis=1)
+
+print("Training Data: ")
+trainReport = classification_report(labelTrainY, predictTrainY)
+print(trainReport)
+print("Test data:")
+testReport = classification_report(np.argmax(testY.values, axis=1), predictY)
+print(testReport)
 # TODO: save classification report and graph for train & validation loss
-save(model, history, netConfig, trainReports, testReports)
+save(model, history, netConfig, trainReport, testReport)

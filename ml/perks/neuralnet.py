@@ -1,12 +1,17 @@
 import keras
-from keras.layers import Dense, Input
-from keras.models import Sequential, load_model, Model
+from keras.layers import Dense
+from keras.models import Sequential, load_model
 import json
 import os
 import pickle
 import matplotlib.pyplot as plt
 from keras.utils import plot_model
-
+import keras.backend as K
+def maskedErrorFunc(y_true, y_pred):
+    mask = K.cast(K.not_equal(y_true, -1), K.floatx())
+    maskedError = (y_true - y_pred) * mask
+    correct = K.mean(K.square(maskedError))
+    return correct
 """
     {
         layers: Array<Layer> # see _getLayer
@@ -19,30 +24,22 @@ from keras.utils import plot_model
     }
 """
 def build(netConfig):
-    # TODO fix with functional api and multiple outputs
-    # https://keras.io/getting-started/functional-api-guide/
-    input = Input(shape=(netConfig["sharedLayers"][0]["inputDim"],))
-    sharedLayers = input
-    for layer in netConfig["sharedLayers"]:
-        sharedLayers = _getLayer(layer)(sharedLayers)
-    # Add outputs
-    outputs = []
-    for output in netConfig["outputs"]:
-        subModel = sharedLayers
-        for layer in output:
-            subModel = _getLayer(layer)(subModel)
-        outputs.append(subModel)
-
-    model = Model(inputs=[input], outputs=outputs)
-    model.compile(optimizer=netConfig["optimizer"], loss=netConfig["loss"], metrics=netConfig["metrics"], loss_weights=netConfig["lossWeights"])
+    model = Sequential()
+    first = True
+    for layer in netConfig["layers"]:
+        model.add(_getLayer(layer, first))
+        first = False
+# enable if you want to use custom error func. also search in preprocessing to enable this too
+#    if netConfig["loss"] == "maskedErrorFunc":
+#        netConfig["loss"] = maskedErrorFunc
+    model.compile(optimizer=netConfig["optimizer"], loss=netConfig["loss"], metrics=netConfig["metrics"])
     return model
 
 def train(model, x_train, y_train, netConfig):
-    y_train = list(map(lambda x: x.values, y_train))
-    history = model.fit([x_train.values], y_train, batch_size=netConfig["batchSize"], epochs=netConfig["epochs"], validation_split=0.1, shuffle=True)
+    history = model.fit(x_train.values, y_train.values, batch_size=netConfig["batchSize"], epochs=netConfig["epochs"], validation_split=0.1, shuffle=True)
     return history
 
-def save(model, history, netConfig, trainReports, testReports):
+def save(model, history, netConfig, trainReport, testReport):
     dir = "./perks/models/" + netConfig["modelName"] + "/"
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -56,15 +53,12 @@ def save(model, history, netConfig, trainReports, testReports):
         pickle.dump(history.history, file_pi)
     # save reports
     with open(dir + "reports", 'w') as reportFile:
-        for i in range(len(trainReports)):
-            reportFile.write(str(trainReports[i][0]) + "\n")
-            reportFile.write("Training Report:\n")
-            reportFile.write(str(trainReports[i][1]) + "\n")
-            reportFile.write("\nTest Report: \n")
-            reportFile.write(str(testReports[i][1]))
-            reportFile.write("\n\n\n\n")
-            reportFile.flush()
-        
+        reportFile.write("Training Report:\n")
+        reportFile.write(str(trainReport) + "\n")
+        reportFile.write("\n\n\nTest Report: \n")
+        reportFile.write(str(testReport))
+        reportFile.write("\n")
+        reportFile.flush()
     # save model image
     plot_model(model, to_file=dir + "model.png")
     # save history image
@@ -90,9 +84,11 @@ def load(netConfig):
         neuronCount: # number of neurons
     }
 """
-def _getLayer(layerConfig):
-    if "name" not in layerConfig:
-        layerConfig["name"] = None
+def _getLayer(layerConfig, first):
+    if first:
+        inputShape = layerConfig["inputDim"]
+    else:
+        inputShape = None
     if layerConfig["type"] == "Dense":
-        layer = Dense(layerConfig["neuronCount"], activation=layerConfig["activation"], name=layerConfig["name"])
+        layer = Dense(layerConfig["neuronCount"], activation=layerConfig["activation"], input_dim=inputShape)
         return layer

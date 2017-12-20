@@ -1,5 +1,5 @@
 {
-    "sharedLayers": [
+    "layers": [
         {
             "type": "Dense",
             "activation": "tanh",
@@ -19,43 +19,13 @@
             "type": "Dense",
             "activation": "tanh",
             "neuronCount": 30
+        },
+        {
+            "type": "Dense",
+            "activation": "softmax",
+            "neuronCount": 3
         }
     ],
-    "outputs": [
-        [        
-            {
-                "type": "Dense",
-                "activation": "softmax",
-                "neuronCount": 3,
-                "name": "perk0"
-            }
-        ],
-        [
-            {
-                "type": "Dense",
-                "activation": "softmax",
-                "neuronCount": 3,
-                "name": "perk1"
-            }    
-        ],
-        [
-            {
-                "type": "Dense",
-                "activation": "softmax",
-                "neuronCount": 3,
-                "name": "perk2"
-            }    
-        ],
-        [
-            {
-                "type": "Dense",
-                "activation": "softmax",
-                "neuronCount": 3,
-                "name": "perk3"
-            }    
-        ]
-    ],
-    "lossWeights": [0.1, 0.1, 0.1, 0.1],
     "optimizer": "adam",
     "loss": "categorical_crossentropy",
     "metrics": ["accuracy"],
@@ -66,13 +36,8 @@
         "max_hp_scaling_early", "bonus_armor_scaling_early", "bonus_magic_resist_scaling_early",
         "ap_ability_scaling_late", "ad_ability_scaling_late",
         "max_hp_scaling_late", "bonus_armor_scaling_late", "bonus_magic_resist_scaling_late"],
-    "predictColumns": [
-        "perk0",
-        "perk1",
-        "perk2",
-        "perk3"
-    ],
-    "nominalColumns": ["tag1", "tag2", "role", "perk0", "perk1", "perk2", "perk3"],
+    "predictColumn": "perk1",
+    "nominalColumns": ["tag1", "tag2", "role", "perk1"],
     "perkstyle": 8000,
     "perkstyle_attribute": "perk_primary_style",
     "trainDataPercentage": 0.9,
