@@ -26,7 +26,7 @@ netConfig = json.load(open("./perks/netconfig/" + sys.argv[1]))
 from preprocessing import fetchData, preprocessData
 
 rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig["perkstyle_attribute"], netConfig["perkstyle"])
-processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"])
+processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"], netConfig)
 data = processedData.transformed_rows
 print(data.columns)
 

@@ -22,12 +22,12 @@
         },
         {
             "type": "Dense",
-            "activation": "softmax",
+            "activation": "sigmoid",
             "neuronCount": 3
         }
     ],
     "optimizer": "adam",
-    "loss": "categorical_crossentropy",
+    "loss": "win_loss",
     "metrics": ["accuracy"],
     "columns": ["tag1", "tag2", "role", "root", "slow", "stun", "charm", "knockup", "heal", "shield",
         "base_ad", "base_health", "base_armor", "base_mres", "base_as", "ad_scaling", "health_scaling", 
@@ -36,8 +36,8 @@
         "max_hp_scaling_early", "bonus_armor_scaling_early", "bonus_magic_resist_scaling_early",
         "ap_ability_scaling_late", "ad_ability_scaling_late",
         "max_hp_scaling_late", "bonus_armor_scaling_late", "bonus_magic_resist_scaling_late"],
-    "predictColumn": "perk1",
-    "nominalColumns": ["tag1", "tag2", "role", "perk1"],
+    "predictColumn": "perk3",
+    "nominalColumns": ["tag1", "tag2", "role", "perk3"],
     "perkstyle": 8000,
     "perkstyle_attribute": "perk_primary_style",
     "trainDataPercentage": 0.9,
