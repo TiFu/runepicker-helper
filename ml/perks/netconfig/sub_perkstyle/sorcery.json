@@ -39,7 +39,7 @@
     "predictColumn": "perk3",
     "nominalColumns": ["tag1", "tag2", "role", "perk3"],
     "perkstyle": 8200,
-    "perkstyle_attribute": "perk_primary_style",
+    "perkstyle_attribute": "perk_sub_style",
     "trainDataPercentage": 0.9,
     "epochs": 10,
     "batchSize": 512,

@@ -90,8 +90,8 @@ rows = ["a"]  # just to get the loop started
 i = 0
 insert = ""
 while len(rows) > 0:
-    print("Fetching rows " + str(i) + " to " + str(i + 50))
-    rows = srcCursor.fetchmany(50)
+    print("Fetching rows " + str(i) + " to " + str(i + 200))
+    rows = srcCursor.fetchmany(200)
     rows = database.createRecord(srcCursor, rows)
     for row in rows:
         if row.win != "Win" and row.win != "Fail":
@@ -111,6 +111,13 @@ while len(rows) > 0:
             elif row.lane == "DUO_SUPPORT":
                 role = "SUPPORT"
 
+        if row.perk4 > row.perk5:
+            perk4 = row.perk5
+            perk5 = row.perk4
+        else:
+            perk4 = row.perk4
+            perk5 = row.perk5
+                
         resources = "'" + getOrDefault("partype", champion, "None") + "'";
         # TODO: write directly to list? see TODO below
         # cc
@@ -175,7 +182,7 @@ while len(rows) > 0:
             + str(max_hp_scaling_late) + ", " + str(bonus_armor_scaling_late) + ", " \
             + str(bonus_magic_resist_scaling_late) + ", " + resources + ", "\
             + str(row.perk0) + ", "+ str(row.perk1) + ", "+ str(row.perk2) + ", "+ str(row.perk3) + ", " \
-            + str(row.perk4) + ", "+ str(row.perk5) + ", "\
+            + str(perk4) + ", "+ str(perk5) + ", "\
             + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ", '" + str(1 if row.win == "Win" else 0) + "')"
         if i > 0 and i % 50 == 0 and insert != "":
             print("Inserting rows into destination database!")
