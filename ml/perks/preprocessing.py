@@ -30,15 +30,15 @@ class Data:
         return df
         
 # integraet into fetchData?
-def fetchDataFiltered(connection, columns, predictColumn, conditions):
-    cursor = connection.cursor()
-    conditions = map(lambda x: x[0] + " = " + "'" +  str(x[1]) + "'", conditions)
-    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns))\
-                    + ", \"" + predictColumn + "\", \"win\" FROM style_prediction_data WHERE " \
-                    + " and ".join(conditions));
-    rows = cursor.fetchall()
-    cursor.close()
-    return rows
+#def fetchDataFiltered(connection, columns, predictColumn, conditions):
+#    cursor = connection.cursor()
+#    conditions = map(lambda x: x[0] + " = " + "'" +  str(x[1]) + "'", conditions)
+#    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns))\
+#                    + ", \"" + predictColumn + "\", \"win\" FROM style_prediction_data WHERE " \
+#                    + " and ".join(conditions));
+#    rows = cursor.fetchall()
+#    cursor.close()
+#    return rows
 
 def fetchData(connection, columns, predictColumn, perkstyle_attribute, perkstyle):
     cursor = connection.cursor()
@@ -49,7 +49,7 @@ def fetchData(connection, columns, predictColumn, perkstyle_attribute, perkstyle
 
 # TODO: use https://github.com/pandas-dev/pandas/issues/8918
 #       see comment of jreback on Oct 5, 2015 (and determine automatically)
-def preprocessData(rows, columns, predictColumn, nominalColumns):
+def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
     totalColumns = []
     totalColumns.extend(columns)
     totalColumns.append(predictColumn)
@@ -61,13 +61,13 @@ def preprocessData(rows, columns, predictColumn, nominalColumns):
     # TODO: set 1 or -1 depending on win 
     data = Data(smarties, dataFrame, dummies, totalColumns)
     cols = data.getColumns([predictColumn])
-# enable if you want to use custom error func
-#    for col in cols:
-        # set 'not picked' perks to -1
-#        data.transformed_rows[col] = np.where(data.transformed_rows[col] == 0, -1, data.transformed_rows[col])
-        # set to 1 if won and picked
-        # TODO: exclude -1 from this setting 
-#        data.transformed_rows[col] = np.where(data.transformed_rows[col] > -1, data.transformed_rows["win"], -1)
+    if netConfig["loss"] == "win_loss":
+        for col in cols:
+            # set 'not picked' perks to -1
+            data.transformed_rows[col] = np.where(data.transformed_rows[col] == 0, -1, data.transformed_rows[col])
+            # set to 1 if won and picked
+            # TODO: exclude -1 from this setting 
+            data.transformed_rows[col] = np.where(data.transformed_rows[col] > -1, data.transformed_rows["win"], -1)
     return data
 
 from sklearn import preprocessing
