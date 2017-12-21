@@ -29,10 +29,11 @@ def build(netConfig):
     for layer in netConfig["layers"]:
         model.add(_getLayer(layer, first))
         first = False
-# enable if you want to use custom error func. also search in preprocessing to enable this too
-#    if netConfig["loss"] == "maskedErrorFunc":
-#        netConfig["loss"] = maskedErrorFunc
-    model.compile(optimizer=netConfig["optimizer"], loss=netConfig["loss"], metrics=netConfig["metrics"])
+    if netConfig["loss"] == "win_loss":
+        loss = maskedErrorFunc
+    else:
+        loss = netConfig["loss"]
+    model.compile(optimizer=netConfig["optimizer"], loss=loss, metrics=netConfig["metrics"])
     return model
 
 def train(model, x_train, y_train, netConfig):
