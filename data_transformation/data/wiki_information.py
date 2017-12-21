@@ -1,6 +1,24 @@
 import sys, os, requests, json, re
 from bs4 import BeautifulSoup
 
+keywords = {
+    "charm":"charm",
+    "stun":"stun",
+    "root":"root",
+    "slow":"slow", # Detects slowing as well
+    "heal":"heal",
+    "shield":"shield",
+    "knockup":"knockup",
+    "knocking up":"knockup",
+    "knocking them up":"knockup",
+    "heal": "heal",
+    "knocks down":"knockdown",
+    "knocking them down":"knockdown",
+    "suppressed":"suppressed",
+    "asleep":"sleeping",
+    "brittle":"brittle"
+}
+
 # Helper Functions
 def html_to_string(html):
     string = ""
@@ -101,7 +119,7 @@ def sanitize_attribute_name(attr_name):
 def parse_skill(skill):
     if len(skill.get("class")) != 2:
         return {"type":"undefined"}
-    info = {"type":skill.get('class',[])[-1], "attributes":{}}
+    info = {"type":skill.get('class',[])[-1], "attributes":{}, "tags":[], "cooldown":[]}
     wrapper = skill.select(".skill_header > div")[0]
     info["name"] = wrapper.get("id")
     if not info["type"] == "skill_innate":
@@ -133,6 +151,29 @@ def parse_skill(skill):
                 else:
                     # There is no base damage (e.g. Ashe Damage per Arrow on Q)
                     info["attributes"][sanitize_attribute_name(title)] = {"type":"none", "value":[], "scalings":scales}
+        # Scan description for keywords
+        text = html_to_string(wrapper).lower()
+        for key, value in keywords.items():
+            if key.lower() in text:
+                info["tags"].append(value)
+        # Get cooldowm
+        cdcontainer = wrapper.find("div", id="cooldowncontainer")
+        if not cdcontainer:
+            cdcontainer = wrapper.find("div", id="staticcontainer")
+        if cdcontainer:
+            cdcontainer.span.decompose()
+            text = html_to_string(cdcontainer).strip()
+            if "based on bonus attack speed" in text:
+                splitted = text.replace("(based on bonus attack speed)", "").split("-")
+                info["cooldown"] = [float(split) for split in splitted]
+            elif "/" in text:
+                splitted = text.split("/")
+                for split in splitted:
+                    info["cooldown"].append(float(split.strip()))
+            else:
+                cd = float(text)
+                for i in range(5):
+                    info["cooldown"].append(cd)
     return info
 
 
@@ -183,13 +224,47 @@ attributes = {}
 
 # Generate scalings.json
 def generate_scalings(wiki_info):
+    print("Generating scalings")
     scalings = {}
+
     for champ, value in wiki_info.items():
-        champ_scaling = {"min":{},"max":{}}
+        champ_scaling = {"early":{"cooldown":{}},"late":{"cooldown":{}}, "keywords":{}}
         # Iterate over skill sets
         for skills in value["skills"]:
             # Iterate over every simple skill
+            second_iteration = False
             for key, skill in skills["skills"].items():
+                if key == "undefined" or key == "skill_innate":
+                    continue
+                for tag in skill["tags"]:
+                    champ_scaling["keywords"][tag] = champ_scaling["keywords"][tag] + 1 if tag in champ_scaling["keywords"] else 1
+                # Ignore Lee Sins reactivations
+                if "_0" in key:
+                    pass
+                elif len(value["skills"]) > 1:
+                    if not second_iteration:
+                        if len(skill["cooldown"]) <= 0:
+                            champ_scaling["early"]["cooldown"][key] = 0
+                            champ_scaling["late"]["cooldown"][key] = 0
+                        else:
+                            champ_scaling["early"]["cooldown"][key] = skill["cooldown"][0]
+                            champ_scaling["late"]["cooldown"][key] = skill["cooldown"][-1]
+                    else:
+                        if len(skill["cooldown"]) > 0:
+                            if champ_scaling["early"]["cooldown"][key] > skill["cooldown"][0]:
+                                champ_scaling["early"]["cooldown"][key] = skill["cooldown"][0]
+                            if champ_scaling["late"]["cooldown"][key] > skill["cooldown"][-1]:
+                                champ_scaling["late"]["cooldown"][key] = skill["cooldown"][-1]
+                else:
+                    key.replace("_1","")
+                    if len(skill["cooldown"]) <= 0:
+                        champ_scaling["early"]["cooldown"][key] = 0
+                        champ_scaling["late"]["cooldown"][key] = 0
+                    else:
+                        champ_scaling["early"]["cooldown"][key] = skill["cooldown"][0]
+                        champ_scaling["late"]["cooldown"][key] = skill["cooldown"][-1]
+
+
                 # Iterate over attributes
                 if "attributes" in skill:
                     for attr_name, attr in skill["attributes"].items():
@@ -220,15 +295,12 @@ def generate_scalings(wiki_info):
                         for s in attr["scalings"]:
                             if s["type"] == "undefined":
                                 continue
-                            print(s)
                             # Add scalings onto each other
-                            champ_scaling["min"][s["type"]] = champ_scaling["min"][s["type"]] + s["value"][0] if s["type"] in champ_scaling["min"] else s["value"][0]
-                            champ_scaling["max"][s["type"]] = champ_scaling["max"][s["type"]] + s["value"][-1] if s["type"] in champ_scaling["max"] else s["value"][-1]
+                            champ_scaling["early"][s["type"]] = champ_scaling["early"][s["type"]] + s["value"][0] if s["type"] in champ_scaling["early"] else s["value"][0]
+                            champ_scaling["late"][s["type"]] = champ_scaling["late"][s["type"]] + s["value"][-1] if s["type"] in champ_scaling["late"] else s["value"][-1]
         scalings[champ] = champ_scaling
-    print(sorted(attributes.items(), key=lambda x:x[1]))
     with open("wiki.json", "w+") as file:
         json.dump(scalings, file)
-    #print(attributes)
 
 if os.path.isfile("wiki_info.json"):
     with open("wiki_info.json") as file:
@@ -244,3 +316,4 @@ else:
     with open("wiki_info.json", "w+") as file:
         json.dump(result, file, indent=2)
     generate_scalings(result)
+    print("Done...")
