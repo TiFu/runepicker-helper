@@ -27,7 +27,8 @@
         }
     ],
     "optimizer": "adam",
-    "loss": "categorical_crossentropy",
+    "loss": "win_loss",
+    "oversample": true,
     "metrics": ["accuracy", "top_k_categorical_accuracy"],
     "top_k_parameter": 2,
     "columns": ["tag1", "tag2", "role", "root", "slow", "stun", "charm", "knockup", "heal", "shield",
