@@ -1,6 +1,6 @@
 SHELL := bash
 
-all: generateNetConfigs trainNets
+all: trainNets
 
 trainNets:
 	find perks/netconfig -type f -name '*.json'  -printf 'python3 perks/perkstyle.py %p\n' -exec python3 perks/perkstyle.py {} \;
