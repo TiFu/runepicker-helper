@@ -5,5 +5,5 @@ all:
 	./downloadData.sh;
 	cd data; \
 	pip3 install -r requirements.txt; \
-	mkdir -p wiki/ \
+	mkdir -p wiki/; \
 	python3 wiki_information.py;
