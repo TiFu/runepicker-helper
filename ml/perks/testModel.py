@@ -17,7 +17,8 @@ db = dbConfig["database"]
 connection = database.connect(url, user, password,db)
 
 # Net config
-netConfig = json.load(open("./perkstyle/netconfig/" + sys.argv[1]))
+from .netconfig import loadNetconfig
+netConfig = loadNetConfig(sys.argv[1])
 
 # Model
 model = load(netConfig)
