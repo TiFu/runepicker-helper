@@ -3,22 +3,17 @@
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 250
+            "neuronCount": 200
         },
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 150
+            "neuronCount": 50
         },
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 250
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 150
+            "neuronCount": 200
         },
         {
             "type": "Dense",
@@ -32,15 +27,19 @@
         }
     ],
     "optimizer": "adam",
-    "loss": "categorical_crossentropy",
+    "loss": "win_loss",
     "metrics": ["accuracy"],
-    "columns": ["tag1", "tag2", "role", "root", "slow", "stun", "charm", "knockup", 
+    "columns": ["tag1", "tag2", "role", "root", "slow", "stun", "charm", "knockup", "heal", "shield",
         "base_ad", "base_health", "base_armor", "base_mres", "base_as", "ad_scaling", "health_scaling", 
-        "armor_scaling", "mres_scaling", "as_scaling"],
+        "armor_scaling", "mres_scaling", "as_scaling", "q_cd_early", "w_cd_early", "e_cd_early", "r_cd_early",
+        "q_cd_late", "w_cd_late", "e_cd_late", "r_cd_late", "ap_ability_scaling_early", "ad_ability_scaling_early",
+        "max_hp_scaling_early", "bonus_armor_scaling_early", "bonus_magic_resist_scaling_early",
+        "ap_ability_scaling_late", "ad_ability_scaling_late",
+        "max_hp_scaling_late", "bonus_armor_scaling_late", "bonus_magic_resist_scaling_late"],
     "predictColumn": "perk_primary_style",
     "nominalColumns": ["tag1", "tag2", "role", "perk_primary_style"],
     "trainDataPercentage": 0.9,
-    "epochs": 30,
+    "epochs": 100,
     "batchSize": 512,
-    "modelName": "primary_perkstyle/statsPrimaryPerkstyle0"
+    "modelName": "primary_perkstyle/abilityScaling"
 }
