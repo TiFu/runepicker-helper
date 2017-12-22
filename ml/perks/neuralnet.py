@@ -53,7 +53,8 @@ def train(model, x_train, y_train, netConfig):
     return history
 
 def save(model, history, netConfig, trainReport, testReport):
-    dir = "./perks/models/" + netConfig["modelName"] + "/"
+    dir = "./perks/models" + netConfig["directory"] + "/"
+    print("Saving model in " + dir)
     if not os.path.exists(dir):
         os.makedirs(dir)
     model.save(dir + "model")

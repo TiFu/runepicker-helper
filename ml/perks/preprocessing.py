@@ -42,7 +42,9 @@ class Data:
 
 def fetchData(connection, columns, predictColumn, perkstyle_attribute, perkstyle):
     cursor = connection.cursor()
-    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns)) + ", \"" + predictColumn + "\", \"win\" FROM style_prediction_data WHERE " + perkstyle_attribute + " = " + str(perkstyle));
+    filterCondition = " WHERE " + perkstyle_attribute + " = " + str(perkstyle) if perkstyle_attribute is not None else ""
+    print("USING FILTER: " + filterCondition)
+    cursor.execute("SELECT " + ", ".join(map(lambda x: "\"" + x + "\"", columns)) + ", \"" + predictColumn + "\", \"win\" FROM style_prediction_data" + filterCondition);
     rows = cursor.fetchall()
     cursor.close()
     return rows
