@@ -1,15 +1,5 @@
 {
-    "loss": "win_loss",
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk_primary_style"
-    ],
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ],
+    "top_k_parameter": 2,
     "columns": [
         "tag1",
         "tag2",
@@ -51,37 +41,47 @@
         "bonus_magic_resist_scaling_late"
     ],
     "predictColumn": "perk_primary_style",
-    "epochs": 30,
+    "optimizer": "adam",
     "batchSize": 512,
-    "oversample": true,
-    "layers": [
-        {
-            "type": "Dense",
-            "neuronCount": 200,
-            "activation": "tanh"
-        },
-        {
-            "type": "Dense",
-            "neuronCount": 50,
-            "activation": "tanh"
-        },
-        {
-            "type": "Dense",
-            "neuronCount": 200,
-            "activation": "tanh"
-        },
-        {
-            "type": "Dense",
-            "neuronCount": 30,
-            "activation": "tanh"
-        },
-        {
-            "type": "Dense",
-            "neuronCount": 5,
-            "activation": "softmax"
-        }
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
     ],
     "trainDataPercentage": 0.9,
-    "top_k_parameter": 2,
-    "optimizer": "adam"
+    "layers": [
+        {
+            "neuronCount": 200,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 50,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 200,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 30,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 5,
+            "activation": "softmax",
+            "type": "Dense"
+        }
+    ],
+    "loss": "win_loss",
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk_primary_style"
+    ],
+    "epochs": 30,
+    "oversample": true
 }
