@@ -73,3 +73,10 @@ b) our data does not model the reason for picking inspiration over another
 b) illustrates one of the main problems with the inspiration tree.
    There's not an obvious benefit to picking this tree, which can be modelled
    by simple stats like AD or CD.
+
+
+## Problem: Imbalanced Classes
+
+- classifier learned to just predict one class everytime => majority class
+- balance by naive oversampling reduces accuracy significantly but increases
+  overall generalization of the model

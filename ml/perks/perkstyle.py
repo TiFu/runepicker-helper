@@ -21,11 +21,12 @@ password = dbConfig["password"]
 db = dbConfig["database"]
 
 connection = database.connect(url, user, password,db)
-netConfig = json.load(open("./perks/netconfig/" + sys.argv[1]))
+from netconfig import loadNetConfig
+netConfig = loadNetConfig(sys.argv[1])
 
 from preprocessing import fetchData, preprocessData, resample
 
-rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig["perkstyle_attribute"], netConfig["perkstyle"])
+rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig.get("perkstyle_attribute"), netConfig.get("perkstyle"))
 processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"], netConfig)
 data = processedData.transformed_rows
 print(data.columns)
