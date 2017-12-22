@@ -1,52 +1,37 @@
 {
+    "batchSize": 512,
+    "layers": [
+        {
+            "neuronCount": 200,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 50,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 200,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 30,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 8,
+            "type": "Dense",
+            "activation": "softmax"
+        }
+    ],
     "oversample": true,
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk5"
-    ],
-    "predictColumn": "perk5",
-    "top_k_parameter": 2,
-    "loss": "categorical_crossentropy",
-    "layers": [
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 200
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 50
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 200
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 30
-        },
-        {
-            "type": "Dense",
-            "activation": "softmax",
-            "neuronCount": 8
-        }
-    ],
-    "modelName": "primary_perkstyle/precision",
-    "perkstyle_attribute": "perk_primary_style",
-    "epochs": 10,
-    "perkstyle": 8400,
-    "batchSize": 512,
-    "optimizer": "adam",
-    "trainDataPercentage": 0.9,
     "columns": [
         "tag1",
         "tag2",
@@ -86,5 +71,20 @@
         "max_hp_scaling_late",
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
-    ]
+    ],
+    "perkstyle_attribute": "perk_primary_style",
+    "optimizer": "adam",
+    "loss": "categorical_crossentropy",
+    "top_k_parameter": 2,
+    "epochs": 30,
+    "trainDataPercentage": 0.9,
+    "modelName": "primary_perkstyle/precision",
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk5"
+    ],
+    "predictColumn": "perk5",
+    "perkstyle": 8400
 }
