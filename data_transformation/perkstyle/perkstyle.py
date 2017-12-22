@@ -89,9 +89,10 @@ baseInsert = """INSERT INTO style_prediction_data (champion_id, tag1, tag2, \"ro
 rows = ["a"]  # just to get the loop started
 i = 0
 insert = ""
+rowsPerFetch = 200
 while len(rows) > 0:
-    print("Fetching rows " + str(i) + " to " + str(i + 200))
-    rows = srcCursor.fetchmany(200)
+    print("Fetching rows " + str(i) + " to " + str(i + rowsPerFetch))
+    rows = srcCursor.fetchmany(rowsPerFetch)
     rows = database.createRecord(srcCursor, rows)
     for row in rows:
         if row.win != "Win" and row.win != "Fail":
@@ -142,16 +143,16 @@ while len(rows) > 0:
         asScaling = stats["attackspeedperlevel"]
         # Cooldowns
         cdEarly = wiki["early"]["cooldown"]
-        qCdEarly = getOrDefault("1", cdEarly, 0)
-        wCdEarly = getOrDefault("2", cdEarly, 0)
-        eCdEarly = getOrDefault("3", cdEarly, 0)
-        rCdEarly = getOrDefault("4", cdEarly, 0)
+        qCdEarly = getOrDefault("skill_q", cdEarly, 0)
+        wCdEarly = getOrDefault("skill_w", cdEarly, 0)
+        eCdEarly = getOrDefault("skill_e", cdEarly, 0)
+        rCdEarly = getOrDefault("skill_r", cdEarly, 0)
 
         cdLate = wiki["late"]["cooldown"]
-        qCdLate = getOrDefault("1", cdLate, 0)
-        wCdLate = getOrDefault("2", cdLate, 0)
-        eCdLate = getOrDefault("3", cdLate, 0)
-        rCdLate = getOrDefault("4", cdLate, 0)
+        qCdLate = getOrDefault("skill_q", cdLate, 0)
+        wCdLate = getOrDefault("skill_w", cdLate, 0)
+        eCdLate = getOrDefault("skill_e", cdLate, 0)
+        rCdLate = getOrDefault("skill_r", cdLate, 0)
 
         # Ability scalings
         early = wiki["early"]
@@ -184,7 +185,7 @@ while len(rows) > 0:
             + str(row.perk0) + ", "+ str(row.perk1) + ", "+ str(row.perk2) + ", "+ str(row.perk3) + ", " \
             + str(perk4) + ", "+ str(perk5) + ", "\
             + str(row.perkPrimaryStyle) + ", " + str(row.perkSubStyle) + ", '" + str(1 if row.win == "Win" else 0) + "')"
-        if i > 0 and i % 50 == 0 and insert != "":
+        if i > 0 and i % rowsPerFetch == 0 and insert != "":
             print("Inserting rows into destination database!")
             destCursor.execute(baseInsert + insert + ";")
             dataDest.commit()
