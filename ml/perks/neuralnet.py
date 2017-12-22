@@ -23,6 +23,13 @@ def maskedErrorFunc(y_true, y_pred):
         modelName: string
     }
 """
+from keras import metrics
+
+def makeTopKAccuracy(k):
+    def topKAccuracy(y_true, y_pred): 
+        return metrics.top_k_categorical_accuracy(y_true, y_pred, k)
+    return topKAccuracy
+
 def build(netConfig):
     model = Sequential()
     first = True
@@ -33,7 +40,12 @@ def build(netConfig):
         loss = maskedErrorFunc
     else:
         loss = netConfig["loss"]
-    model.compile(optimizer=netConfig["optimizer"], loss=loss, metrics=netConfig["metrics"])
+    metrics2 = netConfig["metrics"]
+    if "top_k_categorical_accuracy" in netConfig["metrics"]:
+        k = netConfig["top_k_parameter"]
+        metrics2 += [makeTopKAccuracy(k)]
+        metrics2.remove("top_k_categorical_accuracy")
+    model.compile(optimizer=netConfig["optimizer"], loss=loss, metrics=metrics2)
     return model
 
 def train(model, x_train, y_train, netConfig):
