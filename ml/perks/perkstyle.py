@@ -23,7 +23,7 @@ db = dbConfig["database"]
 connection = database.connect(url, user, password,db)
 netConfig = json.load(open("./perks/netconfig/" + sys.argv[1]))
 
-from preprocessing import fetchData, preprocessData
+from preprocessing import fetchData, preprocessData, resample
 
 rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig["perkstyle_attribute"], netConfig["perkstyle"])
 processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"], netConfig)
@@ -38,8 +38,15 @@ outCols = processedData.getColumns([netConfig["predictColumn"]])
 netConfig["layers"][0]["inputDim"] = len(inCols)
 
 # train/val & test data
-trainX = data.iloc[0:trainValidData,:][inCols]
-trainY = data.iloc[0:trainValidData,:][outCols];
+print("Resampling training data!")
+if "oversample" in netConfig and netConfig["oversample"]:
+    trainData = resample(data.iloc[0:trainValidData, :], outCols, inCols)
+else:
+    trainData = data.iloc[0:trainValidData, :]
+print("Shape after resampling: " + str(trainData.shape))
+
+trainX = trainData[inCols]
+trainY = trainData[outCols];
 
 testX = data.iloc[trainValidData:len(rows),:][inCols]
 testY = data.iloc[trainValidData:len(rows),:][outCols];

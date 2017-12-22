@@ -47,6 +47,37 @@ def fetchData(connection, columns, predictColumn, perkstyle_attribute, perkstyle
     cursor.close()
     return rows
 
+from imblearn.over_sampling import RandomOverSampler
+def oversample(dataFrame, targetSize):
+    if dataFrame.shape[0] > targetSize:
+        raise Error("Oversampling on too large data frame!")
+    originalSize = dataFrame.shape[0]
+    resultDFS = []
+    # make copies until we can sample the remaining ones
+    while targetSize - len(resultDFS) * originalSize >= originalSize:
+        resultDFS.append(dataFrame)
+    remainingRows = targetSize - len(resultDFS) * originalSize
+    resultDFS.append(dataFrame.sample(remainingRows))
+    return pd.concat(resultDFS)
+
+def resample(dataFrame, predictColumns, otherColumns):
+    dataFrames = []
+    largestCount = 0
+    for perk in predictColumns:
+        subDF = dataFrame[dataFrame[perk] == 1]
+        if subDF.shape[0] > largestCount:
+            largestCount = subDF.shape[0]
+        dataFrames.append(subDF)
+    sampledFrames = []
+    for subDF in dataFrames:
+        if subDF.shape[0] != largestCount:
+            subDF = oversample(subDF, largestCount)
+            subDF = subDF.sample(largestCount)        
+        sampledFrames.append(subDF)
+        print("New length: " + str(subDF.shape))
+    concat = pd.concat(sampledFrames)
+    return concat
+
 # TODO: use https://github.com/pandas-dev/pandas/issues/8918
 #       see comment of jreback on Oct 5, 2015 (and determine automatically)
 def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
@@ -56,10 +87,11 @@ def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
     totalColumns.append("win")
     dataFrame = pd.DataFrame(rows, columns=totalColumns)
     dataFrame["win"] = pd.to_numeric(dataFrame["win"])
+    originalDF = dataFrame
     smarties = Smarties()
     dummies = smarties.fit_transform(data=dataFrame, columns=nominalColumns)
     # TODO: set 1 or -1 depending on win 
-    data = Data(smarties, dataFrame, dummies, totalColumns)
+    data = Data(smarties, originalDF, dummies, totalColumns)
     cols = data.getColumns([predictColumn])
     if netConfig["loss"] == "win_loss":
         for col in cols:
@@ -74,8 +106,8 @@ from sklearn import preprocessing
 def preprocessDataForRandomForest(rows, columns, predictColumn, nominalColumns):
     totalColumns = []
     totalColumns.extend(columns)
-    totalColumns.append(predictColumn)
     totalColumns.append("win")
+    totalColumns.append(predictColumn)
     dataFrame = pd.DataFrame(rows, columns=totalColumns)
     dataFrame["win"] = pd.to_numeric(dataFrame["win"])
     for col in nominalColumns:
