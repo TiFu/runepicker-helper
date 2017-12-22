@@ -40,6 +40,5 @@
     "nominalColumns": ["tag1", "tag2", "role", "perk_primary_style"],
     "trainDataPercentage": 0.9,
     "epochs": 100,
-    "batchSize": 512,
-    "modelName": "primary_perkstyle/abilityScaling"
+    "batchSize": 512
 }
