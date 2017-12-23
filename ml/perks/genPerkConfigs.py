@@ -50,11 +50,11 @@ config = {
     "modelName": "primary_perkstyle/precision"
 }
 
-def makeConfigFile(outDir, perks, outputDim):
+def makeConfigFile(outDir, perks, outputDim, style_attribute):
     config["layers"][len(config["layers"]) - 1]["neuronCount"] = outputDim
     for perkstyle in [8000, 8100, 8200, 8300, 8400]:
         config["perkstyle"] = perkstyle
-        config["perkstyle_attribute"] = "perk_primary_style"
+        config["perkstyle_attribute"] = style_attribute
         os.makedirs(outDir + perkstyleMap[perkstyle], exist_ok=True)
         for perk in perks:
             config["predictColumn"] = perk
@@ -77,8 +77,8 @@ perkstyleMap = {
 import os
 outDir = "./netconfig/perks/primary/"
 os.makedirs(outDir, exist_ok=True)
-makeConfigFile(outDir, ["perk0", "perk1", "perk2", "perk3"], 3)
+makeConfigFile(outDir, ["perk0", "perk1", "perk2", "perk3"], 3, "perk_primary_style")
 
 outDir = "./netconfig/perks/secondary/"
 os.makedirs(outDir, exist_ok=True)
-makeConfigFile(outDir, ["perk4", "perk5"], 8)
+makeConfigFile(outDir, ["perk4", "perk5"], 8, "perk_sub_style")
