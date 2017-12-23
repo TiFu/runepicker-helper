@@ -1,5 +1,14 @@
 {
-    "batchSize": 512,
+    "modelName": "primary_perkstyle/precision",
+    "trainDataPercentage": 0.9,
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk0"
+    ],
+    "epochs": 30,
+    "loss": "win_loss",
     "layers": [
         {
             "neuronCount": 200,
@@ -27,11 +36,12 @@
             "activation": "softmax"
         }
     ],
-    "oversample": true,
+    "top_k_parameter": 2,
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
+    "perkstyle": 8200,
     "columns": [
         "tag1",
         "tag2",
@@ -72,19 +82,9 @@
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
     ],
-    "perkstyle_attribute": "perk_primary_style",
     "optimizer": "adam",
-    "loss": "win_loss",
-    "top_k_parameter": 2,
-    "epochs": 30,
-    "trainDataPercentage": 0.9,
-    "modelName": "primary_perkstyle/precision",
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk0"
-    ],
     "predictColumn": "perk0",
-    "perkstyle": 8200
+    "batchSize": 512,
+    "oversample": true,
+    "perkstyle_attribute": "perk_primary_style"
 }
