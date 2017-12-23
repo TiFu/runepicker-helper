@@ -52,7 +52,9 @@ def train(model, x_train, y_train, netConfig):
     history = model.fit(x_train.values, y_train.values, batch_size=netConfig["batchSize"], epochs=netConfig["epochs"], validation_split=0.1, shuffle=True)
     return history
 
-def save(model, history, netConfig, trainReport, testReport):
+import pickle
+
+def save(model, history, netConfig, trainReport, testReport, smarties):
     dir = "./perks/models" + netConfig["directory"] + "/"
     print("Saving model in " + dir)
     if not os.path.exists(dir):
@@ -62,6 +64,9 @@ def save(model, history, netConfig, trainReport, testReport):
     # save architecture
     with open(dir +  "architecture", 'w') as outfile:
         json.dump(architecture, outfile)
+    # save data transformation
+    with open(dir + "smarties.pkl", 'wb') as smartiesFile:
+        pickle.dump(smarties, smartiesFile, pickle.HIGHEST_PROTOCOL)
     # save history
     with open(dir + "history", 'wb') as file_pi:
         pickle.dump(history.history, file_pi)
