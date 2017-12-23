@@ -1,0 +1,14 @@
+{
+    "models": {
+        "perkstyle_directory": "",
+        "perk_directory": ""
+    },
+    "data": {
+        "champion": "",
+        "wiki": ""
+    },
+    "websocket": {
+        "port": 8765,
+        "host": "localhost"
+    }
+}
