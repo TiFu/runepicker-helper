@@ -2,9 +2,9 @@ import database
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from get_smarties import Smarties
+from .get_smarties import Smarties
 class Data:
-    
+
     def __init__(self, smarties, originalDataFrame, transformedDataFrame, totalColumns):
         self.original_rows = originalDataFrame
         self.transformed_rows = transformedDataFrame
@@ -21,14 +21,14 @@ class Data:
         for dfCol in dfCols.values:
             for column in columns:
                 # either same OR we found the start of a nominal value
-                if dfCol == column or dfCol.startswith(column + "_"): 
+                if dfCol == column or dfCol.startswith(column + "_"):
                     cols.append(dfCol)
         return cols
 
     def makeDataFrame(self, rows):
         df = pd.DataFrame(rows, columns=self.totalColumns)
         return df
-        
+
 # integraet into fetchData?
 #def fetchDataFiltered(connection, columns, predictColumn, conditions):
 #    cursor = connection.cursor()
@@ -74,7 +74,7 @@ def resample(dataFrame, predictColumns, otherColumns):
     for subDF in dataFrames:
         if subDF.shape[0] != largestCount:
             subDF = oversample(subDF, largestCount)
-            subDF = subDF.sample(largestCount)        
+            subDF = subDF.sample(largestCount)
         sampledFrames.append(subDF)
         print("New length: " + str(subDF.shape))
     concat = pd.concat(sampledFrames)
@@ -92,7 +92,7 @@ def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
     originalDF = dataFrame
     smarties = Smarties()
     dummies = smarties.fit_transform(data=dataFrame, columns=nominalColumns)
-    # TODO: set 1 or -1 depending on win 
+    # TODO: set 1 or -1 depending on win
     data = Data(smarties, originalDF, dummies, totalColumns)
     cols = data.getColumns([predictColumn])
     if netConfig["loss"] == "win_loss":
@@ -100,7 +100,7 @@ def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
             # set 'not picked' perks to -1
             data.transformed_rows[col] = np.where(data.transformed_rows[col] == 0, -1, data.transformed_rows[col])
             # set to 1 if won and picked
-            # TODO: exclude -1 from this setting 
+            # TODO: exclude -1 from this setting
             data.transformed_rows[col] = np.where(data.transformed_rows[col] > -1, data.transformed_rows["win"], -1)
     return data
 
@@ -114,8 +114,8 @@ def preprocessDataForRandomForest(rows, columns, predictColumn, nominalColumns):
     dataFrame["win"] = pd.to_numeric(dataFrame["win"])
     for col in nominalColumns:
         le = preprocessing.LabelEncoder()
-        dataFrame[col].fillna(value="null", inplace=True) 
+        dataFrame[col].fillna(value="null", inplace=True)
         dataFrame[col] = le.fit_transform(dataFrame[col])
-    
+
     data = Data(None, dataFrame, dataFrame, totalColumns)
     return data
