@@ -73,5 +73,5 @@ print(trainReport)
 print("Test data:")
 testReport = classification_report(np.argmax(testY.values, axis=1), predictY)
 print(testReport)
-# TODO: save classification report and graph for train & validation loss
-save(model, history, netConfig, trainReport, testReport)
+# save model
+save(model, history, netConfig, trainReport, testReport, processedData.smarties)
