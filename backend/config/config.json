@@ -1,7 +1,8 @@
 {
     "models": {
-        "perkstyle_directory": "",
-        "perk_directory": ""
+        "modelDir": "",
+        "netConfigDir": "",
+        "loss": "win_loss"
     },
     "data": {
         "champion": "",
