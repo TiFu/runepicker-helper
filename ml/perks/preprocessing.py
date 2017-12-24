@@ -92,7 +92,8 @@ def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
     originalDF = dataFrame
     smarties = Smarties()
     dummies = smarties.fit_transform(data=dataFrame, columns=nominalColumns)
-    # TODO: set 1 or -1 depending on win
+    dummies.reindex_axis(sorted(dummies.columns), axis=1)
+    # TODO: set 1 or -1 depending on win 
     data = Data(smarties, originalDF, dummies, totalColumns)
     cols = data.getColumns([predictColumn])
     if netConfig["loss"] == "win_loss":
