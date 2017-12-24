@@ -62,11 +62,16 @@ class Model:
     def predict(self, fullData):
         print(fullData.columns)
         transformed = self.smarties.transform(fullData)
+        transformed.reindex_axis(sorted(transformed.columns), axis=1)
         inputCols = self.getColumns(transformed, self.netConfig["columns"])
+        inputCols = sorted(inputCols)
         print(inputCols)
         input = transformed[inputCols]
-#        input = transformed
-        return self.model.predict(input.values)[0].tolist()
+        output =  self.model.predict(input.values)[0].tolist()
+        outputCols = self.getColumns(transformed, self.netConfig["predictColumn"])
+        outputCols = sorted(outputCols)
+        result = list(zip(output, outputCols))
+        return result
 
     def _selectSubsetData(self, fullData):
         pass
