@@ -1,12 +1,12 @@
 {
     "models": {
-        "modelDir": "",
-        "netConfigDir": "",
+        "modelDir": "./models",
+        "netConfigDir": "./netconfigh",
         "loss": "win_loss"
     },
     "data": {
-        "champion": "",
-        "wiki": ""
+        "champion": "./data/champion.json",
+        "wiki": "./data/wiki.json"
     },
     "websocket": {
         "port": 8765,
