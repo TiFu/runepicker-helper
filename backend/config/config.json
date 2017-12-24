@@ -1,7 +1,7 @@
 {
     "models": {
         "modelDir": "./models",
-        "netConfigDir": "./netconfigh",
+        "netConfigDir": "./netconfig",
         "loss": "win_loss"
     },
     "data": {

@@ -1,12 +1,13 @@
 from aiohttp import web
 import socketio
-from runeproposer import RuneProposer
+from runeproposer import RuneProposer, DataPreprocessing
 from models import Models
 from config.config import config
 from data import championById
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import constants
+import traceback
 
 sio = socketio.AsyncServer()
 app = web.Application()
@@ -17,20 +18,35 @@ loop = asyncio.get_event_loop()
 runeproposers = {}
 models = Models(config["models"]["netConfigDir"], config["models"]["modelDir"],\
                      config["models"]["loss"], constants.styleNames)
-
+preprocessing = DataPreprocessing()
 def log(sid, event, data):
-    print("[" + sid + "][" + event + "] " + data)
+    print("[" + sid + "][" + event + "] " + str(data))
 
 async def index(request):
     """Serve the client-side application."""
     with open('index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
+def emit(sid, success, data):
+    log(sid, "", "Created new event loop")
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    emit = sio.emit('primaryStyles', { "success": success, "data": data}, namespace="/runeprediction", room=sid)
+    loop.run_until_complete(emit)
+    
 # TODO: try catch for error reporting in case of crash
-async def predictPrimaryStyle(sid, runeProposer, championId, lane):
-    primaryStyles = runeProposer.predictPrimaryStyle(championId, lane)
-    await sio.emit('primaryStyles', primaryStyles, namespace="/runeprediction", room=sid)
-
+def predictPrimaryStyle(sid, runeProposer, championId, lane):
+    try:
+        log(sid, "predictPrimaryStyle", "Starting prediction")
+        primaryStyles = runeProposer.predictPrimaryStyle(championId, lane)
+        log(sid, "predictPrimaryStyle", "predicted runes: "  + str(primaryStyles))
+        emit(sid, True, primaryStyles)
+        log(sid, "predictPrimaryStyle", "Send response!")
+    except Exception as err:
+        emit(sid, False, "Something went wrong!")
+        tb = traceback.format_exc()
+        log(sid, "predictPrimartyStyle", err)
+        print(tb)
 async def predictSubStyle(sid, runeProposer: RuneProposer):
     subStyles = runeProposer.predictSubStyle()
     await sio.emit("subStyles", subStyles, namespace="/runeprediction", room=sid)
@@ -39,7 +55,7 @@ async def predictPrimaryRunes(sid, runeProposer: RuneProposer):
     runes = runeProposer.predictPrimaryStyleRunes()
     await sio.emit("primaryRunes", runes, namespace="/runeprediction", room=sid)
 
-async def predictSubRunes(sid, runePropsoer: RuneProposer):
+async def predictSubRunes(sid, runeProposer: RuneProposer):
     runes = runeProposer.predictSubStyleRunes()
     await sio.emit("subRunes", runes, namespace="/runeprediction", room=sid)
 
@@ -50,21 +66,22 @@ def connect(sid, environ):
 @sio.on('startPrediction', namespace='/runeprediction')
 async def startPrediction(sid, data):
     """
-        data:
+        data: dict of 
             - champion id
             - lane
     """
     log(sid, "startPrediction", data)
-    runeproposers[sid] = RuneProposer();
+    runeproposers[sid] = RuneProposer(models, preprocessing);
     if not "champion_id" in data or not "lane" in data:
         return False, "Missing champion or lane!"
+    data["champion_id"] = str(data["champion_id"])
     if not data["champion_id"] in championById:
         return False, "Unknown Champion!"
     if data["lane"] not in constants.lanes:
         return False, "Unknown lane " + data["lane"] + ", expected " + str(constants.lanes)
 
     # Run prediction async to not block the whole event loop
-    pred = loop.run_in_executor(poolExecutor, predictPrimaryStyle, sid, runeproposers[sid], data)  
+    pred = loop.run_in_executor(poolExecutor, predictPrimaryStyle, sid, runeproposers[sid], data["champion_id"], data["lane"])  
     asyncio.ensure_future(pred)
     return True
 
@@ -116,7 +133,7 @@ def selectPrimaryRunes(sid, data):
     return True
 
 @sio.on('disconnect', namespace='/runeprediction')
-def disconnect(sid, data):
+def disconnect(sid):
     log(sid, "disconnected", "")
     del runeproposers[sid]
 
