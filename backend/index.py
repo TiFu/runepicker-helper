@@ -15,7 +15,8 @@ poolExecutor = TaskPoolExecutor()
 loop = asyncio.get_event_loop()
 
 runeproposers = {}
-models = new Models(config["netConfigDir"])
+models = new Models(config["models"]["netConfigDir"], config["models"]["modelDir"],\
+                     config["models"]["loss"], constant.styleNames)
 
 def log(sid, event, data):
     print("[" + sid + "][" + event + "] " + data)

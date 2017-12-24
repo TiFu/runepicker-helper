@@ -43,11 +43,21 @@ class Model:
         modelFile = path.join(modelDir, modelFile, "model");
         return load_model(modelFile, custom_objects={"topKAccuracy": self.topKAccuracy, "win_loss": maskedErrorFunc})
 
-    # TODO: decide on data structure
+    def getColumns(self, data, colmuns):
+        dfCols = self.transformed_rows.columns
+        cols = []
+        for dfCol in dfCols.values:
+            for column in columns:
+                # either same OR we found the start of a nominal value
+                if dfCol == column or dfCol.startswith(column + "_"): 
+                    cols.append(dfCol)
+        return cols
+
     def predict(self, fullData):
-        # TODO: select columns, apply smarties, predict and return with column names or so
-        # needs copy of neural net code
-        pass
+        transformed = self.smarties.transform(fullData)
+        inputCols = self.getColumns(fullData, self.netConfig["columns"])
+        input = transformed[inputCols]
+        return self.model.predict(input)
 
     def _selectSubsetData(self, fullData):
         pass
