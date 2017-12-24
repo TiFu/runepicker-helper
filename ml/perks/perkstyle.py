@@ -36,6 +36,8 @@ print(data.columns)
 trainValidData = int(netConfig["trainDataPercentage"] * len(rows))
 inCols = processedData.getColumns(netConfig["columns"]);
 outCols = processedData.getColumns([netConfig["predictColumn"]])
+inCols = sorted(inCols)
+outCols = sorted(outCols)
 netConfig["layers"][0]["inputDim"] = len(inCols)
 
 # train/val & test data
