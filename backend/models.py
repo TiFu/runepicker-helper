@@ -65,12 +65,13 @@ class Model:
         transformed.reindex_axis(sorted(transformed.columns), axis=1)
         inputCols = self.getColumns(transformed, self.netConfig["columns"])
         inputCols = sorted(inputCols)
-        print(inputCols)
         input = transformed[inputCols]
         output =  self.model.predict(input.values)[0].tolist()
-        outputCols = self.getColumns(transformed, self.netConfig["predictColumn"])
+        print("Predict column:" + self.netConfig["predictColumn"])
+        outputCols = self.getColumns(transformed, [self.netConfig["predictColumn"]])
+        print(outputCols)
         outputCols = sorted(outputCols)
-        result = list(zip(output, outputCols))
+        result = list(zip(outputCols, output))
         return result
 
     def _selectSubsetData(self, fullData):
