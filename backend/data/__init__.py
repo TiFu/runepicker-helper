@@ -1,2 +1,2 @@
-from champion import champion, championById
-from wiki import wiki, wikiById
+from .champion import championById
+from .wiki import wikiById

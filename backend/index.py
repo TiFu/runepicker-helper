@@ -2,20 +2,20 @@ from aiohttp import web
 import socketio
 from runeproposer import RuneProposer
 from models import Models
-from config import config
+from config.config import config
 from data import championById
 import asyncio
-from concurrent.futures import TaskPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 import constants
 
 sio = socketio.AsyncServer()
 app = web.Application()
 sio.attach(app)
-poolExecutor = TaskPoolExecutor()
+poolExecutor = ThreadPoolExecutor()
 loop = asyncio.get_event_loop()
 
 runeproposers = {}
-models = new Models(config["models"]["netConfigDir"], config["models"]["modelDir"],\
+models = Models(config["models"]["netConfigDir"], config["models"]["modelDir"],\
                      config["models"]["loss"], constants.styleNames)
 
 def log(sid, event, data):
@@ -27,19 +27,19 @@ async def index(request):
         return web.Response(text=f.read(), content_type='text/html')
 
 # TODO: try catch for error reporting in case of crash
-def predictPrimaryStyle(sid, runeProposer, championId, lane):
+async def predictPrimaryStyle(sid, runeProposer, championId, lane):
     primaryStyles = runeProposer.predictPrimaryStyle(championId, lane)
     await sio.emit('primaryStyles', primaryStyles, namespace="/runeprediction", room=sid)
 
-def predictSubStyle(sid, runeProposer: RuneProposer):
+async def predictSubStyle(sid, runeProposer: RuneProposer):
     subStyles = runeProposer.predictSubStyle()
     await sio.emit("subStyles", subStyles, namespace="/runeprediction", room=sid)
 
-def predictPrimaryRunes(sid, runeProposer: RuneProposer):
+async def predictPrimaryRunes(sid, runeProposer: RuneProposer):
     runes = runeProposer.predictPrimaryStyleRunes()
     await sio.emit("primaryRunes", runes, namespace="/runeprediction", room=sid)
 
-def predictSubRunes(sid, runePropsoer: RuneProposer):
+async def predictSubRunes(sid, runePropsoer: RuneProposer):
     runes = runeProposer.predictSubStyleRunes()
     await sio.emit("subRunes", runes, namespace="/runeprediction", room=sid)
 
@@ -55,7 +55,7 @@ async def startPrediction(sid, data):
             - lane
     """
     log(sid, "startPrediction", data)
-    runeproposers[sid] = new RuneProposer();
+    runeproposers[sid] = RuneProposer();
     if not "champion_id" in data or not "lane" in data:
         return False, "Missing champion or lane!"
     if not data["champion_id"] in championById:
@@ -124,4 +124,4 @@ app.router.add_static('/static', 'static')
 app.router.add_get('/', index)
 
 if __name__ == '__main__':
-    web.run_app(app, host=config["host"], port=config["port"])
+    web.run_app(app, host=config["websocket"]["host"], port=config["websocket"]["port"])
