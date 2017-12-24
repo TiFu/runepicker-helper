@@ -64,7 +64,7 @@ class DataPreprocessing:
         rCd = getOrDefault("skill_r", cd, 0)   
         return qCd, wCd, eCd, rCd     
 
-    def setPrimaryStle(self, data, primaryStyle):
+    def setPrimaryStyle(self, data, primaryStyle):
         data[0, "perk_primary_style"] = primaryStyle
         return data
 
@@ -163,6 +163,16 @@ class DataPreprocessing:
 
 from constants import lanes, styles
 
+def parseModelResult(result):
+    # TODO: hope this doesn't break
+    data = {}
+    for pred in result:
+        splitKey = pred[0].split("_")
+        id = int(splitKey[len(splitKey) - 1])
+        data[id] = pred[1]
+    return data
+
+
 class RuneProposer:
 
     def __init__(self, models: Models, preprocessing: DataPreprocessing):
@@ -187,19 +197,19 @@ class RuneProposer:
         self.lane = lane
         self.data = self.preprocessing.preprocess(championId, lane, 0, 0, None, None)
         model = self.models.getPrimaryStyleModel();
-        return model.predict(self.data)
+        return parseModelResult(model.predict(self.data))
     
     def predictSubStyle(self)-> List[Option]:
         model = self.models.getSubStyleModel()
         prediction = model.predict(self.data)
-        return prediction
+        return parseModelResult(prediction)
 
     def predictPrimaryStyleRunes(self)-> List[int]:
         predictions = []
         for perk in [0,1,2,3]:
             model = self.models.getPrimaryStyleRunesModel(self.primaryStyle, perk)
             prediction = model.predict(self.data)
-            predictions.append(prediction)
+            predictions.append(parseModelResult(prediction))
         return predictions
 
     def predictSubStyleRunes(self)-> List[int]:
@@ -207,7 +217,7 @@ class RuneProposer:
         for perk in [4,5]:
             model = self.models.getSubStyleRunesModel(self.subStyle, perk)
             prediction = model.predict(self.data)
-            predictions.append(prediction)
+            predictions.append(parseModelResult(prediction))
         return predictions
 
     def selectPrimaryStyleRunes(self, runes):

@@ -19,6 +19,7 @@ runeproposers = {}
 models = Models(config["models"]["netConfigDir"], config["models"]["modelDir"],\
                      config["models"]["loss"], constants.styleNames)
 preprocessing = DataPreprocessing()
+
 def log(sid, event, data):
     print("[" + sid + "][" + event + "] " + str(data))
 
@@ -27,11 +28,11 @@ async def index(request):
     with open('index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
-def emit(sid, success, data):
+def emit(sid, evt, success, data):
     log(sid, "", "Created new event loop")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    emit = sio.emit('primaryStyles', { "success": success, "data": data}, namespace="/runeprediction", room=sid)
+    emit = sio.emit(evt, { "success": success, "data": data}, namespace="/runeprediction", room=sid)
     loop.run_until_complete(emit)
     
 # TODO: try catch for error reporting in case of crash
@@ -40,24 +41,43 @@ def predictPrimaryStyle(sid, runeProposer, championId, lane):
         log(sid, "predictPrimaryStyle", "Starting prediction")
         primaryStyles = runeProposer.predictPrimaryStyle(championId, lane)
         log(sid, "predictPrimaryStyle", "predicted runes: "  + str(primaryStyles))
-        emit(sid, True, primaryStyles)
+        emit(sid, 'primaryStyles', True, primaryStyles)
         log(sid, "predictPrimaryStyle", "Send response!")
     except Exception as err:
-        emit(sid, False, "Something went wrong!")
+        emit(sid, 'primaryStyles', False, "Something went wrong!")
         tb = traceback.format_exc()
         log(sid, "predictPrimartyStyle", err)
         print(tb)
-async def predictSubStyle(sid, runeProposer: RuneProposer):
-    subStyles = runeProposer.predictSubStyle()
-    await sio.emit("subStyles", subStyles, namespace="/runeprediction", room=sid)
 
-async def predictPrimaryRunes(sid, runeProposer: RuneProposer):
-    runes = runeProposer.predictPrimaryStyleRunes()
-    await sio.emit("primaryRunes", runes, namespace="/runeprediction", room=sid)
+def predictSubStyle(sid, runeProposer: RuneProposer):
+    try:
+        subStyles = runeProposer.predictSubStyle()
+        emit(sid, "subStyles", True, subStyles)
+    except Exception as err:
+        emit(sid, "subStyles", False, "Something went wrong!")
+        log(sid, "predictSubStyle", err)
+        tb = traceback.format_exc()
+        print(tb)
 
-async def predictSubRunes(sid, runeProposer: RuneProposer):
-    runes = runeProposer.predictSubStyleRunes()
-    await sio.emit("subRunes", runes, namespace="/runeprediction", room=sid)
+def predictPrimaryRunes(sid, runeProposer: RuneProposer):
+    try:
+        runes = runeProposer.predictPrimaryStyleRunes()
+        emit(sid, "primaryRunes", True, runes)
+    except Exception as err:
+        emit(sid, "primaryRunes", False, "Something went wrong!")
+        log(sid, "predictPrimaryRunes", err)
+        tb = traceback.format_exc()
+        print(tb)
+
+def predictSubRunes(sid, runeProposer: RuneProposer):
+    try:
+        runes = runeProposer.predictSubStyleRunes()
+        emit(sid, "subRunes", True, runes)
+    except Exception as err:
+        emit(sid, "subRunes", False, "Something went wrong!")
+        log(sid, "predictPrimaryRunes", err)
+        tb = traceback.format_exc()
+        print(tb)
 
 @sio.on('connect', namespace='/runeprediction')
 def connect(sid, environ):
