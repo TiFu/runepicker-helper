@@ -1,0 +1,1 @@
+from .get_smarties import Smarties

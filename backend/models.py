@@ -5,7 +5,13 @@ from typing import List, Mapping
 import keras.backend as K
 import keras.metrics as metrics
 import pickle
-from get_smarties import Smarties
+import perks.get_smarties as get_smarties
+import sys
+# THIS IS AN EVIL HACK TO MAKE PICKLE LIKE US
+# TL;DR: pickle requires the class to stay in the same package at the samle location
+# we can't do this. therefore we set the old smarties package (perks.get_smarties, see ml/)
+# to the new get_smarties
+sys.modules["perks.get_smarties"] = get_smarties
 
 def makeTopKAccuracy(k):
     def topKAccuracy(y_true, y_pred): 
@@ -41,10 +47,10 @@ class Model:
 
     def loadModel(self, modelDir, modelFile):
         modelFile = path.join(modelDir, modelFile, "model");
-        return load_model(modelFile, custom_objects={"topKAccuracy": self.topKAccuracy, "win_loss": maskedErrorFunc})
+        return load_model(modelFile, custom_objects={"topKAccuracy": self.topKAccuracy, "maskedErrorFunc": maskedErrorFunc})
 
-    def getColumns(self, data, colmuns):
-        dfCols = self.transformed_rows.columns
+    def getColumns(self, data, columns):
+        dfCols = data.columns
         cols = []
         for dfCol in dfCols.values:
             for column in columns:
@@ -54,10 +60,13 @@ class Model:
         return cols
 
     def predict(self, fullData):
+        print(fullData.columns)
         transformed = self.smarties.transform(fullData)
-        inputCols = self.getColumns(fullData, self.netConfig["columns"])
+        inputCols = self.getColumns(transformed, self.netConfig["columns"])
+        print(inputCols)
         input = transformed[inputCols]
-        return self.model.predict(input)
+#        input = transformed
+        return self.model.predict(input.values)[0].tolist()
 
     def _selectSubsetData(self, fullData):
         pass
@@ -96,7 +105,7 @@ class Models:
 
     def _getPerkModelName(self, styleType: str, style: int, perk: int)-> str:
         return path.join("perks", styleType, self.styleNames[style], \
-                                    "/perk" + str(perk) + "_" + self.lossFunction)
+                                    "/perk" + str(perk) + "_" + self.lossFunction + ".json")
    
     def _getPerkStyleModelName(self, modelType)-> str:
         return "perkstyle/" + modelType + "_perkstyle_" + self.lossFunction
@@ -104,7 +113,7 @@ class Models:
     def _getStyleModel(self, modelType: str)-> Model:
         if modelType not in self.styleModels:
             self.styleModels[modelType] = Model(self.netConfigDir, self.modelDir, \
-                           self._getPerkStyleModelName(modelType))
+                           self._getPerkStyleModelName(modelType) + ".json")
         return self.styleModels[modelType]
 
 

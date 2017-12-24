@@ -20,7 +20,10 @@ def getOrDefault(key, dict, default):
 class DataPreprocessing:
 
     def getPrimaryPerks(self, primaryRunes):
-        return primaryRunes[0], primaryRunes[1], primaryRunes[2], primaryRunes[3]
+        if primaryRunes is None:
+            return 0,0,0,0
+        else:
+            return primaryRunes[0], primaryRunes[1], primaryRunes[2], primaryRunes[3]
 
     def getSubPerks(self, subStyleRunes):
         if subStyleRunes is not None:
@@ -86,7 +89,7 @@ class DataPreprocessing:
         wiki = wikiById[championId]
 
         tag1, tag2 = self.getTags(championId)
-        perk0, perk1, perk2, perk3, perk4 = self.getPrimaryPerks(primaryStyleRunes)
+        perk0, perk1, perk2, perk3 = self.getPrimaryPerks(primaryStyleRunes)
         perk4, perk5 = self.getSubPerks(subStyleRunes)
  
         resources = getOrDefault("partype", champion, "None");
@@ -124,11 +127,11 @@ class DataPreprocessing:
         bonus_armor_scaling_late = getOrDefault("bonus armor", late, 0)
         bonus_magic_resist_scaling_late = getOrDefault("bonus magic resistance", late, 0)
 
-        data = np.array([
+        data = np.array([[
             championId, tag1, tag2, role, root, slow,
-            stun, charm, knockup, heal, shield, base_ad, 
-            base_health, base_armor, base_mres, base_as,
-            ad, health, armor, mres, asOffset, 
+            stun, charm, knockup, heal, shield, ad, 
+            hp, armor, mres, asOffset,
+            adScaling, hpScaling, armorScaling, mresScaling, 
             asScaling, qCdEarly, wCdEarly, eCdEarly, 
             rCdEarly, qCdLate, wCdLate, eCdLate, 
             rCdLate, ap_ability_scaling_early, ad_ability_scaling_early,
@@ -138,7 +141,7 @@ class DataPreprocessing:
             bonus_armor_scaling_late, bonus_magic_resist_scaling_late,
             resources, primaryStyle, subStyle,
             perk0, perk1, perk2, perk3, perk4, perk5, 1
-        ])
+        ]])
         columns = ["champion_id", "tag1", "tag2", "role", "root", "slow", \
                     "stun", "charm", "knockup", "heal", "shield", "base_ad", \
                     "base_health", "base_armor", "base_mres", "base_as", \
@@ -153,6 +156,8 @@ class DataPreprocessing:
                     "resource", "perk_primary_style", "perk_sub_style", \
                     "perk0", "perk1", "perk2", "perk3", "perk4", "perk5", "win"]
         # now put this into a df lol
+        print(len(data[0]))
+        print(len(columns))
         df = pd.DataFrame(data, columns=columns)
         return df
 
