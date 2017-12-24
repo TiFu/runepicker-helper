@@ -54,16 +54,19 @@ def train(model, x_train, y_train, netConfig):
 
 import pickle
 
-def save(model, history, netConfig, trainReport, testReport, smarties):
+def save(model, history, netConfig, trainReport, testReport, smarties, cols):
     dir = "./perks/models" + netConfig["directory"] + "/"
     print("Saving model in " + dir)
     if not os.path.exists(dir):
         os.makedirs(dir)
     model.save(dir + "model")
     architecture = model.to_json()
+    # cols
+    with open(dir + "columns", "w") as colFile:
+        json.dump(cols, colFile, indent=4)
     # save architecture
     with open(dir +  "architecture", 'w') as outfile:
-        json.dump(architecture, outfile)
+        json.dump(architecture, outfile, indent=4)
     # save data transformation
     with open(dir + "smarties.pkl", 'wb') as smartiesFile:
         pickle.dump(smarties, smartiesFile, pickle.HIGHEST_PROTOCOL)

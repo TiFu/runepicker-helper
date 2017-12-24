@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from .get_smarties import Smarties
+
 class Data:
 
     def __init__(self, smarties, originalDataFrame, transformedDataFrame, totalColumns):
