@@ -177,19 +177,19 @@ class RuneProposer:
     def isSubStyleValid(self):
         return self.subStyle in styles and self.subStyle != self.primaryStyle
 
-    def predictPrimaryStyle(self, championId, lane): -> List[Option]
+    def predictPrimaryStyle(self, championId, lane)-> List[Option]:
         self.championId = championId
         self.lane = lane
         self.data = self.preprocessing.preprocess(championId, lane, 0, 0, None, None)
         model = self.models.getPrimaryStyleModel();
         return model.predict(self.data)
     
-    def predictSubStyle(self): -> List[Option]
+    def predictSubStyle(self)-> List[Option]:
         model = self.models.getSubStyleModel()
         prediction = model.predict(self.data)
         return prediction
 
-    def predictPrimaryStyleRunes(self): -> List[int]
+    def predictPrimaryStyleRunes(self)-> List[int]:
         predictions = []
         for perk in [0,1,2,3]:
             model = self.models.getPrimaryStyleRunesModel(self.primaryStyle, perk)
@@ -197,7 +197,7 @@ class RuneProposer:
             predictions.append(prediction)
         return predictions
 
-    def predictSubStyleRunes(self): -> List[int]
+    def predictSubStyleRunes(self)-> List[int]:
         predictions = []
         for perk in [4,5]:
             model = self.models.getSubStyleRunesModel(self.subStyle, perk)
