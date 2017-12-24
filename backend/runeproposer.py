@@ -197,7 +197,7 @@ class RuneProposer:
             predictions.append(prediction)
         return predictions
 
-    def predictSubStyleRunes(self, data, subStyle): -> List[int]
+    def predictSubStyleRunes(self): -> List[int]
         predictions = []
         for perk in [4,5]:
             model = self.models.getSubStyleRunesModel(self.subStyle, perk)
