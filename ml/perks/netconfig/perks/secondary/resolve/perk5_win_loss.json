@@ -1,7 +1,15 @@
 {
-    "oversample": true,
-    "perkstyle": 8400,
+    "loss": "win_loss",
+    "perkstyle_attribute": "perk_sub_style",
+    "batchSize": 512,
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk5"
+    ],
     "trainDataPercentage": 0.9,
+    "modelName": "primary_perkstyle/precision",
     "columns": [
         "tag1",
         "tag2",
@@ -44,47 +52,39 @@
     ],
     "layers": [
         {
-            "type": "Dense",
+            "neuronCount": 200,
             "activation": "tanh",
-            "neuronCount": 200
+            "type": "Dense"
         },
         {
-            "type": "Dense",
+            "neuronCount": 50,
             "activation": "tanh",
-            "neuronCount": 50
+            "type": "Dense"
         },
         {
-            "type": "Dense",
+            "neuronCount": 200,
             "activation": "tanh",
-            "neuronCount": 200
+            "type": "Dense"
         },
         {
-            "type": "Dense",
+            "neuronCount": 30,
             "activation": "tanh",
-            "neuronCount": 30
+            "type": "Dense"
         },
         {
-            "type": "Dense",
+            "neuronCount": 8,
             "activation": "softmax",
-            "neuronCount": 8
+            "type": "Dense"
         }
     ],
-    "perkstyle_attribute": "perk_sub_style",
     "predictColumn": "perk5",
-    "batchSize": 512,
+    "oversample": true,
+    "epochs": 30,
+    "perkstyle": 8400,
+    "optimizer": "adam",
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
-    "loss": "win_loss",
-    "modelName": "primary_perkstyle/precision",
-    "epochs": 30,
-    "top_k_parameter": 2,
-    "optimizer": "adam",
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk5"
-    ]
+    "top_k_parameter": 2
 }

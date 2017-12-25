@@ -1,14 +1,8 @@
 {
-    "perkstyle": 8100,
-    "oversample": true,
-    "perkstyle_attribute": "perk_primary_style",
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk_primary_style",
-        "perk_sub_style"
-    ],
+    "predictColumn": "perk_sub_style",
+    "trainDataPercentage": 0.9,
+    "batchSize": 512,
+    "optimizer": "adam",
     "columns": [
         "tag1",
         "tag2",
@@ -50,42 +44,48 @@
         "bonus_magic_resist_scaling_late",
         "perk_primary_style"
     ],
-    "optimizer": "adam",
+    "oversample": true,
+    "perkstyle_attribute": "perk_primary_style",
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk_primary_style",
+        "perk_sub_style"
+    ],
+    "epochs": 30,
+    "top_k_parameter": 2,
+    "layers": [
+        {
+            "neuronCount": 200,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 50,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 200,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 30,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 4,
+            "activation": "softmax",
+            "type": "Dense"
+        }
+    ],
+    "perkstyle": 8100,
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
-    "layers": [
-        {
-            "neuronCount": 200,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 50,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 200,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 30,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 4,
-            "type": "Dense",
-            "activation": "softmax"
-        }
-    ],
-    "loss": "categorical_crossentropy",
-    "epochs": 30,
-    "top_k_parameter": 2,
-    "trainDataPercentage": 0.9,
-    "batchSize": 512,
-    "predictColumn": "perk_sub_style"
+    "loss": "categorical_crossentropy"
 }
