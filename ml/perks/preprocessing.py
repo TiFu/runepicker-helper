@@ -2,7 +2,7 @@ import database
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from get_smarties import Smarties
+from .get_smarties import Smarties
 
 class Data:
 
