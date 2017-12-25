@@ -60,6 +60,7 @@ def save(model, history, netConfig, trainReport, testReport, smarties, cols):
     if not os.path.exists(dir):
         os.makedirs(dir)
     model.save(dir + "model")
+    model.save_weights(dir + "weights")
     architecture = model.to_json()
     # cols
     with open(dir + "columns", "w") as colFile:
