@@ -131,7 +131,7 @@ def selectSubStyle(sid, data):
             return False, "Primary and sub style need to be different!"
         return False, "The selected substyle is invalid!"
 
-    pred = asyncio.run_in_executor(poolExecutor, predictPrimaryRunes, sid, runeProposer)
+    pred = loop.run_in_executor(poolExecutor, predictPrimaryRunes, sid, runeProposer)
     asyncio.ensure_future(pred)
     return True
 
@@ -148,7 +148,7 @@ def selectPrimaryRunes(sid, data):
             return False, "Expected one of " + allowedRunes + ", but got " + data[i]
     
     runesProposer.selectPrimaryStyleRunes(data)
-    pred = asyncio.run_in_executor(poolExecutor, predictSubRunes, sid, runeProposer)
+    pred = loop.run_in_executor(poolExecutor, predictSubRunes, sid, runeProposer)
     asyncio.ensure_future(pred)
     return True
 

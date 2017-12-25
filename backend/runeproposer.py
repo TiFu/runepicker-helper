@@ -202,8 +202,10 @@ class RuneProposer:
     def predictSubStyle(self)-> List[Option]:
         model = self.models.getSubStyleModel()
         prediction = model.predict(self.data)
-        return parseModelResult(prediction)
-
+        modelResult = parseModelResult(prediction)
+        del modelResult[self.primaryStyle]
+        return modelResult
+    
     def predictPrimaryStyleRunes(self)-> List[int]:
         predictions = []
         for perk in [0,1,2,3]:

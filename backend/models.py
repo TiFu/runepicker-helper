@@ -110,8 +110,10 @@ class Models:
         return self.perkModels[str(style)][str(perk)]
 
     def _getPerkModelName(self, styleType: str, style: int, perk: int)-> str:
-        return path.join("perks", styleType, self.styleNames[style], \
-                                    "/perk" + str(perk) + "_" + self.lossFunction + ".json")
+        print("Input: " + styleType + ", " + str(style) + ", " + str(perk))
+        model =  path.join("./perks", styleType, self.styleNames[style], "perk" + str(perk) + "_" + self.lossFunction + ".json")
+        print("Loading model from " + model)
+        return model
    
     def _getPerkStyleModelName(self, modelType)-> str:
         return "perkstyle/" + modelType + "_perkstyle_" + self.lossFunction
