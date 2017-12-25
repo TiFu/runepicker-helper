@@ -21,10 +21,10 @@ password = dbConfig["password"]
 db = dbConfig["database"]
 
 connection = database.connect(url, user, password,db)
-from netconfig import loadNetConfig
+from .netconfig import loadNetConfig
 netConfig = loadNetConfig(sys.argv[1])
 
-from preprocessing import fetchData, preprocessData, resample
+from .preprocessing import fetchData, preprocessData, resample
 
 rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig.get("perkstyle_attribute"), netConfig.get("perkstyle"))
 processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"], netConfig)
