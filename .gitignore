@@ -4,4 +4,3 @@ __pycache__
 .directory
 frontend/dist
 frontend/node_modules
-backend/test
