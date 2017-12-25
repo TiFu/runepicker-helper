@@ -1,4 +1,41 @@
 {
+    "layers": [
+        {
+            "neuronCount": 200,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 50,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 200,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 30,
+            "activation": "tanh",
+            "type": "Dense"
+        },
+        {
+            "neuronCount": 5,
+            "activation": "softmax",
+            "type": "Dense"
+        }
+    ],
+    "epochs": 30,
+    "oversample": true,
+    "predictColumn": "perk_primary_style",
+    "batchSize": 512,
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
+    ],
+    "top_k_parameter": 2,
+    "optimizer": "adam",
     "columns": [
         "tag1",
         "tag2",
@@ -39,45 +76,8 @@
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
     ],
-    "loss": "win_loss",
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ],
-    "top_k_parameter": 2,
-    "optimizer": "adam",
-    "oversample": true,
-    "epochs": 30,
-    "batchSize": 512,
-    "predictColumn": "perk_primary_style",
     "trainDataPercentage": 0.9,
-    "layers": [
-        {
-            "neuronCount": 200,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 50,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 200,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 30,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 5,
-            "type": "Dense",
-            "activation": "softmax"
-        }
-    ],
+    "loss": "win_loss",
     "nominalColumns": [
         "tag1",
         "tag2",
