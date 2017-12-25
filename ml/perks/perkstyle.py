@@ -21,10 +21,10 @@ password = dbConfig["password"]
 db = dbConfig["database"]
 
 connection = database.connect(url, user, password,db)
-from netconfig import loadNetConfig
+from .netconfig import loadNetConfig
 netConfig = loadNetConfig(sys.argv[1])
 
-from preprocessing import fetchData, preprocessData, resample
+from .preprocessing import fetchData, preprocessData, resample
 
 rows = fetchData(connection, netConfig["columns"], netConfig["predictColumn"], netConfig.get("perkstyle_attribute"), netConfig.get("perkstyle"))
 processedData = preprocessData(rows, netConfig["columns"], netConfig["predictColumn"], netConfig["nominalColumns"], netConfig)
@@ -58,7 +58,7 @@ print("Input columns (" + str(len(inCols)) + "): " + str(trainX.columns))
 print("Target columns ( " + str(len(outCols)) + "): " + str(trainY.columns))
 
 
-from neuralnet import build, train, save
+from .neuralnet import build, train, save
 model = build(netConfig)
 history = train(model, trainX, trainY, netConfig)
 
