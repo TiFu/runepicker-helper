@@ -59,6 +59,11 @@ print("Target columns ( " + str(len(outCols)) + "): " + str(trainY.columns))
 
 
 from .neuralnet import build, train, save
+# set output config to the number of detected outputs (in case one rune was nevre picked.)
+# yes that happens
+layers = netConfig["layers"]
+layers[len(layers) - 1]["neuronCount"] = len(outCols)
+
 model = build(netConfig)
 history = train(model, trainX, trainY, netConfig)
 
