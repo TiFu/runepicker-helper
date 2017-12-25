@@ -1,5 +1,4 @@
 {
-    "top_k_parameter": 2,
     "columns": [
         "tag1",
         "tag2",
@@ -40,48 +39,49 @@
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
     ],
-    "predictColumn": "perk_primary_style",
-    "optimizer": "adam",
-    "batchSize": 512,
+    "loss": "categorical_crossentropy",
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
+    "top_k_parameter": 2,
+    "optimizer": "adam",
+    "oversample": true,
+    "epochs": 30,
+    "batchSize": 512,
+    "predictColumn": "perk_primary_style",
     "trainDataPercentage": 0.9,
     "layers": [
         {
             "neuronCount": 200,
-            "activation": "tanh",
-            "type": "Dense"
+            "type": "Dense",
+            "activation": "tanh"
         },
         {
             "neuronCount": 50,
-            "activation": "tanh",
-            "type": "Dense"
+            "type": "Dense",
+            "activation": "tanh"
         },
         {
             "neuronCount": 200,
-            "activation": "tanh",
-            "type": "Dense"
+            "type": "Dense",
+            "activation": "tanh"
         },
         {
             "neuronCount": 30,
-            "activation": "tanh",
-            "type": "Dense"
+            "type": "Dense",
+            "activation": "tanh"
         },
         {
             "neuronCount": 5,
-            "activation": "softmax",
-            "type": "Dense"
+            "type": "Dense",
+            "activation": "softmax"
         }
     ],
-    "loss": "categorical_crossentropy",
     "nominalColumns": [
         "tag1",
         "tag2",
         "role",
         "perk_primary_style"
-    ],
-    "epochs": 30,
-    "oversample": true
+    ]
 }

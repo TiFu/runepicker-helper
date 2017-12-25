@@ -68,3 +68,19 @@ config["predictColumn"] = "perk_sub_style"
 config["nominalColumns"].append("perk_sub_style")
 name = "sub_perkstyle_"
 makeConfigFile(outDir, name)
+
+perkstyleMap = {
+    8000: "precision",
+    8100: "domination",
+    8200: "sorcery",
+    8300: "inspiration",
+    8400: "resolve"
+}
+
+for perkstyle in [8000, 8100, 8200, 8300, 8400]:
+    config["perkstyle_attribute"] = "perk_primary_style"
+    layers = config["layers"]
+    layers[len(layers) - 1]["neuronCount"] = 4
+    name = "sub_perkstyle_" + perkstyleMap[perkstyle] + "_"
+    config["perkstyle"] = perkstyle
+    makeConfigFile(outDir, name)

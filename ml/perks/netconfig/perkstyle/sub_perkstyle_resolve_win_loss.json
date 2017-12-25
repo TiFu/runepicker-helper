@@ -1,4 +1,5 @@
 {
+    "perkstyle": 8400,
     "columns": [
         "tag1",
         "tag2",
@@ -37,7 +38,8 @@
         "ad_ability_scaling_late",
         "max_hp_scaling_late",
         "bonus_armor_scaling_late",
-        "bonus_magic_resist_scaling_late"
+        "bonus_magic_resist_scaling_late",
+        "perk_primary_style"
     ],
     "loss": "win_loss",
     "metrics": [
@@ -49,7 +51,8 @@
     "oversample": true,
     "epochs": 30,
     "batchSize": 512,
-    "predictColumn": "perk_primary_style",
+    "predictColumn": "perk_sub_style",
+    "perkstyle_attribute": "perk_primary_style",
     "trainDataPercentage": 0.9,
     "layers": [
         {
@@ -73,7 +76,7 @@
             "activation": "tanh"
         },
         {
-            "neuronCount": 5,
+            "neuronCount": 4,
             "type": "Dense",
             "activation": "softmax"
         }
@@ -82,6 +85,7 @@
         "tag1",
         "tag2",
         "role",
-        "perk_primary_style"
+        "perk_primary_style",
+        "perk_sub_style"
     ]
 }
