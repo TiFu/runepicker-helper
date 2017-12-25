@@ -1,45 +1,7 @@
 {
-    "perkstyle": 8300,
-    "layers": [
-        {
-            "neuronCount": 200,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 50,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 200,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 30,
-            "type": "Dense",
-            "activation": "tanh"
-        },
-        {
-            "neuronCount": 3,
-            "type": "Dense",
-            "activation": "softmax"
-        }
-    ],
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ],
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk0"
-    ],
-    "epochs": 30,
     "oversample": true,
-    "top_k_parameter": 2,
+    "perkstyle": 8300,
+    "trainDataPercentage": 0.9,
     "columns": [
         "tag1",
         "tag2",
@@ -80,11 +42,49 @@
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
     ],
-    "trainDataPercentage": 0.9,
+    "layers": [
+        {
+            "type": "Dense",
+            "activation": "tanh",
+            "neuronCount": 200
+        },
+        {
+            "type": "Dense",
+            "activation": "tanh",
+            "neuronCount": 50
+        },
+        {
+            "type": "Dense",
+            "activation": "tanh",
+            "neuronCount": 200
+        },
+        {
+            "type": "Dense",
+            "activation": "tanh",
+            "neuronCount": 30
+        },
+        {
+            "type": "Dense",
+            "activation": "softmax",
+            "neuronCount": 3
+        }
+    ],
+    "perkstyle_attribute": "perk_primary_style",
     "predictColumn": "perk0",
     "batchSize": 512,
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
+    ],
+    "loss": "win_loss",
     "modelName": "primary_perkstyle/precision",
+    "epochs": 30,
+    "top_k_parameter": 2,
     "optimizer": "adam",
-    "perkstyle_attribute": "perk_primary_style",
-    "loss": "win_loss"
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk0"
+    ]
 }
