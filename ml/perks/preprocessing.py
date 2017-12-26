@@ -2,7 +2,7 @@ import database
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from get_smarties import Smarties
+from .get_smarties import Smarties
 
 class Data:
 
@@ -52,6 +52,9 @@ def fetchData(connection, columns, predictColumn, perkstyle_attribute, perkstyle
 
 from imblearn.over_sampling import RandomOverSampler
 def oversample(dataFrame, targetSize):
+    # if class is empty
+    if dataFrame.shape[0] == 0:
+        return dataFrame
     if dataFrame.shape[0] > targetSize:
         raise Error("Oversampling on too large data frame!")
     originalSize = dataFrame.shape[0]
@@ -94,7 +97,6 @@ def preprocessData(rows, columns, predictColumn, nominalColumns, netConfig):
     smarties = Smarties()
     dummies = smarties.fit_transform(data=dataFrame, columns=nominalColumns)
     dummies.reindex_axis(sorted(dummies.columns), axis=1)
-    # TODO: set 1 or -1 depending on win 
     data = Data(smarties, originalDF, dummies, totalColumns)
     cols = data.getColumns([predictColumn])
     if netConfig["loss"] == "win_loss":

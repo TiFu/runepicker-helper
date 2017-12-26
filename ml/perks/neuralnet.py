@@ -60,20 +60,26 @@ def save(model, history, netConfig, trainReport, testReport, smarties, cols):
     if not os.path.exists(dir):
         os.makedirs(dir)
     model.save(dir + "model")
+    print("Saved model")
     model.save_weights(dir + "weights")
+    print("Saved weights")
     architecture = model.to_json()
     # cols
     with open(dir + "columns", "w") as colFile:
         json.dump(cols, colFile, indent=4)
+    print("Saved columns")
     # save architecture
     with open(dir +  "architecture", 'w') as outfile:
         json.dump(architecture, outfile, indent=4)
+    print("Saved architecture")
     # save data transformation
     with open(dir + "smarties.pkl", 'wb') as smartiesFile:
         pickle.dump(smarties, smartiesFile, pickle.HIGHEST_PROTOCOL)
+    print("Saved smarties")
     # save history
     with open(dir + "history", 'wb') as file_pi:
         pickle.dump(history.history, file_pi)
+    print("Saved history")
     # save reports
     with open(dir + "reports", 'w') as reportFile:
         reportFile.write("Training Report:\n")
@@ -82,6 +88,7 @@ def save(model, history, netConfig, trainReport, testReport, smarties, cols):
         reportFile.write(str(testReport))
         reportFile.write("\n")
         reportFile.flush()
+    print("Saved reports")
     # save model image
     plot_model(model, to_file=dir + "model.png")
     # save history image
@@ -95,6 +102,7 @@ def save(model, history, netConfig, trainReport, testReport, smarties, cols):
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.savefig(dir + "history.png")
+    print("Saved plot")
 
 def load(netConfig):
     # todo implement

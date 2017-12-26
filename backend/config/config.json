@@ -1,0 +1,15 @@
+{
+    "models": {
+        "modelDir": "./models",
+        "netConfigDir": "./netconfig",
+        "loss": "win_loss"
+    },
+    "data": {
+        "champion": "./data/champion.json",
+        "wiki": "./data/wiki.json"
+    },
+    "websocket": {
+        "port": 8765,
+        "host": "localhost"
+    }
+}
