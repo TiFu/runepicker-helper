@@ -24,11 +24,12 @@ socket.on("subStyles", function(data) {
 
 socket.on("primaryRunes", function(data) {
 	console.log(data)
-	socket.close()
+	socket.emit("selectPrimaryRunes", [8437, 8242, 8430, 8444], errorCB)
 })
 
-socket.on("secondaryRunes", function(data) {
+socket.on("subRunes", function(data) {
 	console.log(data)
+	socket.close()
 })
 
 socket.on('disconnect', function(){

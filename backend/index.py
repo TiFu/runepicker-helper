@@ -71,11 +71,13 @@ def predictPrimaryRunes(sid, runeProposer: RuneProposer):
 
 def predictSubRunes(sid, runeProposer: RuneProposer):
     try:
+        log(sid, "predictSubRunes", "predicting sub runes")
         runes = runeProposer.predictSubStyleRunes()
+        log(sid, "predictSubRunes", "predicted sub runes")
         emit(sid, "subRunes", True, runes)
     except Exception as err:
         emit(sid, "subRunes", False, "Something went wrong!")
-        log(sid, "predictPrimaryRunes", err)
+        log(sid, "predictSubRunes", err)
         tb = traceback.format_exc()
         print(tb)
 
@@ -141,13 +143,14 @@ def selectPrimaryRunes(sid, data):
         return False, "List of 4 Runes is required!"
     if len(data) != 4:
         return False, "Please submit exactly 4 runes in the correct order"
-    runesProposer = runeproposers[sid]
+    runeProposer = runeproposers[sid]
     for i in range(4):
         allowedRunes = constants.runesByPrimaryStyle[runeProposer.primaryStyle][i]
         if data[i] not in constants.runesByPrimaryStyle[runeProposer.primaryStyle][i]:
             return False, "Expected one of " + allowedRunes + ", but got " + data[i]
-    
-    runesProposer.selectPrimaryStyleRunes(data)
+    print("Select primary style runes: " + str(data))
+    runeProposer.selectPrimaryStyleRunes(data)
+    print("Selected primary style runes: " + str(data))
     pred = loop.run_in_executor(poolExecutor, predictSubRunes, sid, runeProposer)
     asyncio.ensure_future(pred)
     return True
