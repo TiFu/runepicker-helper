@@ -1,4 +1,4 @@
-from keras.models import load_model
+from keras.models import load_model, model_from_json
 import json
 import os.path as path
 from typing import List, Mapping
@@ -12,6 +12,9 @@ import sys
 # we can't do this. therefore we set the old smarties package (perks.get_smarties, see ml/)
 # to the new get_smarties
 sys.modules["perks.get_smarties"] = get_smarties
+sys.modules["get_smarties"] = get_smarties
+
+# TODO: no lazy loading, instead load at application start time
 
 def makeTopKAccuracy(k):
     def topKAccuracy(y_true, y_pred): 
@@ -24,13 +27,19 @@ def maskedErrorFunc(y_true, y_pred):
     correct = K.mean(K.square(maskedError))
     return correct
 
+import tensorflow as tf
+#global graph
+#graph = tf.get_default_graph();
+
 # netConfigName is path from netConfig dir (RELATIVE to netConfig Dir) to the json file
 class Model:
     def __init__(self, netConfigsDir, modelDir, netConfigName):
         self.netConfig = self._loadNetConfig(netConfigsDir, netConfigName)
         self.topKAccuracy = makeTopKAccuracy(self.netConfig["top_k_parameter"])
         self.smarties = self._loadSmarties(modelDir, self._getModelName())
+        print("Loading model")
         self.model = self.loadModel(modelDir, self._getModelName())
+        self.graph = tf.get_default_graph()
 
     def _loadSmarties(self, modelDir, modelFile):
         smartiesFile = path.join(modelDir, modelFile, "smarties.pkl")
@@ -46,8 +55,20 @@ class Model:
         return netConfig
 
     def loadModel(self, modelDir, modelFile):
-        modelFile = path.join(modelDir, modelFile, "model");
-        return load_model(modelFile, custom_objects={"topKAccuracy": self.topKAccuracy, "maskedErrorFunc": maskedErrorFunc})
+        print("Reading architecture")
+        architecture = path.join(modelDir, modelFile, "architecture");
+        with open(architecture, 'r') as architectureFile:
+            architecture = json.load(architectureFile)
+        print("Loading architecture")
+        model = model_from_json(architecture)
+        print("Loaded model")
+        weights = path.join(modelDir, modelFile, "weights");
+        print("got weights")
+        model.load_weights(weights)
+        print("loading weights")
+        return model
+#        modelFile = path.join(modelDir, modelFile, "model");
+ #       return load_model(modelFile, custom_objects={"topKAccuracy": self.topKAccuracy, "maskedErrorFunc": maskedErrorFunc})
 
     def getColumns(self, data, columns):
         dfCols = data.columns
@@ -66,7 +87,8 @@ class Model:
         inputCols = self.getColumns(transformed, self.netConfig["columns"])
         inputCols = sorted(inputCols)
         input = transformed[inputCols]
-        output =  self.model.predict(input.values)[0].tolist()
+        with self.graph.as_default():
+            output =  self.model.predict(input.values)[0].tolist()
         print("Predict column:" + self.netConfig["predictColumn"])
         outputCols = self.getColumns(transformed, [self.netConfig["predictColumn"]])
         print(outputCols)
@@ -77,6 +99,7 @@ class Model:
     def _selectSubsetData(self, fullData):
         pass
 
+import tensorflow as tf
 class Models:
     
     def __init__(self, netConfigDir, modelDir, lossFunction, styleNames: Mapping[int, str] ):
@@ -86,7 +109,18 @@ class Models:
         self.styleModels = {}
         self.perkModels = {}
         self.styleNames = styleNames
+        self._initAllModels()
 
+
+    def _initAllModels(self):
+        self.getPrimaryStyleModel()
+        self.getSubStyleModel()
+        for style in [8000, 8100, 8200, 8300, 8400]:
+            for perk in [0,1,2,3]:
+                self.getPrimaryStyleRunesModel(style, perk)
+        for subStyle in [8000, 8100, 8200, 8300, 8400]:
+            for perk in [4,5]:
+                self.getSubStyleRunesModel(subStyle, perk)
     def getPrimaryStyleModel(self)-> Model:
         return self._getStyleModel("primary");
 
@@ -106,17 +140,19 @@ class Models:
             self.perkModels[str(style)] = {}
         if str(perk) not in self.perkModels[str(style)]:
             modelName = self._getPerkModelName(styleType, style, perk)
-            self.perkModels = Model(self.netConfigDir, self.modelDir, modelName)
+            self.perkModels[str(style)][str(perk)] = Model(self.netConfigDir, self.modelDir, modelName)
         return self.perkModels[str(style)][str(perk)]
 
     def _getPerkModelName(self, styleType: str, style: int, perk: int)-> str:
         print("Input: " + styleType + ", " + str(style) + ", " + str(perk))
-        model =  path.join("./perks", styleType, self.styleNames[style], "perk" + str(perk) + "_" + self.lossFunction + ".json")
+        model =  path.join("perks", styleType, self.styleNames[style], "perk" + str(perk) + "_" + self.lossFunction + ".json")
         print("Loading model from " + model)
         return model
    
     def _getPerkStyleModelName(self, modelType)-> str:
-        return "perkstyle/" + modelType + "_perkstyle_" + self.lossFunction
+        model =  "perkstyle/" + modelType + "_perkstyle_" + self.lossFunction
+        print("Loading model from " + model)
+        return model
 
     def _getStyleModel(self, modelType: str)-> Model:
         if modelType not in self.styleModels:
