@@ -67,8 +67,6 @@ class Model:
         model.load_weights(weights)
         print("loading weights")
         return model
-#        modelFile = path.join(modelDir, modelFile, "model");
- #       return load_model(modelFile, custom_objects={"topKAccuracy": self.topKAccuracy, "maskedErrorFunc": maskedErrorFunc})
 
     def getColumns(self, data, columns):
         dfCols = data.columns
