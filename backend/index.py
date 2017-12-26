@@ -18,6 +18,7 @@ loop = asyncio.get_event_loop()
 runeproposers = {}
 models = Models(config["models"]["netConfigDir"], config["models"]["modelDir"],\
                      config["models"]["loss"], constants.styleNames)
+
 preprocessing = DataPreprocessing()
 
 def log(sid, event, data):
@@ -29,7 +30,6 @@ async def index(request):
         return web.Response(text=f.read(), content_type='text/html')
 
 def emit(sid, evt, success, data):
-    log(sid, "", "Created new event loop")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     emit = sio.emit(evt, { "success": success, "data": data}, namespace="/runeprediction", room=sid)
