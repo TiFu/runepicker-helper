@@ -36,7 +36,7 @@ module.exports = [
         filename: '[name].js'
       },      target: 'electron-renderer',
       entry: { index: './src/index.tsx' },
-      plugins: [new HtmlWebpackPlugin()]
+      plugins: [new HtmlWebpackPlugin({ template: "./index.web.html"})]
     },
     commonConfig),
   Object.assign(
