@@ -105,11 +105,12 @@ while len(rows) > 0:
         if len(tags) > 1:
             tag2 = "'" + tags[1] + "'"
         # role transform
+        # i am retarded
         role = row.lane
-        if role == "BOTTOM":
-            if row.lane == "DUO_CARRY":
+        if row.lane == "BOTTOM":
+            if row.role == "DUO_CARRY":
                 role = "MARKSMEN"
-            elif row.lane == "DUO_SUPPORT":
+            elif row.role == "DUO_SUPPORT":
                 role = "SUPPORT"
 
         if row.perk4 > row.perk5:
