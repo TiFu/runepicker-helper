@@ -1,8 +1,22 @@
 {
-    "predictColumn": "perk_primary_style",
-    "trainDataPercentage": 0.9,
+    "loss": "categorical_crossentropy",
+    "epochs": 30,
     "batchSize": 512,
+    "top_k_parameter": 2,
+    "nominalColumns": [
+        "tag1",
+        "tag2",
+        "role",
+        "perk_primary_style"
+    ],
+    "predictColumn": "perk_primary_style",
     "optimizer": "adam",
+    "trainDataPercentage": 0.9,
+    "oversample": true,
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
+    ],
     "columns": [
         "tag1",
         "tag2",
@@ -43,15 +57,6 @@
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
     ],
-    "oversample": true,
-    "nominalColumns": [
-        "tag1",
-        "tag2",
-        "role",
-        "perk_primary_style"
-    ],
-    "epochs": 30,
-    "top_k_parameter": 2,
     "layers": [
         {
             "neuronCount": 200,
@@ -78,10 +83,5 @@
             "activation": "softmax",
             "type": "Dense"
         }
-    ],
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ],
-    "loss": "categorical_crossentropy"
+    ]
 }
