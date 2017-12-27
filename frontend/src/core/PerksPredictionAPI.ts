@@ -58,6 +58,7 @@ export class PerksPredictionAPI {
         this.socket.on("subStyles", (data: Response<PerkStylePrediction>) => listener.onReceivedSubStyle(data));
         this.socket.on("primaryRunes", (perks: Response<PerkPrediction>) => listener.onReceivedPrimaryPerks(perks));
         this.socket.on("subRunes", (perks: Response<PerkPrediction>) => listener.onReceivedSubPerks(perks));
+        this.socket.open();
     }
 
     public close(): void {
