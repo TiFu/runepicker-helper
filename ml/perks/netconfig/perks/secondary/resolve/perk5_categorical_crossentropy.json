@@ -1,7 +1,12 @@
 {
-    "loss": "categorical_crossentropy",
     "perkstyle_attribute": "perk_sub_style",
-    "batchSize": 512,
+    "optimizer": "adam",
+    "top_k_parameter": 2,
+    "oversample": true,
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
+    ],
     "nominalColumns": [
         "tag1",
         "tag2",
@@ -9,7 +14,7 @@
         "perk5"
     ],
     "trainDataPercentage": 0.9,
-    "modelName": "primary_perkstyle/precision",
+    "predictColumn": "perk5",
     "columns": [
         "tag1",
         "tag2",
@@ -50,41 +55,36 @@
         "bonus_armor_scaling_late",
         "bonus_magic_resist_scaling_late"
     ],
+    "batchSize": 512,
+    "loss": "categorical_crossentropy",
+    "modelName": "primary_perkstyle/precision",
     "layers": [
         {
+            "type": "Dense",
             "neuronCount": 200,
-            "activation": "tanh",
-            "type": "Dense"
+            "activation": "tanh"
         },
         {
+            "type": "Dense",
             "neuronCount": 50,
-            "activation": "tanh",
-            "type": "Dense"
+            "activation": "tanh"
         },
         {
+            "type": "Dense",
             "neuronCount": 200,
-            "activation": "tanh",
-            "type": "Dense"
+            "activation": "tanh"
         },
         {
+            "type": "Dense",
             "neuronCount": 30,
-            "activation": "tanh",
-            "type": "Dense"
+            "activation": "tanh"
         },
         {
+            "type": "Dense",
             "neuronCount": 8,
-            "activation": "softmax",
-            "type": "Dense"
+            "activation": "softmax"
         }
     ],
-    "predictColumn": "perk5",
-    "oversample": true,
     "epochs": 30,
-    "perkstyle": 8400,
-    "optimizer": "adam",
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ],
-    "top_k_parameter": 2
+    "perkstyle": 8400
 }
