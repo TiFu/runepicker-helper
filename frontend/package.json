@@ -16,6 +16,7 @@
     "@types/react-dom": "^16.0.3",
     "@types/react-router": "^4.0.19",
     "@types/react-router-dom": "^4.2.3",
+    "@types/request-promise": "^4.1.39",
     "@types/socket.io-client": "^1.4.32",
     "electron": "^1.7.10",
     "is-electron-renderer": "^2.0.1",
@@ -24,6 +25,8 @@
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "socket.io-client": "^2.0.4"
   },
   "devDependencies": {

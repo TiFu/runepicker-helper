@@ -1,10 +1,18 @@
 export interface Page {
     id: number;
-    
+    current: boolean;
+    isActive: boolean;
+    isDeletable: boolean;
+    isEditable: boolean;
+    isValid: boolean;
+    name: string;
+    order: 0;
+    primaryStyleId: number;
+    selectedPerkIds: Array<number>;
+    subStyleId: number;    
 }
 
 export interface LCUClient {
-
     /**
      * Signals if the lcu client is available in the current
      * **distribution** i.e. false in web, true in electron
