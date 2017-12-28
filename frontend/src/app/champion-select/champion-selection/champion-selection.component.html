@@ -1,0 +1,11 @@
+<label for="search">Search:  </label><input type="text" id="search">
+<div class="champ-list">
+  <span
+    class="champ"
+    *ngFor="let champ of champList"
+    [style.background-image]="'url(assets/sprites/' + champMap[champ].image.sprite + ')'"
+    [style.background-position-x]="'-' + champMap[champ].image.x + 'px'"
+    [style.background-position-y]="'-' + champMap[champ].image.y + 'px'"
+    (click)="championClicked(champ)">
+  </span>
+</div>

@@ -1,15 +1,15 @@
 {
   "//":"This file is only for the electron app",
-  "name": "Runes Reforged",
+  "name": "RunePicker",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "electron.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "repository": "https://github.com/TiFu/runepicker-helper",
+  "author": "Anton Pohli",
+  "license": "MIT",
   "devDependencies": {
     "electron": "~1.7.8"
   }

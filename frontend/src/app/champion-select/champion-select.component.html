@@ -1,0 +1,14 @@
+<div id="wrapper">
+  <div (click)="toggleChampionSelection()" class="champion">
+    <img *ngIf="!champ" class="champ-img" src="assets/champions/-1.png">
+    <img *ngIf="champ" class="champ-img" src="assets/champions/{{champ.id}}.png">
+  </div>
+  <lane-select (laneChanged)="laneSelected($event)"></lane-select>
+  <button [disabled]="!champ || !lane">Start</button>
+</div>
+
+<div *ngIf="overlayVisible" class="overlay" (click)="toggleChampionSelection()">
+  <div class="champ-selection">
+    <champion-selection (championSelected)="champSelected($event)"></champion-selection>
+  </div>
+</div>

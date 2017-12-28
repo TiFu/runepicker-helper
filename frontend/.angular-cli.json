@@ -9,7 +9,7 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico",
+        "icon.ico",
         "electron.js",
         "package.json"
       ],
@@ -21,7 +21,8 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "../node_modules/normalize.css/normalize.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
