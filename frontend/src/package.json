@@ -1,0 +1,16 @@
+{
+  "//":"This file is only for the electron app",
+  "name": "Runes Reforged",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "electron.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "~1.7.8"
+  }
+}
