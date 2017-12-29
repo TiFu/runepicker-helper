@@ -5,6 +5,7 @@ from typing import List, Mapping
 import keras.backend as K
 import keras.metrics as metrics
 import pickle
+import pandas
 import perks.get_smarties as get_smarties
 import sys
 # THIS IS AN EVIL HACK TO MAKE PICKLE LIKE US
@@ -17,7 +18,7 @@ sys.modules["get_smarties"] = get_smarties
 # TODO: no lazy loading, instead load at application start time
 
 def makeTopKAccuracy(k):
-    def topKAccuracy(y_true, y_pred): 
+    def topKAccuracy(y_true, y_pred):
         return metrics.top_k_categorical_accuracy(y_true, y_pred, k)
     return topKAccuracy
 
@@ -44,11 +45,11 @@ class Model:
     def _loadSmarties(self, modelDir, modelFile):
         smartiesFile = path.join(modelDir, modelFile, "smarties.pkl")
         with open(smartiesFile, "rb") as smarties:
-            return pickle.load(smarties)
-    
+            return pandas.read_pickle(smarties)
+
     def _getModelName(self):
         return self.netConfig["directory"]
-    
+
     def _loadNetConfig(self, netConfigsDir, netConfigName):
         netConfig = json.load(open(path.join(netConfigsDir, netConfigName)))
         netConfig["directory"] = netConfigName.replace(".json", "")
@@ -74,7 +75,7 @@ class Model:
         for dfCol in dfCols.values:
             for column in columns:
                 # either same OR we found the start of a nominal value
-                if dfCol == column or dfCol.startswith(column + "_"): 
+                if dfCol == column or dfCol.startswith(column + "_"):
                     cols.append(dfCol)
         return cols
 
@@ -99,7 +100,7 @@ class Model:
 
 import tensorflow as tf
 class Models:
-    
+
     def __init__(self, netConfigDir, modelDir, lossFunction, styleNames: Mapping[int, str] ):
         self.netConfigDir = netConfigDir
         self.modelDir = modelDir
@@ -146,7 +147,7 @@ class Models:
         model =  path.join("perks", styleType, self.styleNames[style], "perk" + str(perk) + "_" + self.lossFunction + ".json")
         print("Loading model from " + model)
         return model
-   
+
     def _getPerkStyleModelName(self, modelType)-> str:
         model =  "perkstyle/" + modelType + "_perkstyle_" + self.lossFunction
         print("Loading model from " + model)
@@ -157,5 +158,3 @@ class Models:
             self.styleModels[modelType] = Model(self.netConfigDir, self.modelDir, \
                            self._getPerkStyleModelName(modelType) + ".json")
         return self.styleModels[modelType]
-
-

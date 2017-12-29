@@ -6,3 +6,7 @@ aiohttp == 2.3.6
 
 # index.py: 2
 python_socketio == 1.8.4
+keras
+tensorflow
+pandas
+h5py

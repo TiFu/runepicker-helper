@@ -1,3 +1,4 @@
 models
 netconfig
 data/*.json
+/config/config.json

@@ -26,7 +26,7 @@ def log(sid, event, data):
 
 async def index(request):
     """Serve the client-side application."""
-    with open('index.html') as f:
+    with open('static/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
 def emit(sid, evt, success, data):
@@ -34,7 +34,7 @@ def emit(sid, evt, success, data):
     asyncio.set_event_loop(loop)
     emit = sio.emit(evt, { "success": success, "data": data}, namespace="/runeprediction", room=sid)
     loop.run_until_complete(emit)
-    
+
 # TODO: try catch for error reporting in case of crash
 def predictPrimaryStyle(sid, runeProposer, championId, lane):
     try:
@@ -88,7 +88,7 @@ def connect(sid, environ):
 @sio.on('startPrediction', namespace='/runeprediction')
 async def startPrediction(sid, data):
     """
-        data: dict of 
+        data: dict of
             - champion id
             - lane
     """
@@ -103,7 +103,7 @@ async def startPrediction(sid, data):
         return False, "Unknown lane " + data["lane"] + ", expected " + str(constants.lanes)
 
     # Run prediction async to not block the whole event loop
-    pred = loop.run_in_executor(poolExecutor, predictPrimaryStyle, sid, runeproposers[sid], data["champion_id"], data["lane"])  
+    pred = loop.run_in_executor(poolExecutor, predictPrimaryStyle, sid, runeproposers[sid], data["champion_id"], data["lane"])
     asyncio.ensure_future(pred)
     return True
 
@@ -114,7 +114,7 @@ def selectPrimaryStyle(sid, data):
         return False, "Invalid Style selected!"
 
     runeproposers[sid].selectPrimaryStyle(data)
-    pred = loop.run_in_executor(poolExecutor, predictSubStyle, sid, runeproposers[sid])
+    pred = loop.run_in_executor(poolExecutor, predictPrimaryRunes, sid, runeproposers[sid])
     asyncio.ensure_future(pred)
     return True
 
@@ -133,7 +133,7 @@ def selectSubStyle(sid, data):
             return False, "Primary and sub style need to be different!"
         return False, "The selected substyle is invalid!"
 
-    pred = loop.run_in_executor(poolExecutor, predictPrimaryRunes, sid, runeProposer)
+    pred = loop.run_in_executor(poolExecutor, predictSubRunes, sid, runeProposer)
     asyncio.ensure_future(pred)
     return True
 
@@ -151,7 +151,7 @@ def selectPrimaryRunes(sid, data):
     print("Select primary style runes: " + str(data))
     runeProposer.selectPrimaryStyleRunes(data)
     print("Selected primary style runes: " + str(data))
-    pred = loop.run_in_executor(poolExecutor, predictSubRunes, sid, runeProposer)
+    pred = loop.run_in_executor(poolExecutor, predictSubStyle, sid, runeProposer)
     asyncio.ensure_future(pred)
     return True
 
