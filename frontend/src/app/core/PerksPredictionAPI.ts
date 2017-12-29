@@ -38,7 +38,7 @@ export interface PerkPrediction {
 export type Lane = "MARKSMAN" | "SUPPORT" | "TOP" | "MIDDLE" | "JUNGLE";
 
 export interface BaseChampionInformation {
-    championId: number;
+    champion_id: number;
     lane: Lane;
 }
 
@@ -67,6 +67,7 @@ export class PerksPredictionAPI {
 
     public startPrediction(data: BaseChampionInformation): Promise<CallResult> {
         return new Promise<CallResult>((resolve, reject) => {
+            console.log(data)
             this.socket.emit("startPrediction", data, function(result: CallResult) {
                 console.log(result)
                 if (result.success) {

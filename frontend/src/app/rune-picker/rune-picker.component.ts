@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PerksPredictionAPIListener, PerksPredictionAPI, Response, PerkPrediction, PerkStylePrediction} from '../core/PerksPredictionAPI'
+import { PerksPredictionService } from '../perks-prediction.service';
+
 
 @Component({
   selector: 'app-rune-picker',
@@ -10,47 +11,126 @@ export class RunePickerComponent implements OnInit {
 
   lane:string = null;
   champ:any = null;
-  state = 0;
-  perksApi:PerksPredictionAPI;
+  state = null;
+  store = new Store();
+  primaryStyles:{[index:number]: number}
 
-  constructor() { }
+  constructor(private perksService:PerksPredictionService) { }
 
   ngOnInit() {
-    //TODO: move this to a service
-    this.perksApi = new PerksPredictionAPI("localhost:8765");
-    this.perksApi.connect(new PerksPredictionListener())
-    this.perksApi.startPrediction({championId:1,lane:"MIDDLE"})
+    this.state = new ChampionSelectState(this.perksService, this.store);
+    this.perksService.getStateChange().subscribe(message => {
+      console.log(message);
+      this.state = this.state.handleStateChange(message.type, message.data);
+    })
   }
 
   selected(event){
-    console.log(event);
     this.lane = event.lane;
     this.champ = event.champ;
-    this.state = 1;
+    this.perksService.startPrediction(this.champ.id, this.lane);
   }
 
 }
 
-class PerksPredictionListener implements PerksPredictionAPIListener{
-  onConnect():void{
-    console.log("Hello World")
+class Store{
+  primaryStyles:{[index:number]:number}
+  primaryStyle:number;
+  subStyles:{[index:number]:number}
+  subStyle:number;
+  suggestedPrimaryRunes:any;
+  pickedPrimaryRunes:number[];
+  suggestedSecondaryRunes:any;
+  pickedSecondaryRunes:any;
+}
+
+abstract class State{
+  constructor(protected perksService:PerksPredictionService,protected store:Store){ }
+  abstract handleStateChange(type:string, data:any): State;
+  abstract getId():number;
+
+  pathSelected(path:number){}
+  runesSelected(runes:number[]){}
+  getSuggestedStyles(){return {}}
+  getSuggestedRunes() {return []}
+}
+
+
+class ChampionSelectState extends State{
+  handleStateChange(type:string, data:any){
+    if(type == "primaryStyles"){
+      this.store.primaryStyles = data;
+      return new PrimaryPageSelectState(this.perksService, this.store);
+    }else{
+      return this;
+    }
   }
 
-  onDisconnect():void{
-
+  getId():number{
+    return 0;
   }
+}
 
-  onReceivedPrimaryStyle(predictions: Response<PerkStylePrediction>): void{
-    console.log(predictions)
+class PrimaryPageSelectState extends State{
+  handleStateChange(type:string, data:any):State{
+    if(type == "primaryRunes"){
+      this.store.suggestedPrimaryRunes = data;
+      return new PrimaryPerksSelectState(this.perksService,this.store)
+    }
+    return this;
   }
-  onReceivedSubStyle(predictions: Response<PerkStylePrediction>): void{
-
+  getId():number{return 1;}
+  pathSelected(path:number){
+    this.store.primaryStyle = path;
+    this.perksService.setPrimaryPath(path);
   }
-  onReceivedPrimaryPerks(prediction: Response<PerkPrediction>): void{
-
+  getSuggestedStyles(){
+    return this.store.primaryStyles;
   }
-  onReceivedSubPerks(prediction:  Response<PerkPrediction>): void{
+}
 
+class PrimaryPerksSelectState extends State{
+  handleStateChange(type:string, data:any):State{
+    if(type == "subStyles"){
+      this.store.subStyles = data;
+      return new SecondaryPageSelectState(this.perksService, this.store);
+    }
+    return this;
   }
+  getId():number{return 2;}
+  runesSelected(runes:number[]){
+    this.store.pickedPrimaryRunes = runes;
+    this.perksService.setPrimaryRunes(runes);
+  }
+  getSuggestedRunes(){
+    return this.store.suggestedPrimaryRunes;
+  }
+}
 
+class SecondaryPageSelectState extends State{
+  handleStateChange(type:string, data:any):State{
+    if(type == "subRunes"){
+      this.store.suggestedSecondaryRunes = data;
+      return new SecondaryRunesSelectState(this.perksService, this.store);
+    }
+    return this;
+  }
+  getId():number{return 1}
+  pathSelected(path:number){
+    this.store.subStyle = path;
+    this.perksService.setSecondaryPath(path);
+  }
+  getSuggestedStyles(){
+    return this.store.subStyles;
+  }
+}
+
+class SecondaryRunesSelectState extends State{
+  handleStateChange(type:string, data:any):State{
+    return this;
+  }
+  getSuggestedRunes(){
+    return this.store.suggestedSecondaryRunes;
+  }
+  getId(){return 2;}
 }

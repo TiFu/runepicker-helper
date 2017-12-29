@@ -1,0 +1,9 @@
+<div class="perk-row" *ngFor="let row of perks; let i = index">
+  <div class="perk" *ngFor="let perk of keys(row)"
+    [ngClass]="{'highest':getMax(row) == perk, 'selected':selectedPerks[i] == perk}"
+    (click)="selectedPerks[i] = perk">
+    <img src="assets/perks/{{perk}}.png">
+    {{perk}}
+  </div>
+</div>
+<button (click)="continue()">Continue</button>

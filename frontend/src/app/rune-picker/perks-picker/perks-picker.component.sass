@@ -1,0 +1,13 @@
+.perk-row
+  display: flex
+
+.perk
+  filter: grayscale(1)
+  img
+    border-radius: 50%
+  &.highest
+    img
+      border: 1px solid red
+    filter: grayscale(0.5)
+  &.selected
+    filter: grayscale(0)

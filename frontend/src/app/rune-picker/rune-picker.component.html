@@ -1,1 +1,3 @@
-<champion-selection *ngIf="state == 0" (selected)="selected($event)"></champion-selection>
+<champion-selection *ngIf="state.getId() == 0" (selected)="selected($event)"></champion-selection>
+<style-picker *ngIf="state.getId() == 1" [percentages]="state.getSuggestedStyles()" [disabled]="store.primaryStyle" (selected)="state.pathSelected($event)"></style-picker>
+<perks-picker *ngIf="state.getId() == 2" [perks]="state.getSuggestedRunes()" (selected)="state.runesSelected($event)"></perks-picker>

@@ -10,6 +10,10 @@ import { ChampionListComponent } from './rune-picker/champion-selection/champion
 import { LaneSelectComponent } from './rune-picker/champion-selection/lane-select/lane-select.component';
 import { LaneSelectWheelComponent } from './rune-picker/champion-selection/lane-select/wheel/wheel.component';
 
+import { PerksPredictionService } from './perks-prediction.service';
+import { StylePickerComponent } from './rune-picker/style-picker/style-picker.component';
+import { PerksPickerComponent } from './rune-picker/perks-picker/perks-picker.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,13 +21,17 @@ import { LaneSelectWheelComponent } from './rune-picker/champion-selection/lane-
     ChampionSelectionComponent,
     ChampionListComponent,
     LaneSelectComponent,
-    LaneSelectWheelComponent
+    LaneSelectWheelComponent,
+    StylePickerComponent,
+    PerksPickerComponent
   ],
   imports: [
     BrowserModule,
     routing
   ],
-  providers: [],
+  providers: [
+    PerksPredictionService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

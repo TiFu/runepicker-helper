@@ -1,0 +1,21 @@
+#wrapper
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  .paths
+    display: flex
+    .path
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      cursor: pointer
+      width: 150px
+      &.highest
+        border: 1px solid blue
+      &.selected
+        border: 3px solid red
+      &.disabled
+        cursor: not-allowed
+        filter: grayscale(1)

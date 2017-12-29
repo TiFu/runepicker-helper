@@ -1,0 +1,12 @@
+<div id="wrapper" class="full-screen">
+  <div class="paths">
+    <div *ngFor="let path of paths" class="path"
+    [ngClass]="{'highest':highest == path['id'],'selected':selectedPath == path['id'], 'disabled':disabled == path['id']}"
+    (click)="changeSelected(path['id'])">
+      <h2>{{path["name"]}}</h2>
+      <img src="assets/paths/{{path['id']}}.png">
+      <span>Accuracy: {{getPercentage(path["id"])}}</span>
+    </div>
+  </div>
+  <button (click)="continue()">Continue</button>
+</div>
