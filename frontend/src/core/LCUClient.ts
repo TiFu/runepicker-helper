@@ -24,4 +24,5 @@ export interface LCUClient {
     deletePage(pageId: number): Promise<void>;
     selectPage(pageId: number): Promise<void>;
     isConnected(): boolean;
+    disconnect(): void;
 }

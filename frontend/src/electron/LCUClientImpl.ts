@@ -17,7 +17,7 @@ export class LCUClientImpl implements LCUClient {
     constructor(onLCUConnectListener: () => void, onLCUDisconnectListener: () => void) {
         this.connector = new LCUConnector();
         this.connector.on("connect", (data: any) => {
-            this.url = data.url;
+            this.url = data.address;
             this.port = data.port;
             this.password = data.password;
             this.protocol = data.protocol;
@@ -30,6 +30,10 @@ export class LCUClientImpl implements LCUClient {
             onLCUDisconnectListener();
         });
         this.connector.start();
+    }
+
+    public disconnect(): void {
+        this.connector.stop();
     }
 
     public isConnected(): boolean {
@@ -68,15 +72,18 @@ export class LCUClientImpl implements LCUClient {
 
     private requestPromise(options: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            request(options.uri, options, (error: any, response, body: any) => {
-                console.log(error);
-                console.log(response.statusCode);
+            request(options.uri, options, (error: any, response: any, body: any) => {
                 if (error != null) {
+                    console.log(error)
                     reject(error);
                     return;
                 }
-                console.log(body);
-                resolve(body);
+                console.log(options.uri + " [" + options.method + "]" + ": " + response.statusCode)
+                if (response.statusCode >= 200 && response.statusCode < 300) {
+                    resolve(body);
+                } else {
+                    reject(response.body);
+                }
             })
         });
     }

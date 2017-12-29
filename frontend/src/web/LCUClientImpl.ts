@@ -2,6 +2,14 @@ import {Page, LCUClient} from '../core/LCUClient'
 
 class LCUClientImpl implements LCUClient {
 
+    isConnected(): boolean {
+        return false;
+    }
+
+    disconnect(): void {
+        
+    }
+
     isAvailable(): boolean {
         return false;
     }

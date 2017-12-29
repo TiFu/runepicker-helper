@@ -30,9 +30,9 @@ export class LCUService {
      */
     public isEmptyPageAvailable(): Promise<boolean> {
         let maxPages = this.client.getMaxPages();
-        let pages = this.client.getPages();
-        return Promise.all([maxPages, pages]).then((result: [number, Page[]]) => {
-            return result[1].length < result[0];
+        let pages = this.getDeleteablePages();
+        return Promise.all([maxPages, pages]).then((result: [number, PerkPage[]]) => {
+            return result[1].length < result[0]; // minus default pages
         });
     }
 
@@ -42,13 +42,26 @@ export class LCUService {
     public getPages(): Promise<Array<PerkPage>> {
         return this.client.getPages();
     }
-    
+
+    /**
+     * returns non default pages
+     */
+    public getDeleteablePages(): Promise<Array<PerkPage>> {
+        return this.client.getPages().then((pages) =>{ 
+            return pages.filter((e) => e.isDeletable);
+        })
+    }
+
     /**
      * in this case: save the currentPage and offer restore later?
+     * @returns new created page
      */
     public replacePage(currentPage: PerkPage, newPage: PerkPage): Promise<PerkPage> {
-        return this.client.deletePage(currentPage.id).then((result): Promise<PerkPage> => {
+        return this.client.deletePage(currentPage.id).then((): Promise<PerkPage> => {
             return this.client.createPage(this.perkPageToPage(newPage));
+        }).then((page) => {
+            console.log("Created new page: " + page.id);
+            return this.client.selectPage(page.id).then(() => page);
         });
     }
 
@@ -70,9 +83,11 @@ export class LCUService {
 
     /**
      * Create a new rune page and return it (with the id set)
-     * @param page configuration of the input page
+     * @param page configuration of the input page, returns created page
      */
     public createAndSetPage(page: PerkPage): Promise<PerkPage> {
-        return this.client.createPage(this.perkPageToPage(page));
+        return this.client.createPage(this.perkPageToPage(page)).then((page) => {
+            return this.client.selectPage(page.id).then(() => page);
+        });
     }
 }
