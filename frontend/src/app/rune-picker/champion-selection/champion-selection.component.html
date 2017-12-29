@@ -1,0 +1,17 @@
+<div id="wrapper" class="full-screen">
+  <div class="selection">
+    <div class="champion" (click)="toggleChampionSelection()">
+      <img class="champ-img" [src]="getChampionImageUrl()">
+    </div>
+    <div class="lane">
+      <lane-select (laneChanged)="laneChanged($event)"></lane-select>
+    </div>
+  </div>
+  <button class="start" [disabled]="!champ || !lane" (click)="start()">Find Runepage</button>
+</div>
+
+<div *ngIf="overlayShown" class="overlay">
+  <div class="overlay-inner">
+    <champion-list (championChanged)="championChanged($event)"></champion-list>
+  </div>
+</div>

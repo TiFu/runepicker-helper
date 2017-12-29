@@ -5,4 +5,4 @@
     <img *ngIf="lane != 'none'" class="lane-icon lane-icon-small" src="assets/lane/{{lane}}.png">
   </div>
 </div>
-<lane-wheel *ngIf="laneSelectVisible" (change)="laneChangedCallback($event)"></lane-wheel>
+<lane-select-wheel *ngIf="laneSelectVisible" (change)="laneChangedCallback($event)"></lane-select-wheel>

@@ -1,22 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { routing } from './app.router';
+
 import { AppComponent } from './app.component';
-import { ChampionSelectComponent } from './champion-select/champion-select.component';
-import { LaneSelectComponent } from './champion-select/lane-select/lane-select.component';
-import { WheelComponent } from './champion-select/lane-select/wheel/wheel.component';
-import { ChampionSelectionComponent } from './champion-select/champion-selection/champion-selection.component';
+import { RunePickerComponent } from './rune-picker/rune-picker.component';
+import { ChampionSelectionComponent } from './rune-picker/champion-selection/champion-selection.component';
+import { ChampionListComponent } from './rune-picker/champion-selection/champion-list/champion-list.component';
+import { LaneSelectComponent } from './rune-picker/champion-selection/lane-select/lane-select.component';
+import { LaneSelectWheelComponent } from './rune-picker/champion-selection/lane-select/wheel/wheel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChampionSelectComponent,
+    RunePickerComponent,
+    ChampionSelectionComponent,
+    ChampionListComponent,
     LaneSelectComponent,
-    WheelComponent,
-    ChampionSelectionComponent
+    LaneSelectWheelComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    routing
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,35 @@
+#wrapper
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  .selection
+    display: flex
+    .champion
+      border-radius: 50%
+      border: 7px solid #005f84
+      width: 150px
+      height: 150px
+      overflow: hidden
+      .champ-img
+        width: 100%
+  .start
+    background: #1E2328
+    border: 5px solid #005f84
+    color: white
+    font-weight: bold
+    font-size: x-large
+    padding: 7px 15px
+    cursor: pointer
+    &:disabled
+      color: gray
+      border: 2px solid #005f84
+      cursor: not-allowed
+
+.overlay-inner
+  width: 80%
+  max-width: 786px
+  max-height: 80%
+  overflow-x: auto
+  border: 2px solid #005f84
+  padding: 5px
