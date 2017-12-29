@@ -21,6 +21,10 @@ export class LCUService {
         return this.client.isAvailable();
     }
 
+    public isConnected(): boolean {
+        return this.client.isConnected();
+    }
+
     /**
      * Check if another empty page is available
      */
