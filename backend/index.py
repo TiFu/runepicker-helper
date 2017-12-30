@@ -147,7 +147,7 @@ def selectPrimaryRunes(sid, data):
     for i in range(4):
         allowedRunes = constants.runesByPrimaryStyle[runeProposer.primaryStyle][i]
         if data[i] not in constants.runesByPrimaryStyle[runeProposer.primaryStyle][i]:
-            return False, "Expected one of " + allowedRunes + ", but got " + data[i]
+            return False, "Expected one of " + str(allowedRunes) + ", but got " + str(data[i])
     print("Select primary style runes: " + str(data))
     runeProposer.selectPrimaryStyleRunes(data)
     print("Selected primary style runes: " + str(data))
