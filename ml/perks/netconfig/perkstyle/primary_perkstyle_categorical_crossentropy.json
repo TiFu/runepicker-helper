@@ -1,13 +1,4 @@
 {
-    "columns": [
-        "champion_id",
-        "tag1",
-        "tag2",
-        "role"
-    ],
-    "trainDataPercentage": 0.9,
-    "epochs": 30,
-    "batchSize": 512,
     "layers": [
         {
             "activation": "tanh",
@@ -35,8 +26,21 @@
             "type": "Dense"
         }
     ],
-    "oversample": true,
-    "loss": "categorical_crossentropy",
+    "columns": [
+        "champion_id",
+        "tag1",
+        "tag2",
+        "role"
+    ],
+    "predictColumn": "perk_primary_style",
+    "epochs": 15,
+    "optimizer": "adam",
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
+    ],
+    "trainDataPercentage": 0.9,
+    "batchSize": 512,
     "nominalColumns": [
         "champion_id",
         "tag1",
@@ -45,10 +49,6 @@
         "perk_primary_style"
     ],
     "top_k_parameter": 2,
-    "predictColumn": "perk_primary_style",
-    "optimizer": "adam",
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ]
+    "oversample": true,
+    "loss": "categorical_crossentropy"
 }
