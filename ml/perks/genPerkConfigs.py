@@ -5,17 +5,7 @@ config = {
         {
             "type": "Dense",
             "activation": "tanh",
-            "neuronCount": 200
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 50
-        },
-        {
-            "type": "Dense",
-            "activation": "tanh",
-            "neuronCount": 200
+            "neuronCount": 100
         },
         {
             "type": "Dense",
@@ -33,19 +23,13 @@ config = {
     "oversample": True,
     "metrics": ["accuracy", "top_k_categorical_accuracy"],
     "top_k_parameter": 2,
-    "columns": ["tag1", "tag2", "role", "root", "slow", "stun", "charm", "knockup", "heal", "shield",
-        "base_ad", "base_health", "base_armor", "base_mres", "base_as", "ad_scaling", "health_scaling", 
-        "armor_scaling", "mres_scaling", "as_scaling", "q_cd_early", "w_cd_early", "e_cd_early", "r_cd_early",
-        "q_cd_late", "w_cd_late", "e_cd_late", "r_cd_late", "ap_ability_scaling_early", "ad_ability_scaling_early",
-        "max_hp_scaling_early", "bonus_armor_scaling_early", "bonus_magic_resist_scaling_early",
-        "ap_ability_scaling_late", "ad_ability_scaling_late",
-        "max_hp_scaling_late", "bonus_armor_scaling_late", "bonus_magic_resist_scaling_late"],
+    "columns": ["champion_id", "tag1", "tag2", "role"],
     "predictColumn": "perk4",
-    "nominalColumns": ["tag1", "tag2", "role", "perk4"],
+    "nominalColumns": ["champion_id", "tag1", "tag2", "role", "perk4"],
     "perkstyle": 8000,
     "perkstyle_attribute": "perk_sub_style",
     "trainDataPercentage": 0.9,
-    "epochs": 30,
+    "epochs": 15,
     "batchSize": 512,
     "modelName": "primary_perkstyle/precision"
 }

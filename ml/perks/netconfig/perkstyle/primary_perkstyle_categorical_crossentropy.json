@@ -1,46 +1,45 @@
 {
-    "layers": [
-        {
-            "activation": "tanh",
-            "neuronCount": 200,
-            "type": "Dense"
-        },
-        {
-            "activation": "tanh",
-            "neuronCount": 50,
-            "type": "Dense"
-        },
-        {
-            "activation": "tanh",
-            "neuronCount": 200,
-            "type": "Dense"
-        },
-        {
-            "activation": "tanh",
-            "neuronCount": 30,
-            "type": "Dense"
-        },
-        {
-            "activation": "softmax",
-            "neuronCount": 5,
-            "type": "Dense"
-        }
-    ],
     "columns": [
         "champion_id",
         "tag1",
         "tag2",
         "role"
     ],
-    "predictColumn": "perk_primary_style",
-    "epochs": 15,
-    "optimizer": "adam",
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
-    "trainDataPercentage": 0.9,
     "batchSize": 512,
+    "oversample": true,
+    "loss": "categorical_crossentropy",
+    "layers": [
+        {
+            "neuronCount": 200,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 50,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 200,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 30,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 5,
+            "type": "Dense",
+            "activation": "softmax"
+        }
+    ],
+    "optimizer": "adam",
     "nominalColumns": [
         "champion_id",
         "tag1",
@@ -48,7 +47,8 @@
         "role",
         "perk_primary_style"
     ],
-    "top_k_parameter": 2,
-    "oversample": true,
-    "loss": "categorical_crossentropy"
+    "predictColumn": "perk_primary_style",
+    "trainDataPercentage": 0.9,
+    "epochs": 15,
+    "top_k_parameter": 2
 }

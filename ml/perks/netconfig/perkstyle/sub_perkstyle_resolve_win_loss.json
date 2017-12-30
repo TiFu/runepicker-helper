@@ -1,31 +1,4 @@
 {
-    "layers": [
-        {
-            "activation": "tanh",
-            "neuronCount": 200,
-            "type": "Dense"
-        },
-        {
-            "activation": "tanh",
-            "neuronCount": 50,
-            "type": "Dense"
-        },
-        {
-            "activation": "tanh",
-            "neuronCount": 200,
-            "type": "Dense"
-        },
-        {
-            "activation": "tanh",
-            "neuronCount": 30,
-            "type": "Dense"
-        },
-        {
-            "activation": "softmax",
-            "neuronCount": 4,
-            "type": "Dense"
-        }
-    ],
     "columns": [
         "champion_id",
         "tag1",
@@ -33,17 +6,42 @@
         "role",
         "perk_primary_style"
     ],
-    "predictColumn": "perk_sub_style",
-    "epochs": 15,
-    "optimizer": "adam",
-    "perkstyle": 8400,
     "metrics": [
         "accuracy",
         "top_k_categorical_accuracy"
     ],
-    "trainDataPercentage": 0.9,
     "batchSize": 512,
+    "oversample": true,
+    "loss": "win_loss",
     "perkstyle_attribute": "perk_primary_style",
+    "layers": [
+        {
+            "neuronCount": 200,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 50,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 200,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 30,
+            "type": "Dense",
+            "activation": "tanh"
+        },
+        {
+            "neuronCount": 4,
+            "type": "Dense",
+            "activation": "softmax"
+        }
+    ],
+    "optimizer": "adam",
     "nominalColumns": [
         "champion_id",
         "tag1",
@@ -52,7 +50,9 @@
         "perk_primary_style",
         "perk_sub_style"
     ],
-    "top_k_parameter": 2,
-    "oversample": true,
-    "loss": "win_loss"
+    "predictColumn": "perk_sub_style",
+    "trainDataPercentage": 0.9,
+    "epochs": 15,
+    "perkstyle": 8400,
+    "top_k_parameter": 2
 }
