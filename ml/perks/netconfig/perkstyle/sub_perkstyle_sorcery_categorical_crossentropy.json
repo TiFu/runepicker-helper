@@ -1,91 +1,58 @@
 {
-    "loss": "categorical_crossentropy",
-    "epochs": 30,
-    "batchSize": 512,
-    "top_k_parameter": 2,
+    "layers": [
+        {
+            "activation": "tanh",
+            "neuronCount": 200,
+            "type": "Dense"
+        },
+        {
+            "activation": "tanh",
+            "neuronCount": 50,
+            "type": "Dense"
+        },
+        {
+            "activation": "tanh",
+            "neuronCount": 200,
+            "type": "Dense"
+        },
+        {
+            "activation": "tanh",
+            "neuronCount": 30,
+            "type": "Dense"
+        },
+        {
+            "activation": "softmax",
+            "neuronCount": 4,
+            "type": "Dense"
+        }
+    ],
+    "columns": [
+        "champion_id",
+        "tag1",
+        "tag2",
+        "role",
+        "perk_primary_style"
+    ],
+    "predictColumn": "perk_sub_style",
+    "epochs": 15,
+    "optimizer": "adam",
     "perkstyle": 8200,
+    "metrics": [
+        "accuracy",
+        "top_k_categorical_accuracy"
+    ],
+    "trainDataPercentage": 0.9,
+    "batchSize": 512,
+    "perkstyle_attribute": "perk_primary_style",
     "nominalColumns": [
+        "champion_id",
         "tag1",
         "tag2",
         "role",
         "perk_primary_style",
         "perk_sub_style"
     ],
-    "predictColumn": "perk_sub_style",
-    "optimizer": "adam",
-    "trainDataPercentage": 0.9,
-    "perkstyle_attribute": "perk_primary_style",
+    "top_k_parameter": 2,
     "oversample": true,
-    "metrics": [
-        "accuracy",
-        "top_k_categorical_accuracy"
-    ],
-    "columns": [
-        "tag1",
-        "tag2",
-        "role",
-        "root",
-        "slow",
-        "stun",
-        "charm",
-        "knockup",
-        "heal",
-        "shield",
-        "base_ad",
-        "base_health",
-        "base_armor",
-        "base_mres",
-        "base_as",
-        "ad_scaling",
-        "health_scaling",
-        "armor_scaling",
-        "mres_scaling",
-        "as_scaling",
-        "q_cd_early",
-        "w_cd_early",
-        "e_cd_early",
-        "r_cd_early",
-        "q_cd_late",
-        "w_cd_late",
-        "e_cd_late",
-        "r_cd_late",
-        "ap_ability_scaling_early",
-        "ad_ability_scaling_early",
-        "max_hp_scaling_early",
-        "bonus_armor_scaling_early",
-        "bonus_magic_resist_scaling_early",
-        "ap_ability_scaling_late",
-        "ad_ability_scaling_late",
-        "max_hp_scaling_late",
-        "bonus_armor_scaling_late",
-        "bonus_magic_resist_scaling_late",
-        "perk_primary_style"
-    ],
-    "layers": [
-        {
-            "neuronCount": 200,
-            "activation": "tanh",
-            "type": "Dense"
-        },
-        {
-            "neuronCount": 50,
-            "activation": "tanh",
-            "type": "Dense"
-        },
-        {
-            "neuronCount": 200,
-            "activation": "tanh",
-            "type": "Dense"
-        },
-        {
-            "neuronCount": 30,
-            "activation": "tanh",
-            "type": "Dense"
-        },
-        {
-            "neuronCount": 4,
-            "activation": "softmax",
-            "type": "Dense"
-        }
-    ]
+    "loss": "categorical_crossentropy"
 }
