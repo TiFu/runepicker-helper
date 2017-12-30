@@ -1,5 +1,10 @@
 
-all:
+all: download database
+
+database:
+	python3 perkstyle/perkstyle.py 1000000
+
+download:
 	echo "Downloading data...";
 	cd data; \
 	./downloadData.sh;

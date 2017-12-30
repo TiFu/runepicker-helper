@@ -6,9 +6,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-prod": "npm run build --prod",
     "lint": "ng lint",
     "electron": "electron dist/",
-    "electron:build": "ng build --env=electron",
+    "electron:build": "ng build --env=electron --prod",
     "electron:pack": "electron-builder -w --project dist/",
     "electron:compile": "npm run electron:build && npm run electron:pack",
     "electron:dev": "concurrently \"ng build --watch --env=electron\""
@@ -53,11 +54,13 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "node-sass": "^4.7.2",
     "normalize.css": "^7.0.0",
     "protractor": "~5.1.2",
     "sleep-ms": "^2.0.1",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
-    "typescript": "~2.3.3"
+    "typescript": "~2.3.3",
+    "webpack": "^3.10.0"
   }
 }

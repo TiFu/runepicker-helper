@@ -160,8 +160,8 @@ def disconnect(sid):
     log(sid, "disconnected", "")
     del runeproposers[sid]
 
-app.router.add_static('/static', 'static')
 app.router.add_get('/', index)
+app.router.add_static('/', 'static')
 
 if __name__ == '__main__':
     web.run_app(app, host=config["websocket"]["host"], port=config["websocket"]["port"])
