@@ -31,7 +31,8 @@
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts",
-        "electron": "environments/environment.electron.ts"
+        "electron": "environments/environment.electron.ts",
+        "electron-prod": "environments/environment.electron.prod.ts"
       }
     }
   ],

@@ -5,5 +5,7 @@
 
 export const environment = {
   production: false,
-  electron: false
+  electron: false,
+  electronDownloadPath: "#",
+  backendUrl: "http://localhost:8765/runeprediction"
 };

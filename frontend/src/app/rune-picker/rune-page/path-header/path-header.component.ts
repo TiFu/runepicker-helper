@@ -9,7 +9,7 @@ import { StaticDataService } from '../../../static-data/static-data.service';
 export class PathHeaderComponent implements OnInit {
 
   @Input() path:number;
-  protected random = Math.random()
+  random = Math.random()
 
   constructor(private staticData: StaticDataService) { }
 

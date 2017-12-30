@@ -1,1 +1,18 @@
 <router-outlet></router-outlet>
+<div class="status-icons">
+  <div class="backend">
+    <span class="icon" [ngClass]="{'disconnected':!socketConnected}">
+      <img src="assets/various/icon.jpg">
+    </span>
+  </div>
+  <div class="electron">
+    <span *ngIf="lcu.isAvailable()" [ngClass]="{'disconnected':!lcu.isConnected()}">
+      <img src="assets/various/lol-logo.png">
+    </span>
+    <span *ngIf="!lcu.isAvailable()">
+      <a target="_blank" href="{{environment.electronDownloadPath}}">
+        <img src="assets/various/downloadElectron.png">
+      </a>
+    </span>
+  </div>
+</div>

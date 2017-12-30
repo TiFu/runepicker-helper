@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { environment } from '../environments/environment';
 
 import * as io from 'socket.io-client';
 
 @Injectable()
 export class PerksPredictionService {
 
-  private url = 'http://runehelper.satrium.de/runeprediction'
+  private url = environment.backendUrl;
   private socket;
 
   socketConnected = new BehaviorSubject<boolean>(false);
 
   constructor() {
+    console.log("Connecting to ", this.url)
     this.socket = io(this.url);
     this.socket.on('connect', ()=> this.socketConnected.next(true));
     this.socket.on('disconnect', ()=>this.socketConnected.next(false));

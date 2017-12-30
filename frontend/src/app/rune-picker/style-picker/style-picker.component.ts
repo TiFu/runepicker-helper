@@ -22,7 +22,7 @@ export class StylePickerComponent implements OnInit {
   highest:number;
   selectedPath:number;
 
-  constructor(private perksService:PerksPredictionService, private staticData:StaticDataService) { }
+  constructor(private perksService:PerksPredictionService, public staticData:StaticDataService) { }
 
   ngOnInit() {
     let max = -1;
