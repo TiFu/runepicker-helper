@@ -209,7 +209,6 @@ class RuneProposer:
     def predictPrimaryStyleRunes(self)-> List[int]:
         predictions = []
         for perk in [0,1,2,3]:
-            print("Firsrt Perk " + str(perk))
             model = self.models.getPrimaryStyleRunesModel(self.primaryStyle, perk)
             prediction = model.predict(self.data)
             predictions.append(parseModelResult(prediction))

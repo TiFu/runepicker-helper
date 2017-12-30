@@ -55,7 +55,7 @@ quality of used rune pages.**
     * inputs, outputs and network architecture can be configured in [configuration files](https://github.com/TiFu/runepicker-helper/tree/master/ml/perks/netconfig)
     * enables fast iteration of network designs and easy adaption to new data inputs
 * **95% Accuracy** for Top 2 Primary Style Prediction, **85% Accuracy** for Top 2 Sub Style Prediction
-* Perks are hard to predict based on limited information in the API
+* Perks are difficult to predict based on limited information in the API
     * e.g. there are no features indicating that 'Poro Ward' should be picked
     * **~ 50% Accuracy** on test data
 
@@ -81,7 +81,7 @@ quality of used rune pages.**
 
 * Classes need to be balanced: otherwise network learns to just predict one class/rune all the time
     * Oversampling or Undersampling
-* Perk prediction is hard because the API does not provide good indicators for many perks (e.g. Poro Ward perk)
+* Perk prediction is difficult because the API does not provide good indicators for many perks (e.g. Poro Ward perk)
     * possible solution would be to gather behavioral stats about a player
         * e.g. dies to ganks very often, plays aggressive
 
