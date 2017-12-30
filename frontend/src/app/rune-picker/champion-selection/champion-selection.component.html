@@ -7,7 +7,7 @@
       <lane-select (laneChanged)="laneChanged($event)"></lane-select>
     </div>
   </div>
-  <button class="start" [disabled]="!champ || !lane" (click)="start()">Find Runepage</button>
+  <button class="btn" [disabled]="!champ || !lane" (click)="start()">Find Runepage</button>
 </div>
 
 <div *ngIf="overlayShown" class="overlay">

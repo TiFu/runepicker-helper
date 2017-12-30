@@ -7,7 +7,7 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class PerksPredictionService {
 
-  private url = 'http://93.196.59.39:8765/runeprediction'
+  private url = 'http://93.196.49.153:8765/runeprediction'
   private socket;
 
   socketConnected = new BehaviorSubject<boolean>(false);

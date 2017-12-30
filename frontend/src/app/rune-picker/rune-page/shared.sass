@@ -1,0 +1,42 @@
+.section
+  height: 20%
+  display: flex
+  .image
+    flex-grow: 0
+    flex-shrink: 0
+    width: 110px
+    position: relative
+    display: flex
+    justify-content: center
+    align-items: center
+  .text
+    flex-grow: 1
+
+.rune-image-container
+  background: #1e2328
+  border-radius: 50%
+  position: relative
+  width: 62px
+  height: 62px
+  .rune-image
+    height: 46px
+    width: 46px
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    z-index: 1
+    &.keystone
+      width: 108px
+      height: 108px
+
+.text
+  overflow: hidden
+  padding-top: 10px
+  h2
+    margin: 0
+    font-size: larger
+  span
+    color: white
+    font-size: x-small
+    overflow: hidden

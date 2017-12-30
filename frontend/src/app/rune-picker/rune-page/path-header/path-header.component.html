@@ -1,0 +1,26 @@
+<div class="section">
+  <div class="image">
+    <button class="path-button">
+      <svg class="circles">
+        <linearGradient id="circle-gradient-precision-{{random}}" x1="1" y1="0.6" x2="0" y2="0">
+          <stop stop-opacity="1" offset="0%" [attr.stop-color]="color()"></stop><stop stop-opacity="0" offset="70%" [attr.stop-color]="color()"></stop>
+        </linearGradient>
+        <circle class="circle" cx="50%" cy="50%" r="43%" fill="none" stroke-width="2" [attr.stroke]="'url(#cup-gradient-' + random + ')'"></circle>
+        <circle class="circle second" cx="50%" cy="50%" r="43%" fill="none" stroke-width="2" [attr.stroke]="'url(#cup-gradient-' + random + ')'"></circle>
+        <circle class="circle third" cx="50%" cy="50%" r="43%" fill="none" stroke-width="2" [attr.stroke]="'url(#cup-gradient-' + random + ')'"></circle>
+      </svg>
+      <svg class="cup">
+        <linearGradient id="cup-gradient-{{random}}" x1="0" y1="0" x2="0" y2="1">
+          <stop stop-opacity="0" offset="80%" [attr.stop-color]="color()"></stop>
+          <stop stop-opacity="1" offset="100%" [attr.stop-color]="color()"></stop>
+        </linearGradient>
+        <circle cx="42" cy="42" r="42" fill="none" stroke-width="2" [attr.stroke]="'url(#cup-gradient-' + random + ')'"></circle>
+      </svg>
+      <img src="assets/paths/{{path}}.png">
+    </button>
+  </div>
+  <div class="text">
+    <h2 [style.color]="color()">{{getName()}}</h2>
+    <span>{{getDescription()}}</span>
+  </div>
+</div>

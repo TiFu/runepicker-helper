@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { PerksPredictionService } from '../perks-prediction.service';
 
 
@@ -18,17 +18,30 @@ export class RunePickerComponent implements OnInit {
   constructor(private perksService:PerksPredictionService) { }
 
   ngOnInit() {
-    this.state = new ChampionSelectState(this.perksService, this.store);
+    //this.state = new ChampionSelectState(this.perksService, this.store);
+    this.store.primaryStyle = 8000;
+    this.store.subStyle = 8200;
+    this.store.pickedPrimaryRunes = [8008,8009,9103,8017];
+    this.store.pickedSecondaryRunes = [8234,8236];
+    this.state = new RunePageDisplayState(this.perksService, this.store);
     this.perksService.getStateChange().subscribe(message => {
       console.log(message);
       this.state = this.state.handleStateChange(message.type, message.data);
     })
+    // This is used for internal state changes without intervention from the service
+    this.store.stateChanged.subscribe(message => {
+      this.state = this.state.handleStateChange(message.type, message.data);
+    });
   }
 
   selected(event){
     this.lane = event.lane;
     this.champ = event.champ;
     this.perksService.startPrediction(this.champ.id, this.lane);
+  }
+
+  reset(){
+    this.store.stateChanged.emit({type:"reset",data:{}})
   }
 
 }
@@ -42,6 +55,17 @@ class Store{
   pickedPrimaryRunes:number[];
   suggestedSecondaryRunes:any;
   pickedSecondaryRunes:any;
+  stateChanged = new EventEmitter<any>();
+  clear(){
+    this.primaryStyles = null;
+    this.primaryStyle = null;
+    this.subStyles = null;
+    this.subStyle = null;
+    this.suggestedPrimaryRunes = null;
+    this.pickedPrimaryRunes = null;
+    this.suggestedSecondaryRunes = null;
+    this.pickedSecondaryRunes = null;
+  }
 }
 
 abstract class State{
@@ -127,10 +151,28 @@ class SecondaryPageSelectState extends State{
 
 class SecondaryRunesSelectState extends State{
   handleStateChange(type:string, data:any):State{
+    if(type == "done"){
+      return new RunePageDisplayState(this.perksService, this.store);
+    }
     return this;
   }
   getSuggestedRunes(){
     return this.store.suggestedSecondaryRunes;
   }
+  runesSelected(runes){
+    this.store.pickedSecondaryRunes = runes;
+    this.store.stateChanged.emit({type:"done",data:{}})
+  }
   getId(){return 2;}
+}
+
+class RunePageDisplayState extends State{
+  handleStateChange(type: string, data:any):State{
+    if(type == "reset"){
+      this.store.clear();
+      return new ChampionSelectState(this.perksService, this.store);
+    }
+    return this;
+  }
+  getId(){return 3;}
 }

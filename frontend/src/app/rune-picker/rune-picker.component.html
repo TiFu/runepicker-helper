@@ -1,3 +1,10 @@
-<champion-selection *ngIf="state.getId() == 0" (selected)="selected($event)"></champion-selection>
-<style-picker *ngIf="state.getId() == 1" [percentages]="state.getSuggestedStyles()" [disabled]="store.primaryStyle" (selected)="state.pathSelected($event)"></style-picker>
-<perks-picker *ngIf="state.getId() == 2" [perks]="state.getSuggestedRunes()" (selected)="state.runesSelected($event)"></perks-picker>
+<champion-selection *ngIf="state.getId() == 0"
+  (selected)="selected($event)">
+</champion-selection>
+<style-picker *ngIf="state.getId() == 1"   (selected)="state.pathSelected($event)"   [percentages]="state.getSuggestedStyles()"   [disabled]="store.primaryStyle"></style-picker>
+<perks-picker *ngIf="state.getId() == 2" (selected)="state.runesSelected($event)"
+ [perks]="state.getSuggestedRunes()">
+</perks-picker>
+<rune-page *ngIf="state.getId() == 3" (reset)="reset()"
+  [primaryStyle]="store.primaryStyle" [secondaryStyle]="store.subStyle" [primaryRunes]="store.pickedPrimaryRunes" [secondaryRunes]="store.pickedSecondaryRunes">
+<rune-page>

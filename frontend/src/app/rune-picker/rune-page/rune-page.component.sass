@@ -1,0 +1,33 @@
+$width: 80vw
+$max-width: 876px
+
+#wrapper
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+
+#rune-page
+  border: 2px solid
+  width: $width
+  height: ($width / 23)*16
+  max-width: $max-width
+  max-height: ($max-width / 23) * 16
+  background-size: cover
+  background-repeat: no-repeat
+  display: flex
+  flex-direction: column
+  margin-bottom: 10px
+  .header
+    height: 10%
+  .content
+    display: flex
+    flex-grow: 1
+  .footer
+    height: 5%
+
+.path
+  width: 33%
+  position: relative
+  &.primary
+  &.secondary

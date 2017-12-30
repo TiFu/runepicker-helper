@@ -1,0 +1,41 @@
+.image
+  display: flex
+  justify-content: center
+  align-items: center
+  .path-button
+    background: none
+    border: 0
+    box-shadow: none
+    position: relative
+    display: block
+    padding: 0
+    width: 48px
+    height: 48px
+    border-radius: 50%
+    .circles
+      margin: -32px
+      position: absolute
+      top: 50%
+      left: 50%
+      width: 64px
+      height: 64px
+      .circle
+        cx: 50%
+        cy: 50%
+        r: 43%
+        fill: none
+        stroke-width: 2
+        transform: translate(6%)
+        transform-origin: 50% 50%
+        &.second
+          transform: rotate(120deg) translateY(6%)
+        &.third
+          transform: rotate(240deg) translateY(6%)
+      *
+        outline: 0
+    .cup
+      width: 86px
+      height: 86px
+      position: absolute
+      left: -19px
+      bottom: -19px
