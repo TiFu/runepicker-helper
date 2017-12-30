@@ -6,9 +6,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-prod": "npm run build --prod",
     "lint": "ng lint",
     "electron": "electron dist/",
-    "electron:build": "ng build --env=electron",
+    "electron:build": "ng build --env=electron --prod",
     "electron:pack": "electron-builder -l --project dist/",
     "electron:compile": "npm run electron:build && npm run electron:pack",
     "electron:dev": "concurrently \"ng build --watch --env=electron\""
