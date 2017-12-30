@@ -37,7 +37,7 @@ config = {
     "predictColumn": "perk_primary_style",
     "nominalColumns": ["champion_id", "tag1", "tag2", "role", "perk_primary_style"],
     "trainDataPercentage": 0.9,
-    "epochs": 30,
+    "epochs": 15,
     "batchSize": 512
 }
 
