@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, globalShortcut} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -11,9 +11,6 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/index.html`)
 
-  // Open the DevTools.
-  win.webContents.openDevTools()
-
   // Remove menu bar
   win.setMenu(null);
 
@@ -24,6 +21,7 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null
   })
+  win.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -48,5 +46,12 @@ app.on('activate', () => {
   }
 })
 
+// SSL/TSL: this is the self signed certificate support
+app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
+    // On certificate error we disable default behaviour (stop loading the page)
+    // and we then say "it is all fine - true" to the callback
+    event.preventDefault();
+    callback(true);
+});
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

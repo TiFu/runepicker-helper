@@ -10,6 +10,9 @@
   "repository": "https://github.com/TiFu/runepicker-helper",
   "author": "Anton Pohli",
   "license": "MIT",
+  "dependencies":{
+    "lcu-connector": "^1.0.0"
+  },
   "devDependencies": {
     "electron": "~1.7.8"
   }

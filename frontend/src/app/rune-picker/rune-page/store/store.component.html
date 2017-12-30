@@ -1,0 +1,31 @@
+<div *ngIf="!runePages || !maxPages">
+  Loading pages
+</div>
+<ng-container *ngIf="runePages && maxPages">
+  <div class="pages">
+    <ng-container *ngFor="let page of runePages">
+      <div class="page" *ngIf="page.isEditable" [style.border-color]="getColor(page.primaryStyleId)">
+        <h2>{{page.name}}</h2>
+        <div class="images">
+          <img class="primary" src="assets/paths/{{page.primaryStyleId}}.png">
+          <img class="secondary" src="assets/paths/{{page.subStyleId}}.png">
+        </div>
+        <div class="hover">
+          <button class="btn" (click)="deletePage(page.id)">Delete</button>
+          <button class="btn" (click)="replacePage(page.name, page.id)">Overwrite</button>
+        </div>
+      </div>
+    </ng-container>
+    <div class="page new-page" *ngIf="hasEmptyPages()">
+      +
+      <div class="hover">
+        <input type="text" placeholder="page name" maxlength="25" [(ngModel)]="pageName">
+        <button class="btn" [disabled]="!pageName" (click)="addPage()">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="buttons">
+    <button (click)="closeOverlay()" class="btn">Close</button>
+    <button (click)="update()" class="btn">Refresh</button>
+  </div>
+</ng-container>

@@ -24,7 +24,9 @@
         "styles.sass",
         "../node_modules/normalize.css/normalize.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/lcu-connector/lib/index.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

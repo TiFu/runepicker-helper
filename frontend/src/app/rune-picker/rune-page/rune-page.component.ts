@@ -16,6 +16,8 @@ export class RunePageComponent implements OnInit {
 
   @Output() reset = new EventEmitter<boolean>();
 
+  private overlayVisible = false;
+
   constructor(private staticData:StaticDataService, private lcu:LcuConnectorService) { }
 
   ngOnInit() {
@@ -45,5 +47,9 @@ export class RunePageComponent implements OnInit {
 
   resetClicked(){
     this.reset.emit(true);
+  }
+
+  setOverlayOpen(open:boolean){
+    this.overlayVisible = open;
   }
 }

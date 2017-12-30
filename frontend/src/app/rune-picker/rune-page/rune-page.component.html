@@ -22,7 +22,13 @@
     </section>
   </div>
   <div class="buttons">
-    <button class="btn store" [disabled]="!lcu.isAvailable()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Store</button>
-    <button class="btn return" (click)="resetClicked()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Return</button>
+    <button class="btn store" (click)="setOverlayOpen(true)" [disabled]="!lcu.isAvailable() || !lcu.isConnected()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Save to Client</button>
+    <button class="btn return" (click)="resetClicked()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Back</button>
+  </div>
+</div>
+
+<div class="overlay" *ngIf="overlayVisible && lcu.isConnected()">
+  <div class="inner-overlay">
+    <rune-store (closed)="setOverlayOpen(false)" [primaryStyle]="primaryStyle" [secondaryStyle]="secondaryStyle" [primaryRunes]="primaryRunes" [secondaryRunes]="secondaryRunes"></rune-store>
   </div>
 </div>

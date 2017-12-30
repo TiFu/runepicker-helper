@@ -7,6 +7,7 @@ export class StaticDataService {
 
   champions = require("./champions.json");
   perksDescription = {};
+  perksToPath = {}
   paths = {};
   pathsArray;
   keystones = []
@@ -18,8 +19,12 @@ export class StaticDataService {
       for(let perk of path.slots[0].perks){
         this.keystones.push(parseInt(perk))
       }
+      for(let i = 0; i < path.slots.length; i++){
+        for(let perk of path.slots[i].perks){
+          this.perksToPath[perk] = path["id"]
+        }
+      }
     }
-    console.log(this.keystones)
     let tmpDesc = require("./perksDescription.json");
     for(let perk of tmpDesc){
       this.perksDescription[perk["id"]] = perk;

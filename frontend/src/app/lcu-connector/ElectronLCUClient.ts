@@ -5,7 +5,6 @@ declare var LCUConnector:any;
 import {LCUClient, Page} from './LCUClient';
 import * as request from 'request'
 
-
 export class LCUClientImpl implements LCUClient {
     private url: string;
     private port: number;
@@ -25,11 +24,12 @@ export class LCUClientImpl implements LCUClient {
             this.protocol = data.protocol;
             this.username = data.username;
             this.connected = true;
-            onLCUConnectListener();
+            if(onLCUConnectListener) onLCUConnectListener();
+            console.log(this.protocol)
         })
         this.connector.on("disconnect", (data: any) => {
             this.connected = false;
-            onLCUDisconnectListener();
+            if(onLCUDisconnectListener)onLCUDisconnectListener();
         });
         this.connector.start();
     }

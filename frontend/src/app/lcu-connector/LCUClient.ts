@@ -15,14 +15,14 @@ export interface LCUClient {
 
 
 export interface Page {
-    id: number;
-    current: boolean;
-    isActive: boolean;
-    isDeletable: boolean;
-    isEditable: boolean;
-    isValid: boolean;
+    id?: number;
+    current?: boolean;
+    isActive?: boolean;
+    isDeletable?: boolean;
+    isEditable?: boolean;
+    isValid?: boolean;
     name: string;
-    order: 0;
+    order?: 0;
     primaryStyleId: number;
     selectedPerkIds: Array<number>;
     subStyleId: number;

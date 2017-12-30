@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { routing } from './app.router';
@@ -19,6 +20,7 @@ import { RunePageComponent } from './rune-picker/rune-page/rune-page.component';
 import { PathHeaderComponent } from './rune-picker/rune-page/path-header/path-header.component';
 import { PagePerkComponent } from './rune-picker/rune-page/perk/perk.component';
 import { PerkComponent } from './rune-picker/perk/perk.component';
+import { StoreComponent } from './rune-picker/rune-page/store/store.component';
 
 @NgModule({
   declarations: [
@@ -33,10 +35,12 @@ import { PerkComponent } from './rune-picker/perk/perk.component';
     RunePageComponent,
     PathHeaderComponent,
     PagePerkComponent,
-    PerkComponent
+    PerkComponent,
+    StoreComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     routing
   ],
   providers: [

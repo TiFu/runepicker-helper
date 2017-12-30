@@ -3,6 +3,7 @@ declare function require(url: string);
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { LCUClient, Page } from './LCUClient';
+import { Observable } from 'rxjs';
 let LCU;
 if(environment.electron){
   LCU = require('./ElectronLCUClient').LCUClientImpl;
@@ -32,11 +33,11 @@ export class LcuConnectorService {
       return this.connector.isAvailable();
   }
 
-  getPages(): Promise<Page[]> {
-      return this.connector.getPages();
+  getPages(): Observable<Page[]> {
+      return Observable.fromPromise(this.connector.getPages());
   }
-  getMaxPages(): Promise<number> {
-      return this.connector.getMaxPages();
+  getMaxPages(): Observable<number> {
+      return Observable.fromPromise(this.connector.getMaxPages());
   }
   createPage(page: Page): Promise<Page> {
       return this.connector.createPage(page);
@@ -46,6 +47,13 @@ export class LcuConnectorService {
   }
   selectPage(pageId: number): Promise<void> {
      return this.connector.selectPage(pageId);
+  }
+  replacePage(oldPageId: number, newPage:Page){
+    return this.deletePage(oldPageId).then(()=>{
+      return this.createPage(newPage);
+    }).then((page) => {
+      return this.selectPage(page.id).then(()=>page)
+    });
   }
 
 }
