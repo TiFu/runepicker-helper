@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PerksPredictionService } from '../../perks-prediction.service';
+import { StaticDataService } from '../../static-data/static-data.service';
 
 @Component({
   selector: 'style-picker',
@@ -8,27 +9,20 @@ import { PerksPredictionService } from '../../perks-prediction.service';
 })
 export class StylePickerComponent implements OnInit {
 
-  paths = [
-    {id:8000, name:"Precision", color:"#654f3c"},
-    {id:8100, name:"Domination", color:"#86454a"},
-    {id:8200, name:"Sorcery", color:"#9469e6"},
-    {id:8300, name:"Inspiration", color:"#3c5b66"},
-    {id:8400, name:"Resolve", color:"#467646"}
-  ]
+  @Input()  disabled:number;
 
-  @Input()
-  disabled:number;
+  @Input()  percentages:{[index:number]:number}
 
-  @Input()
-  percentages:{[index:number]:number}
+  @Input() title:string;
 
   @Output()
   selected = new EventEmitter<number>();
 
+
   highest:number;
   selectedPath:number;
 
-  constructor(private perksService:PerksPredictionService) { }
+  constructor(private perksService:PerksPredictionService, private staticData:StaticDataService) { }
 
   ngOnInit() {
     let max = -1;
@@ -46,6 +40,14 @@ export class StylePickerComponent implements OnInit {
       return "primary";
     }
     return Math.round(this.percentages[id] * 100 * 100) / 100
+  }
+
+  getRecommendedPath(){
+    return this.staticData.paths[this.highest];
+  }
+
+  getPickedPath(){
+    return this.staticData.paths[this.selectedPath];
   }
 
   changeSelected(selected){

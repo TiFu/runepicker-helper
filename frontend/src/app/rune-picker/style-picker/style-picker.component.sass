@@ -5,6 +5,7 @@
   flex-direction: column
   .paths
     display: flex
+    margin: 20px 0
     .path
       display: flex
       flex-direction: column
@@ -12,10 +13,21 @@
       align-items: center
       cursor: pointer
       width: 150px
-      &.highest
-        border: 1px solid blue
+      filter: grayscale(0.9)
+      padding: 20px
+      transition: background-color ease-in-out 300ms
+      border: 1px none
+      h2
+        margin: 0
       &.selected
-        border: 3px solid red
+        filter: grayscale(0)
+        border: 1px solid
+        background: #5c5b57
       &.disabled
-        cursor: not-allowed
-        filter: grayscale(1)
+        display: none
+      .accuracy
+        font-size: small
+        color: gray
+
+.btn
+  margin-top: 20px

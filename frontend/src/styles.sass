@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 *
   box-sizing: border-box
+  color: white
 
 body
   background: url("assets/background.jpg") no-repeat center center fixed
@@ -33,5 +34,6 @@ body
     &:not(:disabled)
       background: lighten(#111318, 5%)
   &:disabled
-    color: gray
+    color: gray !important
+    border-color: gray !important
     cursor: not-allowed

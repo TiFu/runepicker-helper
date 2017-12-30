@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { StaticDataService } from '../../static-data/static-data.service';
+import {LcuConnectorService} from '../../lcu-connector/lcu-connector.service';
 
 @Component({
   selector: 'rune-page',
@@ -15,7 +16,7 @@ export class RunePageComponent implements OnInit {
 
   @Output() reset = new EventEmitter<boolean>();
 
-  constructor(private staticData:StaticDataService) { }
+  constructor(private staticData:StaticDataService, private lcu:LcuConnectorService) { }
 
   ngOnInit() {
   }
@@ -45,5 +46,4 @@ export class RunePageComponent implements OnInit {
   resetClicked(){
     this.reset.emit(true);
   }
-
 }

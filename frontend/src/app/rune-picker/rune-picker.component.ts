@@ -69,6 +69,7 @@ class Store{
 }
 
 abstract class State{
+  title = "Change it in every State";
   constructor(protected perksService:PerksPredictionService,protected store:Store){ }
   abstract handleStateChange(type:string, data:any): State;
   abstract getId():number;
@@ -77,10 +78,17 @@ abstract class State{
   runesSelected(runes:number[]){}
   getSuggestedStyles(){return {}}
   getSuggestedRunes() {return []}
+  getTitle(){
+    return this.title;
+  }
+  getStyle(){
+    return 0;
+  }
 }
 
 
 class ChampionSelectState extends State{
+  title = "";
   handleStateChange(type:string, data:any){
     if(type == "primaryStyles"){
       this.store.primaryStyles = data;
@@ -96,6 +104,7 @@ class ChampionSelectState extends State{
 }
 
 class PrimaryPageSelectState extends State{
+  "title" = "Primary Path";
   handleStateChange(type:string, data:any):State{
     if(type == "primaryRunes"){
       this.store.suggestedPrimaryRunes = data;
@@ -114,6 +123,7 @@ class PrimaryPageSelectState extends State{
 }
 
 class PrimaryPerksSelectState extends State{
+  title = "Perks of Primary Path";
   handleStateChange(type:string, data:any):State{
     if(type == "subStyles"){
       this.store.subStyles = data;
@@ -129,9 +139,13 @@ class PrimaryPerksSelectState extends State{
   getSuggestedRunes(){
     return this.store.suggestedPrimaryRunes;
   }
+  getStyle(){
+    return this.store.primaryStyle;
+  }
 }
 
 class SecondaryPageSelectState extends State{
+  title = "Secondary Path";
   handleStateChange(type:string, data:any):State{
     if(type == "subRunes"){
       this.store.suggestedSecondaryRunes = data;
@@ -150,6 +164,7 @@ class SecondaryPageSelectState extends State{
 }
 
 class SecondaryRunesSelectState extends State{
+  title = "Perks of Secondary Path"
   handleStateChange(type:string, data:any):State{
     if(type == "done"){
       return new RunePageDisplayState(this.perksService, this.store);
@@ -164,6 +179,9 @@ class SecondaryRunesSelectState extends State{
     this.store.stateChanged.emit({type:"done",data:{}})
   }
   getId(){return 2;}
+  getStyle(){
+    return this.store.subStyle;
+  }
 }
 
 class RunePageDisplayState extends State{

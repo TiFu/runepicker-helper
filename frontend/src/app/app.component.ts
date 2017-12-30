@@ -1,4 +1,7 @@
+declare let navigator:any;
+
 import { Component } from '@angular/core';
+import { LcuConnectorService } from "./lcu-connector/lcu-connector.service";
 
 @Component({
   selector: 'app-root',
@@ -6,8 +9,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  constructor(private lcu:LcuConnectorService){
 
-  champSelected(data){
-    console.log(data);
+  }
+
+  ngOnInit(){
+    console.log("LCU Availiability", this.lcu.isAvailable())
   }
 }

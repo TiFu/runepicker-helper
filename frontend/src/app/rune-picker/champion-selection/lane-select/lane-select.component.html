@@ -1,8 +1,7 @@
-<div class="lane-select" (click)="laneSelectVisible = !laneSelectVisible">
+<div class="lane-select" (click)="laneSelectVisible = !laneSelectVisible" [ngClass]="{'disabled':disabled}">
   <div class="lane-image">
-    <img class="lane-border" src="assets/various/lane-select.png">
-    <img *ngIf="lane == 'none'" class="lane-icon" src="assets/lane/{{lane}}.png">
-    <img *ngIf="lane != 'none'" class="lane-icon lane-icon-small" src="assets/lane/{{lane}}.png">
+    <img class="lane-border" [src]="getLaneSelectBorder()">
+    <img class="lane-icon" [src]="getLaneIcon()">
   </div>
 </div>
 <lane-select-wheel *ngIf="laneSelectVisible" (change)="laneChangedCallback($event)"></lane-select-wheel>

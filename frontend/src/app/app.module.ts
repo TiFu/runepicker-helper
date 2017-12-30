@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { routing } from './app.router';
 
 import { PerksPredictionService } from './perks-prediction.service';
+import { LcuConnectorService } from './lcu-connector/lcu-connector.service';
 import { StaticDataService } from './static-data/static-data.service';
 
 import { AppComponent } from './app.component';
@@ -16,7 +17,8 @@ import { StylePickerComponent } from './rune-picker/style-picker/style-picker.co
 import { PerksPickerComponent } from './rune-picker/perks-picker/perks-picker.component';
 import { RunePageComponent } from './rune-picker/rune-page/rune-page.component';
 import { PathHeaderComponent } from './rune-picker/rune-page/path-header/path-header.component';
-import { PerkComponent } from './rune-picker/rune-page/perk/perk.component';
+import { PagePerkComponent } from './rune-picker/rune-page/perk/perk.component';
+import { PerkComponent } from './rune-picker/perk/perk.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { PerkComponent } from './rune-picker/rune-page/perk/perk.component';
     PerksPickerComponent,
     RunePageComponent,
     PathHeaderComponent,
+    PagePerkComponent,
     PerkComponent
   ],
   imports: [
@@ -38,6 +41,7 @@ import { PerkComponent } from './rune-picker/rune-page/perk/perk.component';
   ],
   providers: [
     PerksPredictionService,
+    LcuConnectorService,
     StaticDataService
   ],
   bootstrap: [AppComponent]

@@ -6,15 +6,15 @@
     <section class="content">
       <section class="path primary">
         <path-header [path]="primaryStyle"></path-header>
-        <perk [perk]="get(primaryRunes,0)" [path]="primaryStyle" [keystone]="true"></perk>
-        <perk [perk]="get(primaryRunes,1)" [path]="primaryStyle"></perk>
-        <perk [perk]="get(primaryRunes,2)" [path]="primaryStyle"></perk>
-        <perk [perk]="get(primaryRunes,3)" [path]="primaryStyle"></perk>
+        <page-perk [perk]="get(primaryRunes,0)" [path]="primaryStyle" [keystone]="true"></page-perk>
+        <page-perk [perk]="get(primaryRunes,1)" [path]="primaryStyle"></page-perk>
+        <page-perk [perk]="get(primaryRunes,2)" [path]="primaryStyle"></page-perk>
+        <page-perk [perk]="get(primaryRunes,3)" [path]="primaryStyle"></page-perk>
       </section>
       <section class="path secondary">
         <path-header [path]="secondaryStyle"></path-header>
-        <perk [perk]="get(secondaryRunes,0)" [path]="secondaryStyle"></perk>
-        <perk [perk]="get(secondaryRunes,1)" [path]="secondaryStyle"></perk>
+        <page-perk [perk]="get(secondaryRunes,0)" [path]="secondaryStyle"></page-perk>
+        <page-perk [perk]="get(secondaryRunes,1)" [path]="secondaryStyle"></page-perk>
       </section>
     </section>
     <section class="footer">
@@ -22,7 +22,7 @@
     </section>
   </div>
   <div class="buttons">
-    <button class="btn store" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Store</button>
+    <button class="btn store" [disabled]="!lcu.isAvailable()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Store</button>
     <button class="btn return" (click)="resetClicked()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Return</button>
   </div>
 </div>

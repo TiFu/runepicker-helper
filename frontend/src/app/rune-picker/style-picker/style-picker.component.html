@@ -1,12 +1,19 @@
 <div id="wrapper" class="full-screen">
+  <h1>{{title}}</h1>
+  <p class="into">
+    We would recommend <strong [style.color]="getRecommendedPath().color"> {{getRecommendedPath().name}} </strong>
+  </p>
+  <p>
+    If you don't like that choice, you can choose another path below
+  </p>
   <div class="paths">
-    <div *ngFor="let path of paths" class="path"
-    [ngClass]="{'highest':highest == path['id'],'selected':selectedPath == path['id'], 'disabled':disabled == path['id']}"
+    <div *ngFor="let path of staticData.pathsArray" class="path"
+    [ngClass]="{'highest':highest == path['id'],'selected':selectedPath == path['id'], 'disabled':disabled == path['id']}" [style.border-color]="path.color"
     (click)="changeSelected(path['id'])">
-      <h2>{{path["name"]}}</h2>
+      <h2 [style.color]="path.color">{{path["name"]}}</h2>
       <img src="assets/paths/{{path['id']}}.png">
-      <span>Accuracy: {{getPercentage(path["id"])}}</span>
+      <span class="accuracy">Accuracy: {{getPercentage(path["id"])}}</span>
     </div>
   </div>
-  <button (click)="continue()">Continue</button>
+  <button class="btn" (click)="continue()" [style.color]="getPickedPath().color" [style.border-color]="getPickedPath().color">Continue</button>
 </div>

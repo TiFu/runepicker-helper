@@ -1,8 +1,7 @@
 <div class="section">
   <div class="image">
-    <div class="rune-image-container">
-      <img class="rune-image" [ngClass]="{'keystone':keystone}" src="assets/perks/{{perk}}.png">
-    </div>
+    <perk [perk]="perk"></perk>
+
   </div>
   <div class="text">
     <h2 [style.color]="getColor()">{{getName()}}</h2>

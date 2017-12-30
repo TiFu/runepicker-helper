@@ -7,11 +7,11 @@
     "start": "ng serve",
     "build": "ng build",
     "lint": "ng lint",
-    "electron": "electron",
-    "electron:build": "ng build",
-    "electron:pack": "electron-builder -w --project dist/",
+    "electron": "electron dist/",
+    "electron:build": "ng build --env=electron",
+    "electron:pack": "electron-builder -l --project dist/",
     "electron:compile": "npm run electron:build && npm run electron:pack",
-    "electron:dev": "concurrently \"ng build --watch\""
+    "electron:dev": "concurrently \"ng build --watch --env=electron\""
   },
   "private": true,
   "dependencies": {
@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
+    "electron": "^1.7.10",
     "is-electron-renderer": "^2.0.1",
     "rxjs": "^5.4.1",
     "socket.io-client": "^2.0.4",
@@ -34,6 +35,7 @@
     "@angular/cli": "1.2.6",
     "@angular/compiler-cli": "^4.0.0",
     "@angular/language-service": "^4.0.0",
+    "@types/electron": "^1.6.10",
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",

@@ -1,7 +1,10 @@
 .lane-select{
   width: 100px;
   cursor: pointer;
-  margin-right: 60px;
+}
+
+.lane-select.disabled{
+  cursor: not-allowed;
 }
 
 .lane-image{

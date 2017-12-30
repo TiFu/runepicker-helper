@@ -25,7 +25,22 @@ export class ChampionSelectionComponent implements OnInit {
     }else{
       return "assets/champions/" + this.champ.id + ".png";
     }
+  }
 
+  getChampionName():string{
+    if(this.champ){
+      return this.champ.name;
+    }else{
+      return "No champion selected";
+    }
+  }
+
+  getLane():string{
+    if(this.lane){
+      return this.lane;
+    }else{
+      return "No lane selected";
+    }
   }
 
   start(){

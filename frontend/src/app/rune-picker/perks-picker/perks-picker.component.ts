@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PerksPredictionService } from '../../perks-prediction.service';
+import { StaticDataService } from '../../static-data/static-data.service';
 
 @Component({
   selector: 'perks-picker',
@@ -11,12 +12,15 @@ export class PerksPickerComponent implements OnInit {
   @Input()
   perks;
 
+  @Input()
+  path;
+
   @Output()
   selected = new EventEmitter<number[]>();
 
   selectedPerks:number[] = [];
 
-  constructor(private perksService:PerksPredictionService) { }
+  constructor(private perksService:PerksPredictionService, private staticData:StaticDataService) { }
 
   ngOnInit() {
     console.log(this.perks);
@@ -41,6 +45,30 @@ export class PerksPickerComponent implements OnInit {
 
   continue(){
     this.selected.emit(this.selectedPerks);
+  }
+
+  getRowTitle(index:number){
+    let title = "";
+    if(this.isPrimaryPath()){
+      switch(index){
+        case 0: title =  "Keystone"; break;
+        case 1: title =  "Greater Rune"; break;
+        case 2: title =  "Lesser Runes"; break;
+      }
+    }else{
+      if(index == 0){
+        title = "Lesser Runes";
+      }
+    }
+    return title;
+  }
+
+  isPrimaryPath(){
+    return this.perks.length > 2
+  }
+
+  getColor(){
+    return this.staticData.paths[this.path].color;
   }
 
 }

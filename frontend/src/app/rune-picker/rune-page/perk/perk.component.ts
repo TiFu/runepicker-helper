@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { StaticDataService } from '../../../static-data/static-data.service';
 
 @Component({
-  selector: 'perk',
+  selector: 'page-perk',
   templateUrl: './perk.component.html',
   styleUrls: ['../shared.sass','./perk.component.sass']
 })
-export class PerkComponent implements OnInit {
+export class PagePerkComponent implements OnInit {
 
   @Input() perk:number;
   @Input() keystone:boolean = false;

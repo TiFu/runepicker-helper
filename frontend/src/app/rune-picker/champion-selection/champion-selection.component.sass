@@ -1,35 +1,42 @@
+$color: #016c8e
+
 #wrapper
   display: flex
   justify-content: center
   align-items: center
-  flex-direction: column
-  .selection
+  .inner-wrapper
     display: flex
-    .champion
-      border-radius: 50%
-      border: 7px solid #005f84
-      width: 150px
-      height: 150px
-      overflow: hidden
-      .champ-img
-        width: 100%
-  .start
-    background: #1E2328
-    border: 5px solid #005f84
-    color: white
-    font-weight: bold
-    font-size: x-large
-    padding: 7px 15px
-    cursor: pointer
-    &:disabled
-      color: gray
-      border: 2px solid #005f84
-      cursor: not-allowed
-
+    flex-direction: column
+    justify-content: space-around
+    align-items: center
+    min-height: 300px
+    .selection
+      display: flex
+      .selection-part
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-direction: column
+        margin: 0 7px
+      .champion
+        border-radius: 50%
+        border: 7px solid $color
+        width: 150px
+        height: 150px
+        overflow: hidden
+        .champ-img
+          width: 100%
 .overlay-inner
   width: 80%
   max-width: 786px
   max-height: 80%
   overflow-x: auto
-  border: 2px solid #005f84
+  border: 2px solid $color
   padding: 5px
+
+.btn
+  border-color: $color
+  color: $color
+  &:disabled
+    border-color: #5c5b57
+    color: #5c5b57
