@@ -1,4 +1,4 @@
 <div class="rune-image-container">
   <img class="rune-image" src="assets/perks/{{perk}}.png" [ngClass]="{'keystone':keystone}">
 </div>
-<div class="tooltip" [innerHTML]="getDescription()" [style.border-color]="getColor()"></div>
+<div class="tooltip" [innerHTML]="getTooltip()" [style.border-color]="getColor()"></div>
