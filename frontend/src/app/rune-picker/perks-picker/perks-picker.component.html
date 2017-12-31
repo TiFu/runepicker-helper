@@ -2,9 +2,9 @@
   <div class="inner-wrapper">
     <h1>{{title}}</h1>
     <div class="perks">
-      <div class="perk-row spacing-vertical" *ngFor="let row of perks; let i = index">
+      <div class="perk-row spacing-vertical" [ngStyle]="{'z-index':10-i}" *ngFor="let row of perks; let i = index">
         <span class="{{getKeyStoneClass(i)}}"><b>{{getRowTitle(i)}}</b></span>
-        <div class="perks spacing-vertial">
+        <div class="perks" style="z-index:inherit" >
           <div class="perk spacing-horizontal" *ngFor="let perk of keys(row)"
             [ngClass]="{'highest':getMax(row) == perk, 'selected':selectedPerks[i] == perk,'keystone':staticData.isKeystone(perk)}"
             (click)="selectedPerks[i] = perk">
