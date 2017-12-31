@@ -6,14 +6,16 @@ let win
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 800, height: 600})
-
+  win = new BrowserWindow({show: false, resizable: false, zoomToPageWidth: true, webPreferences: { zoomFactor: 1.2 }})
+  win.maximize();
+  
+  
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/index.html`)
 
   // Remove menu bar
   win.setMenu(null);
-
+  win.show();
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -21,7 +23,6 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null
   })
-  win.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
