@@ -145,6 +145,7 @@ def selectPrimaryRunes(sid, data):
         return False, "Please submit exactly 4 runes in the correct order"
     runeProposer = runeproposers[sid]
     for i in range(4):
+        data[i] = int(data[i])
         allowedRunes = constants.runesByPrimaryStyle[runeProposer.primaryStyle][i]
         if data[i] not in constants.runesByPrimaryStyle[runeProposer.primaryStyle][i]:
             return False, "Expected one of " + str(allowedRunes) + ", but got " + str(data[i])
