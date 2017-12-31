@@ -7,6 +7,11 @@
  [perks]="state.getSuggestedRunes()"
  [title]="state.getTitle()">
 </perks-picker>
+<subperks-picker *ngIf="state.getId() == 4" (selected)="state.runesSelected($event)"
+[path]="state.getStyle()"
+[perks]="state.getSuggestedRunes()"
+[title]="state.getTitle()">
+</subperks-picker>
 <rune-page *ngIf="state.getId() == 3" (reset)="reset()"
   [primaryStyle]="store.primaryStyle" [secondaryStyle]="store.subStyle" [primaryRunes]="store.pickedPrimaryRunes" [secondaryRunes]="store.pickedSecondaryRunes">
 <rune-page>

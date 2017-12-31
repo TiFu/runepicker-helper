@@ -1,0 +1,20 @@
+<div id="wrapper" class="full-screen">
+  <div class="inner-wrapper">
+    <h1>{{title}}</h1>
+    <p class="into big">
+        We would recommend the runes selected below. If you don't agree with this selection, you can change it by clicking on the other runes.
+      </p>    
+    <div class="perks">
+      <div class="subperk-row spacing-vertical" [ngStyle]="{'z-index':10-i}" *ngFor="let row of selectableRunes; let i = index">
+        <div class="perks" style="z-index:inherit" >
+          <div class="subperk spacing-horizontal" *ngFor="let perk of row"
+            [ngClass]="{'highest': predictedPerk1 == perk || predictedPerk2 == perk, 'selected':perk1 == perk || perk2 == perk}"
+            (click)="selectRune(i, perk)">
+            <perk [perk]="perk"></perk>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn spacing-vertical" (click)="continue()" [style.color]="getColor()" [style.border-color]>Continue</button>
+  </div>
+</div>

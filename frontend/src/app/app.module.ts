@@ -16,6 +16,7 @@ import { LaneSelectComponent } from './rune-picker/champion-selection/lane-selec
 import { LaneSelectWheelComponent } from './rune-picker/champion-selection/lane-select/wheel/wheel.component';
 import { StylePickerComponent } from './rune-picker/style-picker/style-picker.component';
 import { PerksPickerComponent } from './rune-picker/perks-picker/perks-picker.component';
+import { SubperksPickerComponent } from './rune-picker/subperks-picker/subperks-picker.component';
 import { RunePageComponent } from './rune-picker/rune-page/rune-page.component';
 import { PathHeaderComponent } from './rune-picker/rune-page/path-header/path-header.component';
 import { PagePerkComponent } from './rune-picker/rune-page/perk/perk.component';
@@ -26,6 +27,7 @@ import { StoreComponent } from './rune-picker/rune-page/store/store.component';
   declarations: [
     AppComponent,
     RunePickerComponent,
+    SubperksPickerComponent,
     ChampionSelectionComponent,
     ChampionListComponent,
     LaneSelectComponent,

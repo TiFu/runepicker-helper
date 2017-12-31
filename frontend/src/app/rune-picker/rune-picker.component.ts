@@ -18,11 +18,6 @@ export class RunePickerComponent implements OnInit {
   constructor(private perksService:PerksPredictionService) { }
 
   ngOnInit() {
-    //this.state = new ChampionSelectState(this.perksService, this.store);
-//    this.store.primaryStyle = 8000;
-//    this.store.subStyle = 8200;
-//    this.store.pickedPrimaryRunes = [8008,8009,9103,8017];
-//    this.store.pickedSecondaryRunes = [8234,8236];
     this.state = new ChampionSelectState(this.perksService, this.store);
     this.perksService.getStateChange().subscribe(message => {
       console.log(message);
@@ -178,7 +173,7 @@ class SecondaryRunesSelectState extends State{
     this.store.pickedSecondaryRunes = runes;
     this.store.stateChanged.emit({type:"done",data:{}})
   }
-  getId(){return 2;}
+  getId(){return 4;}
   getStyle(){
     return this.store.subStyle;
   }
