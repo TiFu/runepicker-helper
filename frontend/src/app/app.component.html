@@ -2,16 +2,16 @@
 <div class="status-icons">
   <div class="backend">
     <span class="icon" [ngClass]="{'disconnected':!socketConnected}">
-      <img src="assets/various/icon.jpg">
+      <img src="assets/various/icon.jpg" alt="Signals if backend is available">
     </span>
   </div>
   <div class="electron">
     <span *ngIf="lcu.isAvailable()" [ngClass]="{'disconnected':!lcu.isConnected()}">
-      <img src="assets/various/lol-logo.png">
+      <img src="assets/various/lol-logo.png" alt="Signals if LCU is connected!">
     </span>
     <span *ngIf="!lcu.isAvailable()">
       <a target="_blank" href="{{environment.electronDownloadPath}}">
-        <img src="assets/various/downloadElectron.png">
+        <img src="assets/various/downloadElectron.png" alt="Download our electron app!">
       </a>
     </span>
   </div>

@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:prod":"ng serve --prod",
+    "start:prod": "ng serve --prod",
     "build": "ng build",
     "build:prod": "node build-scripts/generateEnvironment.js && ng build --prod && node build-scripts/copyArtifact.js",
     "build:full": "npm run electron:compile && npm run build:prod",
