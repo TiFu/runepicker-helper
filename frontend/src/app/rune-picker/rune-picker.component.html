@@ -4,7 +4,8 @@
 <style-picker *ngIf="state.getId() == 1"   (selected)="state.pathSelected($event)"   [percentages]="state.getSuggestedStyles()"   [disabled]="store.primaryStyle" [title]="state.getTitle()"></style-picker>
 <perks-picker *ngIf="state.getId() == 2" (selected)="state.runesSelected($event)"
  [path]="state.getStyle()"
- [perks]="state.getSuggestedRunes()">
+ [perks]="state.getSuggestedRunes()"
+ [title]="state.getTitle()">
 </perks-picker>
 <rune-page *ngIf="state.getId() == 3" (reset)="reset()"
   [primaryStyle]="store.primaryStyle" [secondaryStyle]="store.subStyle" [primaryRunes]="store.pickedPrimaryRunes" [secondaryRunes]="store.pickedSecondaryRunes">

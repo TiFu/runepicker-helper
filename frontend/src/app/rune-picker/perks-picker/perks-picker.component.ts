@@ -15,6 +15,9 @@ export class PerksPickerComponent implements OnInit {
   @Input()
   path;
 
+  @Input()
+  title;
+  
   @Output()
   selected = new EventEmitter<number[]>();
 
