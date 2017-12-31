@@ -14,24 +14,6 @@ quality of used rune pages.**
 
 --
 
-<div style="font-size: 200%; text-align:center"><b>Why?</b></div>
-
-
-* Creating rune pages can be quite tedious - especially for low elo players
-    * memorizing the effects of each rune is required to quickly create new pages while in champ select
-* The current solution for many players is to copy the pages other players use
-    * e.g. [probuilds.net](probuilds.net) 
-    * This process takes relatively long: there might not be enough time to create the rune page in champ select
-
---
-
-<div style="font-size: 200%; text-align:center"><b>Our Solution</b></div>
-
-* User selects Champion and Role
-* System generates a new rune page for the user and allows customization if required
-    * includes a summary of the benefits of the generated rune page
-* Allow user to create and select the rune page in LCU with 1 click (only available in the electron distribution)
-
 <div style="font-size: 200%; text-align:center"><b>How?</b></div>
 
 * Leverage machine learning to learn which rune pages perform well for a given champion
@@ -52,12 +34,11 @@ quality of used rune pages.**
 * We used [tensorflow](https://www.tensorflow.org/) and [keras](https://keras.io/) to create 1 + 1 + 5 \* 4 + 5 \* 2 = 32 neural networks
     * Need 8 forward passes for each generated rune page 
 * Built a generic framework
-    * inputs, outputs and network architecture can be configured in [configuration files](https://github.com/TiFu/runepicker-helper/tree/master/ml/perks/netconfig)
+    * inputs, outputs and network architecture configured in [configuration files](https://github.com/TiFu/runepicker-helper/tree/master/ml/perks/netconfig)
     * enables fast iteration of network designs and easy adaption to new data inputs
-* **95% Accuracy** for Top 2 Primary Style Prediction, **85% Accuracy** for Top 2 Sub Style Prediction
+* **95% Accuracy** for Top 2 Primary Style Prediction
 * Perks are difficult to predict based on limited information in the API
     * e.g. there are no features indicating that 'Poro Ward' should be picked
-    * **~ 50% Accuracy** on test data
 
 -- 
 
@@ -65,13 +46,10 @@ quality of used rune pages.**
 
 * Very simple architecture with 2 - 3 layers
     * Inputs: champion id, role + tags (Fighter, Marksman, ...)
-        * One Hot encoded
     * Outputs: predicted rune/style
-    * see [configuration files](https://github.com/TiFu/runepicker-helper/tree/master/ml/perks/netconfig)
 * Training takes about 2 minutes per network on a 3 year old laptop GPU
 * Custom Metric to measure rune performance 
-    * Target 1 if rune was picked and game **won**
-    * Target 0 if rune was pickend and game **lost**
+    * Target 1 / 0 if rune was picked and game **won** / **lost**
     * ignore otherwise
     * **Result:** network learns to predict if a user will win with a rune
 
