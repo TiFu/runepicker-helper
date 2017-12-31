@@ -159,7 +159,8 @@ def selectPrimaryRunes(sid, data):
 @sio.on('disconnect', namespace='/runeprediction')
 def disconnect(sid):
     log(sid, "disconnected", "")
-    del runeproposers[sid]
+    if sid in runeproposers:
+        del runeproposers[sid]
 
 app.router.add_get('/', index)
 app.router.add_static('/', 'static')
