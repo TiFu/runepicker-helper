@@ -2,7 +2,7 @@
   <div class="inner-wrapper">
     <div class="intro">
       <h1 class="title">Welcome to Runepicker Helper!</h1>
-      <p style="text-align: center">To get started, select your champion and lane below</p>
+      <p class="big" style="text-align: center">To get started, select your champion and lane below</p>
     </div>
     <div class="selection">
       <div class="selection-part">
@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <button class="btn" [disabled]="!champ || !lane" (click)="start()">Find Runepage</button>
+    <button class="btn spacing-vertical" [disabled]="!champ || !lane" (click)="start()">Find Runepage</button>
   </div>
 </div>
 
