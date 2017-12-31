@@ -12,7 +12,7 @@
     (click)="changeSelected(path['id'])">
       <h2 [style.color]="path.color">{{path["name"]}}</h2>
       <img src="assets/paths/{{path['id']}}.png">
-      <span class="accuracy">Accuracy: {{getPercentage(path["id"])}}</span>
+      <span class="accuracy">Score: {{getPercentage(path["id"])}}</span>
     </div>
   </div>
   <button class="btn" (click)="continue()" [style.color]="getPickedPath().color" [style.border-color]="getPickedPath().color">Continue</button>
