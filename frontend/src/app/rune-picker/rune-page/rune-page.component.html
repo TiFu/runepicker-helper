@@ -23,7 +23,13 @@
   </div>
   <div class="buttons">
     <button class="btn store" (click)="setOverlayOpen(true)" [disabled]="!lcu.isAvailable() || !lcu.isConnected()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Save to Client</button>
-    <button class="btn return" (click)="resetClicked()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Back</button>
+    <div class="storetooltip" *ngIf="!lcu.isAvailable()">
+      This function is only available in the Electron App. You can download it by clicking on the download icon in the bottom right.
+    </div>
+    <div class="storetooltip" *ngIf="lcu.isAvailable() && !lcu.isConnected()">
+        This function is only available if the League Client is connected. Please start it!
+      </div>
+      <button class="btn return" (click)="resetClicked()" [style.border-color]="getPrimaryColor()" [style.color]="getPrimaryColor()">Back</button>
   </div>
 </div>
 

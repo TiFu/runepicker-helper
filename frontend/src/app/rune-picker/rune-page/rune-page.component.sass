@@ -31,3 +31,19 @@ $max-width: 876px
   position: relative
   &.primary
   &.secondary
+
+.store
+  &:hover
+    + .storetooltip
+      display: block
+
+.storetooltip
+  position: absolute
+  z-index: 98
+  background: rgba(#1e2328, 0.9)
+  display: none
+  width: 300px
+  padding: 5px
+  text-align: center
+  border: 1px solid
+  border-radius: 8px
