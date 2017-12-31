@@ -1,7 +1,7 @@
 import json
 from .champion import champion
 
-wiki = json.load(open('data/wiki.json'))
+wiki = json.load(open('data/wiki.json', encoding="UTF-8"))
 
 mappedNames = set([
     "MasterYi",
@@ -30,4 +30,4 @@ wikiById = {}
 for champName in wiki:
     mappedChampName = map(champName)
     data = champion["data"][mappedChampName];
-    wikiById[data["key"]] = wiki[champName];    
+    wikiById[data["key"]] = wiki[champName];
