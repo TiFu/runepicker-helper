@@ -18,6 +18,18 @@ export class ChampionListComponent implements OnInit {
 
   ngOnInit() {
     this.champList = Object.keys(this.champMap)
+    this.champList = this.champList.sort((a, b) => {
+      // because edge cases are fun
+      a = a == "MonkeyKing" ? "Wukong" : a;
+      b = b == "MonkeyKing" ? "Wukong" : b;
+      if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
   }
 
   championClicked(champ){
