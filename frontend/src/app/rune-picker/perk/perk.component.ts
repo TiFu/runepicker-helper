@@ -10,6 +10,7 @@ export class PerkComponent implements OnInit {
 
   KEYSTONES:number[];
 
+  @Input() predicted: boolean = false;
   @Input() perk:number;
   keystone:boolean;
 

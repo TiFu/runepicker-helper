@@ -10,7 +10,7 @@
           <div class="subperk spacing-horizontal" *ngFor="let perk of row"
             [ngClass]="{'highest': predictedPerk1 == perk || predictedPerk2 == perk, 'selected':perk1 == perk || perk2 == perk}"
             (click)="selectRune(i, perk)">
-            <perk [perk]="perk"></perk>
+            <perk [perk]="perk" [predicted]="predictedPerk1 == perk || predictedPerk2 == perk"></perk>
           </div>
         </div>
       </div>

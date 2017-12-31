@@ -11,7 +11,7 @@
           <div class="perk spacing-horizontal" *ngFor="let perk of keys(row)"
             [ngClass]="{'highest':getMax(row) == perk, 'selected':selectedPerks[i] == perk,'keystone':staticData.isKeystone(perk)}"
             (click)="selectedPerks[i] = perk">
-            <perk [perk]="perk"></perk>
+            <perk [perk]="perk" [predicted]="getMax(row) == perk"></perk>
           </div>
         </div>
       </div>
