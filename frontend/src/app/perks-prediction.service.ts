@@ -54,7 +54,6 @@ export class PerksPredictionService {
       });
       this.socket.on("subRunes", data => {
         observer.next({type:"subRunes", data:data.data})
-        this.socket.close();
       })
     });
   }
