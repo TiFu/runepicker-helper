@@ -47,14 +47,29 @@ export class PerksPickerComponent implements OnInit {
     this.selected.emit(this.selectedPerks);
   }
 
+  getKeyStoneClass(index: number): string {
+    return this.isKeyStone(index) ? "bigger" : "big";
+  }
+
+  isKeyStone(index:number): boolean {
+    let perk = this.staticData.paths[this.path]["slots"][index];
+    return perk["type"] === "kKeyStone";
+  }
+
   getRowTitle(index:number){
     let title = "";
     if(this.isPrimaryPath()){
-      switch(index){
+      let perk = this.staticData.paths[this.path]["slots"][index];
+      if (this.isKeyStone(index)) {
+        title = "Keystone";
+      } else {
+        title = perk["slotLabel"];
+      }
+/*      switch(index){
         case 0: title =  "Keystone"; break;
         case 1: title =  "Greater Rune"; break;
         case 2: title =  "Lesser Runes"; break;
-      }
+      }*/
     }else{
       if(index == 0){
         title = "Lesser Runes";

@@ -1,10 +1,10 @@
 <div id="wrapper" class="full-screen">
   <div class="inner-wrapper">
     <div class="perks">
-      <div class="perk-row" *ngFor="let row of perks; let i = index">
-        <span>{{getRowTitle(i)}}</span>
-        <div class="perks">
-          <div class="perk" *ngFor="let perk of keys(row)"
+      <div class="perk-row spacing-vertical" *ngFor="let row of perks; let i = index">
+        <span class="{{getKeyStoneClass(i)}}"><b>{{getRowTitle(i)}}</b></span>
+        <div class="perks spacing-vertial">
+          <div class="perk spacing-horizontal" *ngFor="let perk of keys(row)"
             [ngClass]="{'highest':getMax(row) == perk, 'selected':selectedPerks[i] == perk,'keystone':staticData.isKeystone(perk)}"
             (click)="selectedPerks[i] = perk">
             <perk [perk]="perk"></perk>
@@ -12,6 +12,6 @@
         </div>
       </div>
     </div>
-    <button class="btn" (click)="continue()" [style.color]="getColor()" [style.border-color]>Continue</button>
+    <button class="btn spacing-vertical" (click)="continue()" [style.color]="getColor()" [style.border-color]>Continue</button>
   </div>
 </div>
