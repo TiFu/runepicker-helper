@@ -1,6 +1,9 @@
 <div id="wrapper" class="full-screen">
   <div class="inner-wrapper">
     <h1>{{title}}</h1>
+    <p class="into big">
+        We would recommend the runes selected below. If you don't agree with this selection, you can change it by clicking on the other runes.
+      </p>    
     <div class="perks">
       <div class="perk-row spacing-vertical" [ngStyle]="{'z-index':10-i}" *ngFor="let row of perks; let i = index">
         <span class="{{getKeyStoneClass(i)}}"><b>{{getRowTitle(i)}}</b></span>

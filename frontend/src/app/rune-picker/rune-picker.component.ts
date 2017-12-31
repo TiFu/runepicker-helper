@@ -19,11 +19,11 @@ export class RunePickerComponent implements OnInit {
 
   ngOnInit() {
     //this.state = new ChampionSelectState(this.perksService, this.store);
-    this.store.primaryStyle = 8000;
-    this.store.subStyle = 8200;
-    this.store.pickedPrimaryRunes = [8008,8009,9103,8017];
-    this.store.pickedSecondaryRunes = [8234,8236];
-    this.state = new RunePageDisplayState(this.perksService, this.store);
+//    this.store.primaryStyle = 8000;
+//    this.store.subStyle = 8200;
+//    this.store.pickedPrimaryRunes = [8008,8009,9103,8017];
+//    this.store.pickedSecondaryRunes = [8234,8236];
+    this.state = new ChampionSelectState(this.perksService, this.store);
     this.perksService.getStateChange().subscribe(message => {
       console.log(message);
       this.state = this.state.handleStateChange(message.type, message.data);
