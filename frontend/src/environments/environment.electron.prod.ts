@@ -2,5 +2,5 @@ export const environment = {
   production: true,
   electron: true,
   electronDownloadPath: "#",
-  backendUrl: "http://runehelper.satrium.de/runeprediction"
+  backendUrl: "https://runehelper.heimerdinger.support/runeprediction"
 };
