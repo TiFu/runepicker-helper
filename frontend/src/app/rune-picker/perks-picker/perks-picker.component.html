@@ -4,14 +4,14 @@
     <p class="into big">
         We would recommend the runes selected below. If you don't agree with this selection, you can change it by clicking on the other runes.
       </p>    
-    <div class="perks">
-      <div class="perk-row spacing-vertical" [ngStyle]="{'z-index':10-i}" *ngFor="let row of perks; let i = index">
+    <div class="perks" style="z-index:1">
+      <div class="perk-row spacing-vertical" [ngStyle]="{'z-index':100-10*i}" *ngFor="let row of perks; let i = index">
         <span class="{{getKeyStoneClass(i)}}"><b>{{getRowTitle(i)}}</b></span>
         <div class="perks" style="z-index:inherit" >
-          <div class="perk spacing-horizontal" *ngFor="let perk of keys(row)"
+          <div class="perk spacing-horizontal"  style="z-index:inherit" *ngFor="let perk of keys(row)"
             [ngClass]="{'highest':getMax(row) == perk, 'selected':selectedPerks[i] == perk,'keystone':staticData.isKeystone(perk)}"
             (click)="selectedPerks[i] = perk">
-            <perk [perk]="perk" [predicted]="getMax(row) == perk"></perk>
+            <perk [perk]="perk"  style="z-index:inherit" [predicted]="getMax(row) == perk"></perk>
           </div>
         </div>
       </div>
