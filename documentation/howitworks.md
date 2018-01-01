@@ -95,3 +95,5 @@ quality of used rune pages.**
 * For more information and source code: [https://github.com/TiFu/runepicker-helper](https://github.com/TiFu/runepicker-helper)
     * Checkout the [documentation](https://github.com/TiFu/runepicker-helper/tree/master/documentation) 
       to get an overview of the folder structure
+
+[Go back to the main page](index.html)

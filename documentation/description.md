@@ -34,6 +34,6 @@ of both teams could also be automatically extracted, enabling more accurate pred
 
 ## Technical Details
 
-The technical details can be found in a short [presentation](/howitworks.html)
+The technical details can be found in a short [presentation](howitworks.html)
 
-[Back to main page](/)
+[Back to main page](index.html)
