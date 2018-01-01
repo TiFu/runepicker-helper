@@ -36,4 +36,4 @@ of both teams could also be automatically extracted, enabling more accurate pred
 
 The technical details can be found in a short [presentation](howitworks.html)
 
-[Back to main page](index.html)
+[Go back to the main page](index.html)

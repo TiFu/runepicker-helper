@@ -91,9 +91,9 @@ quality of used rune pages.**
 
 <div style="font-size: 200%; text-align:center"><b>More Information</b></div>
 
-* [Download our electron app](https://github.com/TiFu/runepicker-helper/releases)
+* [Download our electron app](https://runehelper.heimerdinger.support/RunePicker%20Setup%201.0.0.exe)
 * For more information and source code: [https://github.com/TiFu/runepicker-helper](https://github.com/TiFu/runepicker-helper)
-    * Checkout the [documentation](https://github.com/TiFu/runepicker-helper/tree/master/documentation) 
+    * Checkout the [README](https://github.com/TiFu/runepicker-helper/tree/master/) 
       to get an overview of the folder structure
 
 [Go back to the main page](index.html)
