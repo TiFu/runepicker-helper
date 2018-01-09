@@ -3,6 +3,7 @@
 This repository contains [Satrium's](https://github.com/Satrium) and 
 [TiFu's](https://github.com/TiFu) entry for the [Riot Games API Challenge 2017](https://discussion.developer.riotgames.com/articles/4395/the-riot-games-api-challenge-2017.html).
 
+**Demo**: [http://runehelper.heimerdinger.support/](http://runehelper.heimerdinger.support/)
 # Goal
 
 **We want to enable all players to quickly create, customize and select good 
